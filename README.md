@@ -1,3 +1,5 @@
+<img src="resources/logo.svg" width="68" alt="GTD logo">
+
 # GTD — Getting Things Done
 
 [![Test](https://github.com/akrck02/gtd/actions/workflows/test.yaml/badge.svg)](https://github.com/akrck02/gtd/actions/workflows/test.yaml)
