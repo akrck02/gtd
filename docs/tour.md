@@ -8,11 +8,11 @@ It needs no real server: the "API" is a JSON file in the project.
 
 > Start from the project you made in [Getting started](getting-started.md). Keep these two
 > running in two terminals, and reload the browser after each step:
->
-> ```sh
-> ./bin/esbuild src/main.ts --bundle --format=esm --outfile=out/main.js --watch
-> python3 -m http.server 8000
-> ```
+
+```sh
+./bin/esbuild src/main.ts --bundle --format=esm --outfile=out/main.js --watch
+python3 -m http.server 8000
+```
 
 ## The files we will end with
 
