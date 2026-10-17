@@ -125,7 +125,8 @@ order and build on each other; add new ones at the end.</li>
 <li>Every exported function has a JSDoc comment.</li>
 <li>Compare with the constant first: <code>undefined == value</code>, <code>false == buffer.has(id)</code>.</li>
 <li>A module imports its siblings with <code>.js</code> (<code>./dom.js</code>), as TypeScript and esbuild expect.</li>
-<li>A new module gets a test file and a page in <code>docs/</code>, linked from <code>docs/README.md</code>.</li>
+<li>A new module gets a test file and a page in <code>docs/5-guides/</code> or <code>docs/6-reference/</code>, linked from
+<code>docs/1-overview.md</code>.</li>
 </ul>
 
 <h2 id="documentation">Documentation</h2>
@@ -137,10 +138,12 @@ something on screen in minutes. When you write a page:</p>
 <li><strong>Start with &ldquo;In 30 seconds&rdquo;</strong>: the smallest example that works, then explain.</li>
 <li><strong>Show, then tell</strong>: code first, then a table or a sentence about it.</li>
 <li><strong>Write for a junior</strong>: short sentences, plain words, explain any term the first time
-(or link <a href="./concepts">How GTD thinks</a>).</li>
+(or link <a href="./3-core-ideas">How GTD thinks</a>).</li>
 <li><strong>Every example must run</strong> as written: imports with <code>.js</code>, <code>await</code> where needed.</li>
 <li><strong>End with a full example and &ldquo;Common mistakes&rdquo;</strong> when the module has pitfalls.</li>
-<li><strong>Link both ways</strong>: from <code>docs/README.md</code> to the page, and back with <code>[← All the documentation]</code>.</li>
+<li><strong>Link both ways</strong>: from <code>docs/1-overview.md</code> to the page, and back with <code>[← All the documentation]</code>.</li>
+<li><strong>Name files for the menu</strong>: a number for the order and readable words (<code>3-talking-to-a-server.md</code>);
+papiro shows <em>Talking to a server</em> and hides the number.</li>
 </ul>
 
 <p>The <code>docs/</code> folder is published with <a href="https://github.com/akrck02/papiro" target="_blank">papiro</a> by
@@ -152,4 +155,4 @@ they work on GitHub and papiro turns them into site links.</p>
 
 <hr>
 
-<p><a href="./readme">← All the documentation</a></p>
+<p><a href="./1-overview">← All the documentation</a></p>
