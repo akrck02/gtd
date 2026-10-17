@@ -21,19 +21,19 @@ document.body.append(uiComponent({ type: "button", text: "Hello world!", classes
 
 ## Documentation
 
-Read it at **<https://akrck02.github.io/gtd>**, or in [`docs/`](docs/README.md):
+Read it at **<https://akrck02.github.io/gtd>**, or in [`docs/`](docs/1-overview.md):
 
-- [Getting started](docs/getting-started.md) (5 minutes), [how GTD thinks](docs/concepts.md) and
-  [the GTD quest](docs/tour.md)
-- Guides: [interface](docs/guides/dom.md), [routing](docs/guides/router.md),
-  [HTTP](docs/guides/http.md), [signals](docs/guides/signals.md),
-  [translations](docs/guides/i18n.md), [configuration](docs/guides/configuration.md),
-  [icons](docs/guides/icons.md), [keyboard shortcuts](docs/guides/shortcuts.md)
-- Helpers: [browser](docs/reference/browser.md), [display](docs/reference/display.md),
-  [animations](docs/reference/animations.md), [time](docs/reference/time.md),
-  [HTML tags and Bubble UI](docs/reference/html.md), [paths](docs/reference/paths.md),
-  [crypto](docs/reference/crypto.md)
-- [Troubleshooting](docs/troubleshooting.md) · [Contributing and testing](docs/contributing.md)
+- [Getting started](docs/2-getting-started.md) (5 minutes), [how GTD thinks](docs/3-core-ideas.md) and
+  [the GTD quest](docs/4-the-quest.md)
+- Guides: [interface](docs/5-guides/1-building-the-interface.md), [routing](docs/5-guides/2-views-and-routing.md),
+  [HTTP](docs/5-guides/3-talking-to-a-server.md), [signals](docs/5-guides/4-signals.md),
+  [translations](docs/5-guides/5-translations.md), [configuration](docs/5-guides/6-configuration.md),
+  [icons](docs/5-guides/7-icons.md), [keyboard shortcuts](docs/5-guides/8-keyboard-shortcuts.md)
+- Helpers: [browser](docs/6-reference/1-browser.md), [display](docs/6-reference/2-display.md),
+  [animations](docs/6-reference/3-animations.md), [time](docs/6-reference/4-time.md),
+  [HTML tags and Bubble UI](docs/6-reference/5-tags-and-styles.md), [paths](docs/6-reference/6-paths.md),
+  [crypto](docs/6-reference/7-crypto.md)
+- [Troubleshooting](docs/7-troubleshooting.md) · [Contributing and testing](docs/8-contributing.md)
 
 ## Testing
 

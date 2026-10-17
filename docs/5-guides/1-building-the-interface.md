@@ -235,4 +235,4 @@ document.body.append(label, button)
 
 ---
 
-[← All the documentation](../README.md) · Next: [Views and routing →](router.md)
+[← All the documentation](../1-overview.md) · Next: [Views and routing →](2-views-and-routing.md)

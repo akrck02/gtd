@@ -72,7 +72,8 @@ Some habits that keep the suite reliable:
 - Every exported function has a JSDoc comment.
 - Compare with the constant first: `undefined == value`, `false == buffer.has(id)`.
 - A module imports its siblings with `.js` (`./dom.js`), as TypeScript and esbuild expect.
-- A new module gets a test file and a page in `docs/`, linked from `docs/README.md`.
+- A new module gets a test file and a page in `docs/5-guides/` or `docs/6-reference/`, linked from
+  `docs/1-overview.md`.
 
 ## Documentation
 
@@ -82,10 +83,12 @@ something on screen in minutes. When you write a page:
 - **Start with "In 30 seconds"**: the smallest example that works, then explain.
 - **Show, then tell**: code first, then a table or a sentence about it.
 - **Write for a junior**: short sentences, plain words, explain any term the first time
-  (or link [How GTD thinks](concepts.md)).
+  (or link [How GTD thinks](3-core-ideas.md)).
 - **Every example must run** as written: imports with `.js`, `await` where needed.
 - **End with a full example and "Common mistakes"** when the module has pitfalls.
-- **Link both ways**: from `docs/README.md` to the page, and back with `[← All the documentation]`.
+- **Link both ways**: from `docs/1-overview.md` to the page, and back with `[← All the documentation]`.
+- **Name files for the menu**: a number for the order and readable words (`3-talking-to-a-server.md`);
+  papiro shows *Talking to a server* and hides the number.
 
 The `docs/` folder is published with [papiro](https://github.com/akrck02/papiro) by
 `.github/workflows/publish-docs.yaml` on every push to `main`. Link pages with relative `.md` links:
@@ -96,4 +99,4 @@ GitHub Pages must serve the `gh-pages` branch: **Settings → Pages → Deploy f
 
 ---
 
-[← All the documentation](README.md)
+[← All the documentation](1-overview.md)

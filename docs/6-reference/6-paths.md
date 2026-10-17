@@ -47,7 +47,7 @@ getUrlParametersByIndex("search/user/1/page/2", 2)
 With a full address, remember that `https:`, an empty piece and the domain count as the first
 three positions.
 
-> 💡 Using the [router](../guides/router.md)? It already gives your views the values of `$`
+> 💡 Using the [router](../5-guides/2-views-and-routing.md)? It already gives your views the values of `$`
 > segments — you rarely need these functions for that.
 
 ## Downloading a file
@@ -73,4 +73,4 @@ from other sites keep their own name, or open in a new tab.
 
 ---
 
-[← All the documentation](../README.md)
+[← All the documentation](../1-overview.md)

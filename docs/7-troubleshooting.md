@@ -47,7 +47,7 @@ The `<script>` tag needs `type="module"`.
 **`x is not defined` or `Cannot read properties of undefined`, but it compiled**
 
 esbuild does not check types, so typos reach the browser. Check the name in the error, or check
-types first: see *Checking types* in [Getting started](getting-started.md).
+types first: see *Checking types* in [Getting started](2-getting-started.md).
 
 ## Routing
 
@@ -76,12 +76,12 @@ container before each page.
 
 - Did you `await loadTextBundle("name")` before calling `getText`?
 - Does `./resources/i18n/<language>/<name>.json` exist? Check the *Network* tab for a 404.
-- Is your language in `AVAILABLE_LANGUAGES` in `i18n.ts`? See [Translations](guides/i18n.md).
+- Is your language in `AVAILABLE_LANGUAGES` in `i18n.ts`? See [Translations](5-guides/5-translations.md).
 
 **Settings of two apps mix up on `localhost`**
 
 Both use the same `configurationId`. Set your app's name in `configuration.ts`. See
-[Configuration](guides/configuration.md).
+[Configuration](5-guides/6-configuration.md).
 
 **`getIcon` returns `undefined`**
 
@@ -99,7 +99,7 @@ from the same address avoids it.
 **My request fails but there's no error**
 
 `fetch` — and so GTD — only throws on network failures. A `404` or `500` is a normal response:
-check `response.ok` or use `handleResponseStatus`. See [Talking to a server](guides/http.md).
+check `response.ok` or use `handleResponseStatus`. See [Talking to a server](5-guides/3-talking-to-a-server.md).
 
 ## Still stuck?
 
@@ -108,4 +108,4 @@ the console error. Small examples are the fastest to fix.
 
 ---
 
-[← All the documentation](README.md)
+[← All the documentation](1-overview.md)

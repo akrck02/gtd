@@ -77,7 +77,7 @@ await setCurrentLanguage("es", true) // true = download the loaded bundles again
 navigate()                            // draw the current page again with the new texts
 ```
 
-Remember the choice with [Configuration](configuration.md), and use it at start:
+Remember the choice with [Configuration](6-configuration.md), and use it at start:
 
 ```ts
 setConfiguration("lang", "es")
@@ -144,4 +144,4 @@ key. Check the *Network* tab for a 404 on the JSON file.
 
 ---
 
-[← All the documentation](../README.md) · Next: [Configuration →](configuration.md)
+[← All the documentation](../1-overview.md) · Next: [Configuration →](6-configuration.md)

@@ -206,4 +206,4 @@ navigate()
 
 ---
 
-[← All the documentation](../README.md) · Next: [Talking to a server →](http.md)
+[← All the documentation](../1-overview.md) · Next: [Talking to a server →](3-talking-to-a-server.md)

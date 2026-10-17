@@ -34,45 +34,45 @@ automatic re-rendering when data changes.
 
 New here? Follow these in order — the first two take about **10 minutes** together.
 
-[![The GTD quest: 8 levels to build a notes app](images/quest/quest-map.svg)](tour.md)
+[![The GTD quest: 8 levels to build a notes app](images/quest/quest-map.svg)](4-the-quest.md)
 
 | Step | Page | Time |
 |---|---|---|
-| 1 | [Getting started](getting-started.md) — create a project and see it in the browser | 5 min |
-| 2 | [How GTD thinks](concepts.md) — the six ideas behind every module | 5 min |
-| 3 | [The GTD quest](tour.md) — build a notes app in 8 short levels | 45 min |
-| 🆘 | [Troubleshooting](troubleshooting.md) — blank page? errors in the console? look here | — |
+| 1 | [Getting started](2-getting-started.md) — create a project and see it in the browser | 5 min |
+| 2 | [How GTD thinks](3-core-ideas.md) — the six ideas behind every module | 5 min |
+| 3 | [The GTD quest](4-the-quest.md) — build a notes app in 8 short levels | 45 min |
+| 🆘 | [Troubleshooting](7-troubleshooting.md) — blank page? errors in the console? look here | — |
 
 ## Guides — one per thing you want to do
 
 | I want to… | Read | Module |
 |---|---|---|
-| Put things on the screen | [Building the interface](guides/dom.md) | `dom.ts` |
-| Have several pages | [Views and routing](guides/router.md) | `router.ts`, `view.ts` |
-| Load or send data to a server | [Talking to a server](guides/http.md) | `http.ts` |
-| Let parts of my app react to each other | [Signals](guides/signals.md) | `signals.ts` |
-| Show my app in several languages | [Translations](guides/i18n.md) | `i18n.ts` |
-| Remember user settings | [Configuration](guides/configuration.md) | `configuration.ts` |
-| Show icons | [Icons](guides/icons.md) | `icons.ts` |
-| React to keyboard shortcuts | [Keyboard shortcuts](guides/shortcuts.md) | `shortcuts.ts` |
+| Put things on the screen | [Building the interface](5-guides/1-building-the-interface.md) | `dom.ts` |
+| Have several pages | [Views and routing](5-guides/2-views-and-routing.md) | `router.ts`, `view.ts` |
+| Load or send data to a server | [Talking to a server](5-guides/3-talking-to-a-server.md) | `http.ts` |
+| Let parts of my app react to each other | [Signals](5-guides/4-signals.md) | `signals.ts` |
+| Show my app in several languages | [Translations](5-guides/5-translations.md) | `i18n.ts` |
+| Remember user settings | [Configuration](5-guides/6-configuration.md) | `configuration.ts` |
+| Show icons | [Icons](5-guides/7-icons.md) | `icons.ts` |
+| React to keyboard shortcuts | [Keyboard shortcuts](5-guides/8-keyboard-shortcuts.md) | `shortcuts.ts` |
 
 ## Small helpers
 
 | I want to… | Read | Module |
 |---|---|---|
-| Know the screen size, dark mode or the device | [Browser](reference/browser.md) | `browser.ts` |
-| Style the page differently on phones | [Display](reference/display.md) | `display.ts` |
-| Type text letter by letter, or fade things in | [Animations](reference/animations.md) | `animations.ts` |
-| Wait some milliseconds | [Time](reference/time.md) | `time.ts` |
-| Make it look good (buttons, cards, dark theme) | [HTML tags and Bubble UI](reference/html.md) | `bubble.ts`, `html.ts` |
-| Read parts of a URL or download a file | [Paths](reference/paths.md) | `paths.ts` |
-| Generate a random unique id | [Crypto](reference/crypto.md) | `crypto.ts` |
+| Know the screen size, dark mode or the device | [Browser](6-reference/1-browser.md) | `browser.ts` |
+| Style the page differently on phones | [Display](6-reference/2-display.md) | `display.ts` |
+| Type text letter by letter, or fade things in | [Animations](6-reference/3-animations.md) | `animations.ts` |
+| Wait some milliseconds | [Time](6-reference/4-time.md) | `time.ts` |
+| Make it look good (buttons, cards, dark theme) | [HTML tags and Bubble UI](6-reference/5-tags-and-styles.md) | `bubble.ts`, `html.ts` |
+| Read parts of a URL or download a file | [Paths](6-reference/6-paths.md) | `paths.ts` |
+| Generate a random unique id | [Crypto](6-reference/7-crypto.md) | `crypto.ts` |
 
 ## Helping with GTD
 
 | Page | What it covers |
 |---|---|
-| [Contributing and testing](contributing.md) | Running the tests, code style, writing these docs |
+| [Contributing and testing](8-contributing.md) | Running the tests, code style, writing these docs |
 
 ## All the modules at a glance
 
