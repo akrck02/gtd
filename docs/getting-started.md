@@ -151,11 +151,11 @@ Open **<http://localhost:8000>** in your browser. You should see:
 
 ![The home page: a "My first GTD app" title and a "Say hello" button](images/getting-started-home.png)
 
-1. Click **Say hello** → the address ends in `#/hello/world` and the page greets you:
+Click **Say hello** → the address ends in `#/hello/world` and the page greets you:
 
 ![The second page says "Hello, world!" with a link back](images/getting-started-hello.png)
 
-2. Click **← Back** → you are home again. Try typing `#/hello/Ada` in the address bar too.
+Click **← Back** → you are home again. Try typing `#/hello/Ada` in the address bar too.
 
 🎉 **That's it — you have a GTD app with routing.**
 
