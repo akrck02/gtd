@@ -24,7 +24,7 @@ document.body.append(uiComponent({ type: "button", text: "Hello world!", classes
 Read it at **<https://akrck02.github.io/gtd>**, or in [`docs/`](docs/README.md):
 
 - [Getting started](docs/getting-started.md) (5 minutes), [how GTD thinks](docs/concepts.md) and
-  [a tour of GTD](docs/tour.md)
+  [🎮 the GTD Quest](docs/tour.md)
 - Guides: [interface](docs/guides/dom.md), [routing](docs/guides/router.md),
   [HTTP](docs/guides/http.md), [signals](docs/guides/signals.md),
   [translations](docs/guides/i18n.md), [configuration](docs/guides/configuration.md),

@@ -34,11 +34,13 @@ automatic re-rendering when data changes.
 
 New here? Follow these in order — the first two take about **10 minutes** together.
 
+[![The GTD Quest: 8 levels and a boss to build a notes app](images/quest/quest-map.svg)](tour.md)
+
 | Step | Page | Time |
 |---|---|---|
 | 1 | [Getting started](getting-started.md) — create a project and see it in the browser | 5 min |
 | 2 | [How GTD thinks](concepts.md) — the six ideas behind every module | 5 min |
-| 3 | [A tour of GTD](tour.md) — build a small notes app using every module | 15 min |
+| 3 | [🎮 The GTD Quest](tour.md) — build a notes app in 8 levels and a boss, earn 9 badges | 45 min |
 | 🆘 | [Troubleshooting](troubleshooting.md) — blank page? errors in the console? look here | — |
 
 ## Guides — one per thing you want to do

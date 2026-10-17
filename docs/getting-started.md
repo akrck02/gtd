@@ -1,7 +1,16 @@
 # Getting started 🚀
 
-By the end of this page you will have a GTD app running in your browser, with two pages and a
-button. It takes about **five minutes**.
+| | |
+|---|---|
+| 🎯 **Goal** | Your first GTD app in the browser: two pages and a button |
+| ⏱️ **Time** | About 5 minutes |
+| 🧰 **You need** | A terminal, git and Python 3 — no Node.js |
+| 🗺️ **Then** | [The GTD Quest](tour.md): 8 levels, a boss and 9 badges |
+
+Think of this page as **level 0, the base camp** ⛺: you set up your tools here, and the adventure
+starts on the next page.
+
+---
 
 ## No Node.js, no npm
 
@@ -17,7 +26,9 @@ Nothing gets installed globally, there is no `package.json`, and your project fo
 > 💡 **Why a local server?** Browsers refuse to load scripts from a file opened by double-click
 > (`file://…`) in many cases. Any static server works; Python's is just already there.
 
-## Step 1 — Get GTD
+---
+
+## Step 1 — Get GTD 📦
 
 ```sh
 git clone --depth 1 https://github.com/akrck02/gtd gtd-download
@@ -34,7 +45,13 @@ The `styles/` folder holds **Bubble UI**, the stylesheet that goes with GTD: nic
 a dark theme and layout classes, in one 9 KB file. It is optional, but it makes your app look good
 from the first minute.
 
-## Step 2 — Get esbuild
+---
+
+## Step 2 — Get esbuild 🔧
+
+esbuild is a **blender** 🥤: you put in many `.ts` files — yours and GTD's — and get **one**
+`.js` file the browser can drink.
+
 
 **On Linux (x86-64)** the GTD repository already ships it:
 
@@ -70,7 +87,9 @@ my-app/
         └── …
 ```
 
-## Step 3 — Write the page
+---
+
+## Step 3 — Write the page 📄
 
 Create **`index.html`** in `my-app/`:
 
@@ -97,7 +116,9 @@ Create **`index.html`** in `my-app/`:
 classes stack what we put in it and centre it. The `<script>` loads our code — it points to
 `out/main.js`, the file esbuild will **build**, not to the `.ts` file.
 
-## Step 4 — Write the app
+---
+
+## Step 4 — Write the app ✍️
 
 Create **`src/main.ts`**:
 
@@ -137,7 +158,9 @@ navigate()
 > 💡 The imports end in **`.js`** even though the files are `.ts`. That is the standard way to
 > write imports in TypeScript for the browser, and esbuild understands it.
 
-## Step 5 — Build and run
+---
+
+## Step 5 — Build and run ▶️
 
 ```sh
 ./bin/esbuild src/main.ts --bundle --format=esm --outfile=out/main.js
@@ -157,11 +180,13 @@ Click **Say hello** → the address ends in `#/hello/world` and the page greets 
 
 Click **← Back** → you are home again. Try typing `#/hello/Ada` in the address bar too.
 
-🎉 **That's it — you have a GTD app with routing.**
+🎉 **That's it — you have a GTD app with routing.** Base camp done: you are ready for the quest.
 
 Nothing on screen? Head to [Troubleshooting](troubleshooting.md).
 
-## Making changes
+---
+
+## Making changes 🔁
 
 Leave esbuild **watching** in a second terminal; it rebuilds every time you save:
 
@@ -171,7 +196,7 @@ Leave esbuild **watching** in a second terminal; it rebuilds every time you save
 
 Then just reload the browser after each change.
 
-## Getting ready to publish
+## Getting ready to publish 🌍
 
 Add `--minify` to make the file small, and copy `index.html` and `out/` to any static host
 (GitHub Pages, Netlify, your own server…):
@@ -180,7 +205,7 @@ Add `--minify` to make the file small, and copy `index.html` and `out/` to any s
 ./bin/esbuild src/main.ts --bundle --format=esm --minify --outfile=out/main.js
 ```
 
-## Checking types (optional)
+## Checking types (optional) 🔍
 
 esbuild builds fast because it **does not check types**: a typo like `contaner` shows up in the
 browser, not in the terminal. Editors such as VS Code check types as you type. To check from the
@@ -190,10 +215,12 @@ without Node:
 ```sh
 cp ../gtd-download/bin/install-ts.sh bin/
 ./bin/install-ts.sh        # downloads bin/tsgo once
-./bin/tsgo --noEmit --target ES2022 --module ESNext --lib ES2022,DOM,DOM.Iterable src/main.ts
+./bin/tsgo --noEmit --strict false --target ES2022 --module ESNext --lib ES2022,DOM,DOM.Iterable src/main.ts
 ```
 
-## What just happened?
+---
+
+## What just happened? 🤔
 
 ![How a GTD app is built: your TypeScript and GTD go through esbuild into one JavaScript file that index.html loads](images/build-flow.svg)
 
@@ -205,10 +232,15 @@ cp ../gtd-download/bin/install-ts.sh bin/
 | `setRoute("/hello/$", view)` | Says which function draws which address — see [Views and routing](guides/router.md) |
 | `showRoute(path, app)` | Clears `app` and draws the matching page |
 
-## Next steps
+---
 
-- 🧠 [How GTD thinks](concepts.md) — six ideas that make every other page easier.
-- 🗺️ [A tour of GTD](tour.md) — build a small notes app, step by step.
+## Next: choose your path 🧭
+
+| | Path | What you get |
+|---|---|---|
+| 🗺️ | **[Start the GTD Quest](tour.md)** (recommended) | Build a notes app in 8 levels and a boss. Learn by doing, earn 9 badges |
+| 🧠 | [How GTD thinks](concepts.md) | Six ideas, five minutes, every other page becomes easier |
+| 📚 | [The guides](README.md#guides--one-per-thing-you-want-to-do) | Look up one thing when you need it |
 
 ---
 
