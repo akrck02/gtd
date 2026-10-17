@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 290" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect width="760" height="290" rx="18" fill="#e6e6e6"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#4A5C92"/></marker></defs>
+  <g font-size="14">
+    <rect x="24" y="110" width="190" height="70" rx="35" fill="#4A5C92"/>
+    <text x="119" y="140" text-anchor="middle" fill="#fff" font-size="13">the address is</text>
+    <text x="119" y="162" text-anchor="middle" fill="#fff" font-weight="700">#/user/7</text>
+    <path d="M214 145 H262" stroke="#4A5C92" stroke-width="2.5" marker-end="url(#a)"/>
+    <text x="276" y="30" fill="#000" font-weight="700">your routes, longest first</text>
+    <rect x="266" y="44" width="230" height="52" rx="14" fill="#d9d9d9"/>
+    <text x="284" y="75" fill="#555">/user/$/post/$</text><text x="482" y="75" text-anchor="end" fill="#BA1A1A" font-weight="700">✗</text>
+    <rect x="266" y="110" width="230" height="70" rx="14" fill="#DBE1FF" stroke="#4A5C92" stroke-width="2"/>
+    <text x="284" y="140" fill="#00174B" font-weight="700">/user/$</text><text x="482" y="140" text-anchor="end" fill="#1b7a3c" font-weight="700">✓</text>
+    <text x="284" y="164" fill="#00174B" font-size="13">params = ["7"]</text>
+    <rect x="266" y="194" width="230" height="52" rx="14" fill="#d9d9d9"/>
+    <text x="284" y="225" fill="#555">/about</text>
+    <text x="276" y="272" fill="#585E72" font-size="12">no match at all → the not found view</text>
+    <path d="M496 145 H544" stroke="#4A5C92" stroke-width="2.5" marker-end="url(#a)"/>
+    <rect x="548" y="70" width="188" height="150" rx="16" fill="#fff" stroke="#bfbfbf"/>
+    <text x="642" y="96" text-anchor="middle" fill="#585E72" font-size="12">container (emptied)</text>
+    <rect x="566" y="110" width="152" height="40" rx="12" fill="#d9d9d9"/>
+    <text x="642" y="135" text-anchor="middle" fill="#000" font-weight="700">Profile of user 7</text>
+    <text x="642" y="190" text-anchor="middle" fill="#00174B" font-size="13">userView(["7"], container)</text>
+  </g>
+</svg>

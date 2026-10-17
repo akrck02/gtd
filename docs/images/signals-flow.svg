@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 260" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect width="760" height="260" rx="18" fill="#e6e6e6"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 10 5 0 10z" fill="#4A5C92"/></marker></defs>
+  <g font-size="14">
+    <rect x="24" y="95" width="170" height="70" rx="16" fill="#d9d9d9"/>
+    <text x="109" y="125" text-anchor="middle" font-weight="700">login.ts</text>
+    <text x="109" y="147" text-anchor="middle" fill="#333" font-size="12">emitSignal(…, user)</text>
+    <path d="M194 130 H262" stroke="#4A5C92" stroke-width="2.5" marker-end="url(#a)"/>
+    <rect x="266" y="90" width="200" height="80" rx="40" fill="#4A5C92"/>
+    <text x="366" y="124" text-anchor="middle" fill="#fff" font-weight="700" font-size="16">userLoggedIn</text>
+    <text x="366" y="146" text-anchor="middle" fill="#fff" font-size="12">a signal</text>
+    <path d="M466 118 C510 100 510 60 544 56" fill="none" stroke="#4A5C92" stroke-width="2.5" marker-end="url(#a)"/>
+    <path d="M466 130 H544" stroke="#4A5C92" stroke-width="2.5" marker-end="url(#a)"/>
+    <path d="M466 142 C510 160 510 200 544 204" fill="none" stroke="#4A5C92" stroke-width="2.5" marker-end="url(#a)"/>
+    <rect x="548" y="28" width="188" height="56" rx="16" fill="#DBE1FF"/><text x="642" y="52" text-anchor="middle" font-weight="700" fill="#00174B">header.ts</text><text x="642" y="72" text-anchor="middle" fill="#00174B" font-size="12">"Hi, Ada"</text>
+    <rect x="548" y="102" width="188" height="56" rx="16" fill="#DBE1FF"/><text x="642" y="126" text-anchor="middle" font-weight="700" fill="#00174B">menu.ts</text><text x="642" y="146" text-anchor="middle" fill="#00174B" font-size="12">shows more options</text>
+    <rect x="548" y="176" width="188" height="56" rx="16" fill="#DBE1FF"/><text x="642" y="200" text-anchor="middle" font-weight="700" fill="#00174B">cart.ts</text><text x="642" y="220" text-anchor="middle" fill="#00174B" font-size="12">loads the cart</text>
+    <text x="109" y="226" text-anchor="middle" fill="#585E72" font-size="12">knows nothing about</text>
+    <text x="109" y="242" text-anchor="middle" fill="#585E72" font-size="12">the header, menu or cart</text>
+  </g>
+</svg>

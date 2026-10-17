@@ -17,7 +17,7 @@ export function getUrlParametersByBreakPoint(url: string, breakpoint: string): s
     if (-1 == index) 
       return [];
     
-    return params.slice(index, params.length);
+    return params.slice(index + 1, params.length);
 }
 
 /**
@@ -27,8 +27,8 @@ export function getUrlParametersByBreakPoint(url: string, breakpoint: string): s
  * @description This method is useful for getting parameters of a url by index.
  * @returns parameters of a url
  * @example
- *      const url = "https://www.website.org/search/user/1/page/2";
- *      const index = 1;
+ *      const url = "search/user/1/page/2";
+ *      const index = 2;
  *      const parameters = getParametersByIndex(url, index);
  *      console.log(parameters); // ["1","page","2"]
  */

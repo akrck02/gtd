@@ -1,0 +1,15 @@
+name: Test
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Install the native TypeScript compiler
+        run: ./bin/install-ts.sh
+      - name: Check types
+        run: ./bin/tsgo -p .
+      - name: Run the tests in Chrome
+        run: ./bin/test.sh

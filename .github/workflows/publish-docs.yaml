@@ -1,0 +1,26 @@
+name: Publish documents
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: akrck02/papiro-deploy@main
+        with:
+          title: "GTD"
+          description: "Easy idiomatic web library."
+          path: "./docs"
+          isObsidianProject: false
+          showFooter: true
+          showBreadcrumb: true
+          showStartPage: true
+      - name: Deploy to github pages 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: .

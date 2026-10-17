@@ -1,3 +1,4 @@
 temp
-src/test.ts
-icons.json
+bin/tsgo
+bin/.tsgo
+test/out
