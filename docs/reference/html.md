@@ -73,10 +73,10 @@ const danger = uiComponent({ type: Html.Button, text: "Delete", classes: [Bubble
 
 > 💡 Colours are CSS variables (`--primary-color`, `--surface-1`…). Change them in your own CSS to
 > give your app its own palette:
->
-> ```css
-> :root { --primary-color: #00796b; }
-> ```
+
+```css
+:root { --primary-color: #00796b; }
+```
 
 ## `Html`: tag names
 

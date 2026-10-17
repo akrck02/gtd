@@ -70,11 +70,11 @@ uiComponent({ type: "p", text: "Some <strong>bold</strong> words." }) // HTML wo
 
 > ⚠️ **Never put text typed by users into `text`.** It is read as HTML, so a user could inject
 > scripts into your page. For user text, set `textContent` after creating the element:
->
-> ```ts
-> const comment = uiComponent({ type: "p", classes: ["comment"] })
-> comment.textContent = userInput // always shown as plain text, safe
-> ```
+
+```ts
+const comment = uiComponent({ type: "p", classes: ["comment"] })
+comment.textContent = userInput // always shown as plain text, safe
+```
 
 ### Classes
 
