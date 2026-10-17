@@ -1,0 +1,114 @@
+<h1 id="troubleshooting">Troubleshooting 🆘</h1>
+
+<p>Something not working? Open the <strong>browser console</strong> first (<code>F12</code>, or right click → <em>Inspect</em> →
+<em>Console</em>). The error there almost always points to one of these.</p>
+
+<h2 id="building">Building</h2>
+
+<p><strong><code>./bin/esbuild: Permission denied</code></strong></p>
+
+<p>Make it executable: <code>chmod +x bin/esbuild</code>.</p>
+
+<p><strong><code>./bin/esbuild: cannot execute binary file</code></strong> (or <em>Exec format error</em>)</p>
+
+<p>The esbuild in the GTD repository is for Linux x86-64. On macOS, Windows or ARM, download yours:
+<code>curl -fsSL https://esbuild.github.io/dl/v0.25.8 | sh</code>. On Windows, run it in <em>Git Bash</em> or WSL.</p>
+
+<p><strong><code>Could not resolve &quot;./gtd/dom.js&quot;</code></strong></p>
+
+<p>The path is wrong. Imports are relative to the file that has them: from <code>src/main.ts</code>, GTD&rsquo;s files
+are in <code>./gtd/</code>. Check that <code>src/gtd/dom.ts</code> exists.</p>
+
+<p><strong><code>Top-level await is currently not supported with the &quot;iife&quot; output format</code></strong></p>
+
+<p>Add <code>--format=esm</code> to the esbuild command, and keep <code>type=&quot;module&quot;</code> on the <code>&lt;script&gt;</code> tag.</p>
+
+<p><strong>My changes don&rsquo;t show up</strong></p>
+
+<p>Is esbuild running with <code>--watch</code>, or did you run it again? Then reload without cache:
+<code>Ctrl + Shift + R</code> (<code>Cmd + Shift + R</code> on a Mac).</p>
+
+<h2 id="the-page-is-blank">The page is blank</h2>
+
+<p><strong><code>GET http://localhost:8000/out/main.js 404 (Not Found)</code></strong></p>
+
+<p>The app was not built yet, or went somewhere else. Run esbuild and check that <code>out/main.js</code> exists
+and matches the <code>src</code> of your <code>&lt;script&gt;</code>.</p>
+
+<p><strong>Errors about modules or CORS, and the address starts with <code>file://</code></strong></p>
+
+<p>You opened <code>index.html</code> by double-clicking it. Serve the folder instead:
+<code>python3 -m http.server 8000</code>, then open <a href="http://localhost:8000" target="_blank">http://localhost:8000</a>.</p>
+
+<p><strong><code>Cannot use import statement outside a module</code></strong></p>
+
+<p>The <code>&lt;script&gt;</code> tag needs <code>type=&quot;module&quot;</code>.</p>
+
+<p><strong><code>x is not defined</code> or <code>Cannot read properties of undefined</code>, but it compiled</strong></p>
+
+<p>esbuild does not check types, so typos reach the browser. Check the name in the error, or check
+types first: see <em>Checking types</em> in <a href="./getting-started">Getting started</a>.</p>
+
+<h2 id="routing">Routing</h2>
+
+<p><strong>Every page shows &ldquo;Page not found.&rdquo;</strong></p>
+
+<ul>
+<li>Is <code>setRoute</code> called <strong>before</strong> <code>showRoute</code>?</li>
+<li>Are you passing the path without the <code>#</code>? Use <code>location.hash.slice(1)</code>.</li>
+<li>Is the route registered with a leading slash? <code>setRoute(&quot;/about&quot;, …)</code>, then go to <code>#/about</code>.</li>
+</ul>
+
+<p><strong>Nothing happens when the address changes</strong></p>
+
+<p>GTD does not watch the address bar for you. Add:</p>
+
+<pre><code class="language-ts">window.addEventListener(&quot;hashchange&quot;, () =&gt; showRoute(location.hash.slice(1) || &quot;/&quot;, app))
+</code></pre>
+
+<p><strong>Pages pile up on top of each other</strong></p>
+
+<p>Draw into the <code>container</code> your view receives, not into <code>document.body</code>. <code>showRoute</code> empties the
+container before each page.</p>
+
+<h2 id="translations-configuration-icons">Translations, configuration, icons</h2>
+
+<p><strong><code>getText</code> returns an empty string</strong></p>
+
+<ul>
+<li>Did you <code>await loadTextBundle(&quot;name&quot;)</code> before calling <code>getText</code>?</li>
+<li>Does <code>./resources/i18n/&lt;language&gt;/&lt;name&gt;.json</code> exist? Check the <em>Network</em> tab for a 404.</li>
+<li>Is your language in <code>AVAILABLE_LANGUAGES</code> in <code>i18n.ts</code>? See <a href="./guides/i18n">Translations</a>.</li>
+</ul>
+
+<p><strong>Settings of two apps mix up on <code>localhost</code></strong></p>
+
+<p>Both use the same <code>configurationId</code>. Set your app&rsquo;s name in <code>configuration.ts</code>. See
+<a href="./guides/configuration">Configuration</a>.</p>
+
+<p><strong><code>getIcon</code> returns <code>undefined</code></strong></p>
+
+<p>Make sure you <code>await loadIcons(...)</code> first, and that the collection id and icon name are spelled
+the same as in the JSON file.</p>
+
+<h2 id="requests">Requests</h2>
+
+<p><strong><code>Access to fetch … has been blocked by CORS policy</code></strong></p>
+
+<p>The server does not allow requests from your page&rsquo;s address. This is fixed on the <strong>server</strong> (it
+must send <code>Access-Control-Allow-Origin</code>), not in GTD. While developing, serving your app and the API
+from the same address avoids it.</p>
+
+<p><strong>My request fails but there&rsquo;s no error</strong></p>
+
+<p><code>fetch</code> — and so GTD — only throws on network failures. A <code>404</code> or <code>500</code> is a normal response:
+check <code>response.ok</code> or use <code>handleResponseStatus</code>. See <a href="./guides/http">Talking to a server</a>.</p>
+
+<h2 id="still-stuck">Still stuck?</h2>
+
+<p>Open an issue at <a href="https://github.com/akrck02/gtd/issues" target="_blank">https://github.com/akrck02/gtd/issues</a> with what you did, what you expected, and
+the console error. Small examples are the fastest to fix.</p>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

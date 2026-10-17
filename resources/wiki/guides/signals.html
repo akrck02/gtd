@@ -1,0 +1,190 @@
+<h1 id="signals">Signals 📡</h1>
+
+<p><strong>Module:</strong> <code>signals.ts</code> · <strong>Depends on:</strong> <code>crypto.ts</code></p>
+
+<p>As an app grows, parts of it need to know when something happens elsewhere: when the user logs in,
+the header shows their name, the menu shows more options, the cart loads. A <strong>signal</strong> lets one part
+<strong>announce</strong> the event and any number of parts <strong>react</strong>, without importing each other.</p>
+
+<p>If you have used Godot, GTK or Qt, it is the same idea. Elsewhere it is called an <em>event bus</em> or the
+<em>observer pattern</em>.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { setSignal, connectToSignal, emitSignal } from &quot;./gtd/signals.js&quot;
+
+const userLoggedIn = setSignal()                       // 1. create
+
+connectToSignal(userLoggedIn, async user =&gt; {          // 2. listen
+  console.log(`Welcome, ${user.name}!`)
+})
+
+await emitSignal(userLoggedIn, { name: &quot;Ada&quot; })        // 3. announce
+// → Welcome, Ada!
+</code></pre>
+
+<p><img src="./images/signals-flow.svg" alt="The login emits userLoggedIn; the header, the menu and the cart react, without knowing each other" /></p>
+
+<h2 id="the-three-steps">The three steps</h2>
+
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Create</td>
+<td><code>setSignal()</code></td>
+<td>Returns a new, unique signal id (a string)</td>
+</tr>
+
+<tr>
+<td>Listen</td>
+<td><code>connectToSignal(id, handler)</code></td>
+<td>Calls <code>handler(data)</code> every time the signal is emitted</td>
+</tr>
+
+<tr>
+<td>Announce</td>
+<td><code>emitSignal(id, data)</code></td>
+<td>Calls every handler connected to <code>id</code>, with <code>data</code>, and waits for all of them</td>
+</tr>
+
+<tr>
+<td>Stop</td>
+<td><code>disconnectSignal(id)</code></td>
+<td>Removes <strong>every</strong> handler of <code>id</code>; the signal can be connected again</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="organising-signals-in-a-real-app">Organising signals in a real app</h2>
+
+<p>Create all the signals in <strong>one file</strong>, so everyone imports the same ids:</p>
+
+<pre><code class="language-ts">// src/events.ts
+import { setSignal } from &quot;./gtd/signals.js&quot;
+
+export const userLoggedIn = setSignal()
+export const cartChanged = setSignal()
+</code></pre>
+
+<pre><code class="language-ts">// src/header.ts
+import { connectToSignal } from &quot;./gtd/signals.js&quot;
+import { userLoggedIn } from &quot;./events.js&quot;
+
+connectToSignal(userLoggedIn, async user =&gt; {
+  greeting.textContent = `Hi, ${user.name}`
+})
+</code></pre>
+
+<pre><code class="language-ts">// src/cart.ts
+connectToSignal(userLoggedIn, async user =&gt; loadCart(user.id))
+</code></pre>
+
+<pre><code class="language-ts">// src/login.ts — knows nothing about the header or the cart
+await emitSignal(userLoggedIn, { id: 7, name: &quot;Ada&quot; })
+</code></pre>
+
+<p>Adding a new reaction later means adding one <code>connectToSignal</code>, without touching <code>login.ts</code>.</p>
+
+<h2 id="how-it-behaves">How it behaves</h2>
+
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>What happens</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Several handlers on one signal</td>
+<td>All run, in the order they were connected</td>
+</tr>
+
+<tr>
+<td>Emitting a signal that was never created</td>
+<td>Nothing</td>
+</tr>
+
+<tr>
+<td>Connecting to a signal that was never created</td>
+<td>An error in the console; the handler is ignored</td>
+</tr>
+
+<tr>
+<td>A handler that takes long (e.g. a request)</td>
+<td><code>await emitSignal(...)</code> waits until every handler finished</td>
+</tr>
+
+<tr>
+<td><code>emitSignal(id)</code> without data</td>
+<td>Handlers receive <code>undefined</code></td>
+</tr>
+</tbody>
+</table>
+<p>Handlers start one after the other but run <strong>at the same time</strong>, so a slow one doesn&rsquo;t delay the
+others.</p>
+
+<h3 id="signals-and-pages">Signals and pages</h3>
+
+<p>A view that connects to a signal every time it is drawn would pile up handlers. Connect long-lived
+parts of the app (a header, a cart) once, at start. For a signal that belongs to one page, clear it
+before drawing the page again:</p>
+
+<pre><code class="language-ts">setRoute(&quot;/chat&quot;, async (_, container) =&gt; {
+  disconnectSignal(messageArrived) // forget the previous visit's handlers
+  connectToSignal(messageArrived, async message =&gt; container.append(bubble(message)))
+})
+</code></pre>
+
+<h2 id="typing-the-data">Typing the data</h2>
+
+<p>Handlers receive <code>any</code>. Give the data a type to get autocompletion:</p>
+
+<pre><code class="language-ts">type User = { id: number, name: string }
+
+connectToSignal(userLoggedIn, async (user: User) =&gt; {
+  user.name // autocompleted
+})
+</code></pre>
+
+<h2 id="full-example-a-cart-badge">Full example: a cart badge</h2>
+
+<pre><code class="language-ts">import { uiComponent, setDomEvents } from &quot;./gtd/dom.js&quot;
+import { setSignal, connectToSignal, emitSignal } from &quot;./gtd/signals.js&quot;
+
+const cartChanged = setSignal()
+const cart: string[] = []
+
+// the badge only listens
+const badge = uiComponent({ type: &quot;span&quot;, text: &quot;🛒 0&quot; })
+connectToSignal(cartChanged, async (items: string[]) =&gt; {
+  badge.textContent = `🛒 ${items.length}`
+})
+
+// the buttons only announce
+const products = [&quot;Pencil&quot;, &quot;Notebook&quot;].map(name =&gt; {
+  const button = uiComponent({ type: &quot;button&quot;, text: `Add ${name}` })
+  setDomEvents(button, {
+    click: () =&gt; {
+      cart.push(name)
+      emitSignal(cartChanged, cart)
+    },
+  })
+  return button
+})
+
+document.body.append(badge, ...products)
+</code></pre>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./guides/i18n">Translations →</a></p>

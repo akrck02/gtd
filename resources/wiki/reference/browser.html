@@ -1,0 +1,131 @@
+<h1 id="browser">Browser 🖥️</h1>
+
+<p><strong>Module:</strong> <code>browser.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p>Small questions about the device and the user&rsquo;s preferences, each answered by one function that
+returns <code>true</code> or <code>false</code>.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { isSmallDevice, prefersDarkMode } from &quot;./gtd/browser.js&quot;
+
+if (isSmallDevice()) document.body.classList.add(&quot;mobile-layout&quot;)
+if (prefersDarkMode()) document.body.classList.add(&quot;dark&quot;)
+</code></pre>
+
+<h2 id="screen-size">Screen size</h2>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th><code>true</code> when the window is</th>
+<th>Typical device</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>isSmallDevice()</code></td>
+<td>760px wide or less</td>
+<td>phone</td>
+</tr>
+
+<tr>
+<td><code>isMediumDevice()</code></td>
+<td>760px to 1024px</td>
+<td>tablet, small laptop window</td>
+</tr>
+
+<tr>
+<td><code>isLargeDevice()</code></td>
+<td>wider than 1024px</td>
+<td>desktop</td>
+</tr>
+</tbody>
+</table>
+<p>They check the size <strong>when you call them</strong>. To react when the user resizes the window:</p>
+
+<pre><code class="language-ts">window.addEventListener(&quot;resize&quot;, () =&gt; {
+  document.body.classList.toggle(&quot;mobile-layout&quot;, isSmallDevice())
+})
+</code></pre>
+
+<blockquote>
+<p>💡 For pure styling, CSS media queries (<code>@media (max-width: 760px) { … }</code>) are simpler. Use
+these functions when the <strong>code</strong> must change, e.g. to draw a different menu.</p>
+</blockquote>
+
+<h2 id="user-preferences">User preferences</h2>
+
+<p>People set these in their operating system. Respecting them makes your app feel at home.</p>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th><code>true</code> when the user…</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>prefersDarkMode()</code></td>
+<td>uses a dark theme</td>
+</tr>
+
+<tr>
+<td><code>prefersLightMode()</code></td>
+<td>uses a light theme</td>
+</tr>
+
+<tr>
+<td><code>prefersReducedMotion()</code></td>
+<td>asked for fewer animations (motion can make some people dizzy)</td>
+</tr>
+
+<tr>
+<td><code>mediaQuery(query)</code></td>
+<td>matches any <a href="https://developer.mozilla.org/docs/Web/CSS/Media_Queries" target="_blank">media query</a> you write</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-ts">const animate = !prefersReducedMotion()
+const touchOnly = mediaQuery(&quot;(hover: none)&quot;)
+const printing = mediaQuery(&quot;print&quot;)
+</code></pre>
+
+<h2 id="device-and-system">Device and system</h2>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Returns</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>isMobile()</code></td>
+<td>Something truthy on Android, iPhone, iPad and other mobile browsers</td>
+</tr>
+
+<tr>
+<td><code>getOs()</code></td>
+<td><code>&quot;Windows&quot;</code>, <code>&quot;MacOS&quot;</code>, <code>&quot;Linux&quot;</code>, <code>&quot;UNIX&quot;</code>, or <code>undefined</code></td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-ts">const shortcut = &quot;MacOS&quot; == getOs() ? &quot;⌘ + S&quot; : &quot;Ctrl + S&quot;
+uiComponent({ type: &quot;small&quot;, text: `Save with ${shortcut}` })
+</code></pre>
+
+<p>These read the browser&rsquo;s <em>user agent</em> text, which can be changed or faked. Use them for small
+hints like the example above, not for important decisions.</p>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

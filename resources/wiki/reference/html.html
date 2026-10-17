@@ -1,0 +1,171 @@
+<h1 id="html-tags-and-bubble-ui">HTML tags and Bubble UI 🏷️</h1>
+
+<p><strong>Modules:</strong> <code>html.ts</code>, <code>bubble.ts</code> · <strong>Depend on:</strong> nothing · <strong>Stylesheet:</strong> <code>styles/bubbleui-v3.0.0.css</code></p>
+
+<p>Two lists of names, so your editor can autocomplete them and typos become errors — and the
+stylesheet that makes GTD apps look good with almost no CSS.</p>
+
+<h2 id="bubble-ui-in-30-seconds">Bubble UI in 30 seconds</h2>
+
+<p>Link the stylesheet in <code>index.html</code>:</p>
+
+<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;./styles/bubbleui-v3.0.0.css&quot;&gt;
+</code></pre>
+
+<p>and use its classes:</p>
+
+<pre><code class="language-ts">import { BubbleUI } from &quot;./gtd/bubble.js&quot;
+
+const card = uiComponent({ classes: [BubbleUI.Surface1, BubbleUI.BoxColumn], styles: { padding: &quot;1rem&quot; } })
+card.append(
+  uiComponent({ type: &quot;h2&quot;, text: &quot;Welcome&quot; }),
+  uiComponent({ type: &quot;button&quot;, text: &quot;Start&quot;, classes: [BubbleUI.Primary] }),
+)
+</code></pre>
+
+<h2 id="what-the-stylesheet-gives-you-for-free">What the stylesheet gives you for free</h2>
+
+<p>Without adding any class:</p>
+
+<ul>
+<li>A clean base: margins reset, the system font, a soft grey background.</li>
+<li><strong>Buttons</strong> rounded like pills, that shrink a little when pressed.</li>
+<li><strong>Inputs and text areas</strong> rounded, with a blue outline when focused.</li>
+<li><strong>Links</strong> in the primary colour, without underline.</li>
+<li><strong>Titles</strong> <code>h1</code>–<code>h6</code> with comfortable sizes and margins.</li>
+<li>A <strong>dark theme</strong>: set <code>data-theme=&quot;dark&quot;</code> on <code>&lt;html&gt;</code>.</li>
+</ul>
+
+<pre><code class="language-ts">document.documentElement.dataset.theme = prefersDarkMode() ? &quot;dark&quot; : &quot;light&quot;
+</code></pre>
+
+<h2 id="bubbleui-the-class-names"><code>BubbleUI</code>: the class names</h2>
+
+<p><strong>Layout</strong> — every box is a flexbox:</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Class</th>
+<th>Puts the children…</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>BoxColumn</code> / <code>BoxColumnReverse</code></td>
+<td><code>box-column</code>…</td>
+<td>top to bottom (or bottom to top)</td>
+</tr>
+
+<tr>
+<td><code>BoxRow</code> / <code>BoxRowReverse</code></td>
+<td><code>box-row</code>…</td>
+<td>left to right (or right to left)</td>
+</tr>
+
+<tr>
+<td><code>BoxWrap</code></td>
+<td><code>box-wrap</code></td>
+<td>in lines that wrap</td>
+</tr>
+
+<tr>
+<td><code>BoxCenter</code></td>
+<td><code>box-center</code></td>
+<td>in the middle, both ways</td>
+</tr>
+
+<tr>
+<td><code>BoxXCenter</code> / <code>BoxXStart</code> / <code>BoxXEnd</code></td>
+<td><code>box-x-…</code></td>
+<td>centred, at the start or at the end, horizontally</td>
+</tr>
+
+<tr>
+<td><code>BoxYCenter</code> / <code>BoxYStart</code> / <code>BoxYEnd</code></td>
+<td><code>box-y-…</code></td>
+<td>centred, at the top or at the bottom, vertically</td>
+</tr>
+
+<tr>
+<td><code>BoxXBetween</code> / <code>BoxXAround</code></td>
+<td><code>box-x-between</code>…</td>
+<td>spread out</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Colours</strong> — background and matching text colour, from the Material palette:</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Class</th>
+<th>Looks like</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>Primary</code></td>
+<td><code>primary</code></td>
+<td>Blue, white text: the main button</td>
+</tr>
+
+<tr>
+<td><code>PrimaryContainer</code></td>
+<td><code>primary-container</code></td>
+<td>Light blue, rounded: a highlighted card</td>
+</tr>
+
+<tr>
+<td><code>Secondary</code>, <code>Tertiary</code> (+ <code>Container</code>)</td>
+<td><code>secondary</code>…</td>
+<td>Calmer variants</td>
+</tr>
+
+<tr>
+<td><code>Error</code>, <code>ErrorContainer</code></td>
+<td><code>error</code>…</td>
+<td>Red: errors and dangerous actions</td>
+</tr>
+
+<tr>
+<td><code>Surface1</code>, <code>Surface2</code>, <code>Surface3</code></td>
+<td><code>surface-1</code>…</td>
+<td>Greys, rounded: cards and panels, darker each step</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Text</strong>: <code>TextCenter</code>, <code>TextLeft</code>, <code>TextRight</code>, <code>TextTruncate</code> (cut with <code>…</code>), <code>Bold</code>, <code>Italic</code>.</p>
+
+<pre><code class="language-ts">const toolbar = uiComponent({ type: Html.Nav, classes: [BubbleUI.BoxRow, BubbleUI.BoxXBetween, BubbleUI.BoxYCenter] })
+const danger = uiComponent({ type: Html.Button, text: &quot;Delete&quot;, classes: [BubbleUI.Error] })
+</code></pre>
+
+<blockquote>
+<p>💡 Colours are CSS variables (<code>--primary-color</code>, <code>--surface-1</code>…). Change them in your own CSS to
+give your app its own palette:</p>
+
+<pre><code class="language-css">&gt; :root { --primary-color: #00796b; }
+&gt; ```
+
+## `Html`: tag names
+
+```ts
+import { Html } from &quot;./gtd/html.js&quot;
+
+uiComponent({ type: Html.Button, text: &quot;Save&quot; })   // instead of type: &quot;button&quot;
+uiComponent({ type: Html.Section })
+</code></pre>
+</blockquote>
+
+<p>It has the common tags (<code>Div</code>, <code>Span</code>, <code>P</code>, <code>A</code>, <code>H1</code>–<code>H6</code>, <code>Img</code>, <code>Ul</code>, <code>Li</code>, <code>Table</code>…), form
+elements (<code>Input</code>, <code>Button</code>, <code>Select</code>, <code>Textarea</code>, <code>Label</code>…) and SVG tags (<code>Svg</code>, <code>Path</code>, <code>Circle</code>…).
+Writing <code>&quot;buton&quot;</code> by mistake gives you a broken element; writing <code>Html.Buton</code> does not compile.</p>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

@@ -1,0 +1,144 @@
+<h1 id="icons">Icons ✨</h1>
+
+<p><strong>Module:</strong> <code>icons.ts</code> · <strong>Depends on:</strong> <code>dom.ts</code></p>
+
+<p>Load a collection of SVG icons once, then draw any of them, at any size and colour, with one call.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { loadIcons, getIcon } from &quot;./gtd/icons.js&quot;
+
+await loadIcons(&quot;ui&quot;, &quot;./icons.json&quot;)
+document.body.append(getIcon(&quot;ui&quot;, &quot;home&quot;))
+</code></pre>
+
+<h2 id="the-collection-file">The collection file</h2>
+
+<p>A JSON file where each key is an icon name, and each value is what goes <strong>inside</strong> an <code>&lt;svg&gt;</code> tag,
+drawn on a 24 × 24 grid:</p>
+
+<pre><code class="language-json">{
+  &quot;home&quot;: &quot;&lt;path d=\&quot;M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z\&quot;/&gt;&quot;,
+  &quot;close&quot;: &quot;&lt;path d=\&quot;M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z\&quot;/&gt;&quot;
+}
+</code></pre>
+
+<blockquote>
+<p>💡 <strong>Where do I get icons?</strong> <a href="https://fonts.google.com/icons" target="_blank">Material Symbols</a> and most icon
+sets use a 24 × 24 grid. Download an SVG, open it in a text editor, and copy what is <strong>between</strong>
+<code>&lt;svg …&gt;</code> and <code>&lt;/svg&gt;</code> — usually one or more <code>&lt;path …/&gt;</code>. Remember to escape the quotes (<code>\&quot;</code>)
+inside the JSON.</p>
+</blockquote>
+
+<h2 id="drawing-icons">Drawing icons</h2>
+
+<pre><code class="language-ts">getIcon(collection, name, size?, fill?)
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Argument</th>
+<th>Meaning</th>
+<th>Default</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>collection</code></td>
+<td>The id you gave to <code>loadIcons</code></td>
+<td>—</td>
+</tr>
+
+<tr>
+<td><code>name</code></td>
+<td>The key in the JSON file</td>
+<td>—</td>
+</tr>
+
+<tr>
+<td><code>size</code></td>
+<td>Width and height</td>
+<td><code>&quot;24px&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>fill</code></td>
+<td>Colour</td>
+<td><code>&quot;#222222&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p>It returns a <code>&lt;div&gt;</code> (a flex box that centres the icon) with the <code>&lt;svg&gt;</code> inside, or <code>undefined</code> if the collection or the icon doesn&rsquo;t
+exist.</p>
+
+<pre><code class="language-ts">getIcon(&quot;ui&quot;, &quot;close&quot;, &quot;16px&quot;, &quot;crimson&quot;)
+getIcon(&quot;ui&quot;, &quot;home&quot;, &quot;2rem&quot;, &quot;currentColor&quot;)
+</code></pre>
+
+<blockquote>
+<p>💡 Use <strong><code>&quot;currentColor&quot;</code></strong> as the colour: the icon then takes the text colour of its parent, so it
+follows your CSS, hover states and dark mode for free.</p>
+</blockquote>
+
+<h2 id="an-icon-inside-a-button">An icon inside a button</h2>
+
+<pre><code class="language-ts">const button = uiComponent({ type: &quot;button&quot;, text: &quot; Home&quot;, classes: [&quot;with-icon&quot;] })
+button.prepend(getIcon(&quot;ui&quot;, &quot;home&quot;, &quot;18px&quot;, &quot;currentColor&quot;))
+</code></pre>
+
+<pre><code class="language-css">.with-icon { display: inline-flex; align-items: center; gap: 4px; }
+</code></pre>
+
+<h2 id="several-collections">Several collections</h2>
+
+<p>Give each collection its own id:</p>
+
+<pre><code class="language-ts">await loadIcons(&quot;ui&quot;, &quot;./icons/ui.json&quot;)
+await loadIcons(&quot;brands&quot;, &quot;./icons/brands.json&quot;)
+
+getIcon(&quot;brands&quot;, &quot;github&quot;)
+</code></pre>
+
+<h2 id="common-mistakes">Common mistakes</h2>
+
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>getIcon</code> returns <code>undefined</code></td>
+<td><code>loadIcons</code> not awaited, or a typo in the id or name</td>
+<td><code>await loadIcons(...)</code> first, check spelling</td>
+</tr>
+
+<tr>
+<td>Icon is invisible</td>
+<td>Same colour as the background</td>
+<td>Pass a <code>fill</code>, or <code>&quot;currentColor&quot;</code></td>
+</tr>
+
+<tr>
+<td>Icon looks cut or tiny</td>
+<td>The SVG was not drawn on a 24 × 24 grid</td>
+<td>Use 24px icons, or edit <code>viewBox</code> in <code>icons.ts</code></td>
+</tr>
+
+<tr>
+<td>JSON fails to load</td>
+<td>Unescaped quotes in the paths</td>
+<td>Write <code>\&quot;</code> inside the strings</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

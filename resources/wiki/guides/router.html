@@ -1,0 +1,254 @@
+<h1 id="views-and-routing">Views and routing 🧭</h1>
+
+<p><strong>Modules:</strong> <code>router.ts</code>, <code>view.ts</code> · <strong>Depend on:</strong> nothing</p>
+
+<p>Most apps have more than one page: a home, a profile, settings… The <strong>router</strong> decides which page
+to draw for the current address.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { setRoute, showRoute } from &quot;./gtd/router.js&quot;
+
+setRoute(&quot;/&quot;, async (_params, container) =&gt; { container.textContent = &quot;Home&quot; })
+setRoute(&quot;/about&quot;, async (_params, container) =&gt; { container.textContent = &quot;About us&quot; })
+
+const app = document.getElementById(&quot;app&quot;)
+const navigate = () =&gt; showRoute(location.hash.slice(1) || &quot;/&quot;, app)
+window.addEventListener(&quot;hashchange&quot;, navigate)
+navigate()
+</code></pre>
+
+<p>Now <code>#/</code> shows <strong>Home</strong> and <code>#/about</code> shows <strong>About us</strong>.</p>
+
+<p><img src="./images/router-flow.svg" alt="How showRoute works: the address is matched against your routes, the matching view draws into the container" /></p>
+
+<h2 id="two-words-view-and-route">Two words: view and route</h2>
+
+<p>A <strong>view</strong> is a function that draws one page. It receives two things:</p>
+
+<ol>
+<li><code>params</code> — values taken from the address (more on that below).</li>
+<li><code>container</code> — the element to draw into.</li>
+</ol>
+
+<pre><code class="language-ts">async function aboutView(params: string[], container: HTMLElement) {
+  container.append(uiComponent({ type: &quot;h1&quot;, text: &quot;About us&quot; }))
+}
+</code></pre>
+
+<p>Its type is <code>viewHandler</code>, from <code>view.ts</code>, if you want to write it down:</p>
+
+<pre><code class="language-ts">import { viewHandler } from &quot;./gtd/view.js&quot;
+
+const aboutView: viewHandler = async (params, container) =&gt; { /* … */ }
+</code></pre>
+
+<p>A <strong>route</strong> links an address to a view:</p>
+
+<pre><code class="language-ts">setRoute(&quot;/about&quot;, aboutView)
+</code></pre>
+
+<h2 id="addresses-with-values-in-them">Addresses with values in them</h2>
+
+<p>Put a <strong><code>$</code></strong> where the address has a value that changes. The view receives the values, in order,
+in <code>params</code>:</p>
+
+<pre><code class="language-ts">setRoute(&quot;/user/$&quot;, async ([userId], container) =&gt; {
+  container.textContent = `Profile of user ${userId}`
+})
+
+setRoute(&quot;/user/$/post/$&quot;, async ([userId, postId], container) =&gt; {
+  container.textContent = `Post ${postId} by user ${userId}`
+})
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Address</th>
+<th>View</th>
+<th><code>params</code></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>/user/7</code></td>
+<td><code>/user/$</code></td>
+<td><code>[&quot;7&quot;]</code></td>
+</tr>
+
+<tr>
+<td><code>/user/7/post/42</code></td>
+<td><code>/user/$/post/$</code></td>
+<td><code>[&quot;7&quot;, &quot;42&quot;]</code></td>
+</tr>
+</tbody>
+</table>
+<p>Values always arrive as <strong>strings</strong>. Convert them if you need numbers: <code>Number(userId)</code>.</p>
+
+<h2 id="home-and-not-found">Home and &ldquo;not found&rdquo;</h2>
+
+<ul>
+<li><code>&quot;/&quot;</code> (or <code>&quot;&quot;</code>) is the home page. You can also set it with <code>setHomeRoute(view)</code>.</li>
+<li>When no route matches, the <strong>not found</strong> view is shown. Set your own:</li>
+</ul>
+
+<pre><code class="language-ts">import { setNotFoundRoute } from &quot;./gtd/router.js&quot;
+
+setNotFoundRoute(async (_params, container) =&gt; {
+  container.append(
+    uiComponent({ type: &quot;h1&quot;, text: &quot;Oops, this page does not exist&quot; }),
+    uiComponent({ type: &quot;a&quot;, text: &quot;Go home&quot;, attributes: { href: &quot;#/&quot; } }),
+  )
+})
+</code></pre>
+
+<p>Until you set them, GTD shows the words <code>Home page.</code> and <code>Page not found.</code>.</p>
+
+<h2 id="showing-a-page">Showing a page</h2>
+
+<p><code>showRoute(path, container)</code>:</p>
+
+<ol>
+<li>Empties <code>container</code>.</li>
+<li>Finds the route that matches <code>path</code>.</li>
+<li>Calls its view with the values and the container.</li>
+</ol>
+
+<p>To <strong>add</strong> a page below what the container already has, instead of replacing it, pass <code>false</code>:
+<code>showRoute(&quot;/comments&quot;, container, false)</code>.</p>
+
+<p>GTD does <strong>not</strong> listen to the address bar by itself — you choose how. There are two common ways.</p>
+
+<h3 id="option-a-hash-addresses-recommended-to-start">Option A — hash addresses (recommended to start)</h3>
+
+<p>Addresses look like <code>example.org/#/user/7</code>. They work on <strong>any</strong> host, GitHub Pages included,
+without configuring a server.</p>
+
+<pre><code class="language-ts">const app = document.getElementById(&quot;app&quot;)
+const navigate = () =&gt; showRoute(location.hash.slice(1) || &quot;/&quot;, app)
+
+window.addEventListener(&quot;hashchange&quot;, navigate) // when the address changes
+navigate()                                     // and once at start
+</code></pre>
+
+<p>Move to another page with a normal link, or from code:</p>
+
+<pre><code class="language-ts">uiComponent({ type: &quot;a&quot;, text: &quot;Profile&quot;, attributes: { href: &quot;#/user/7&quot; } })
+location.hash = &quot;/user/7&quot;
+</code></pre>
+
+<h3 id="option-b-clean-addresses-user-7">Option B — clean addresses (<code>/user/7</code>)</h3>
+
+<p>Uses the History API. Looks nicer, but the <strong>server must answer every address with <code>index.html</code></strong>,
+or reloading a page gives a 404.</p>
+
+<pre><code class="language-ts">function go(path: string) {
+  history.pushState({}, &quot;&quot;, path)
+  showRoute(path, app)
+}
+
+window.addEventListener(&quot;popstate&quot;, () =&gt; showRoute(location.pathname, app)) // back / forward
+showRoute(location.pathname, app)
+
+// to navigate: go(&quot;/user/7&quot;)
+</code></pre>
+
+<h2 id="how-a-route-is-chosen">How a route is chosen</h2>
+
+<p>You rarely need to think about this, but if two routes compete:</p>
+
+<ul>
+<li>Routes with <strong>more segments are tried first</strong>: for <code>/docs/intro</code>, <code>/docs/$</code> wins over <code>/docs</code>.</li>
+<li>A trailing slash is ignored: <code>&quot;/settings/&quot;</code> is the same as <code>&quot;/settings&quot;</code>.</li>
+<li><code>$</code> matches one segment: anything except <code>/</code>.</li>
+<li>A route also matches longer addresses: <code>/user/$</code> matches <code>/user/7/anything</code>. If you need both,
+register the longer one too.</li>
+</ul>
+
+<h2 id="full-example-a-small-site">Full example: a small site</h2>
+
+<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
+import { setRoute, setNotFoundRoute, showRoute } from &quot;./gtd/router.js&quot;
+
+const app = document.getElementById(&quot;app&quot;)
+
+function menu(): HTMLElement {
+  const nav = uiComponent({ type: &quot;nav&quot; })
+  nav.append(
+    uiComponent({ type: &quot;a&quot;, text: &quot;Home&quot;, attributes: { href: &quot;#/&quot; } }),
+    uiComponent({ type: &quot;a&quot;, text: &quot; · Products&quot;, attributes: { href: &quot;#/products&quot; } }),
+  )
+  return nav
+}
+
+const products = [&quot;Pencil&quot;, &quot;Notebook&quot;, &quot;Eraser&quot;]
+
+setRoute(&quot;/&quot;, async (_, container) =&gt; {
+  container.append(menu(), uiComponent({ type: &quot;h1&quot;, text: &quot;Welcome to the shop&quot; }))
+})
+
+setRoute(&quot;/products&quot;, async (_, container) =&gt; {
+  container.append(menu(), uiComponent({ type: &quot;h1&quot;, text: &quot;Products&quot; }))
+  products.forEach((name, index) =&gt; {
+    const item = uiComponent({ type: &quot;p&quot; })
+    item.append(uiComponent({ type: &quot;a&quot;, text: name, attributes: { href: `#/products/${index}` } }))
+    container.append(item)
+  })
+})
+
+setRoute(&quot;/products/$&quot;, async ([index], container) =&gt; {
+  container.append(menu(), uiComponent({ type: &quot;h1&quot;, text: products[Number(index)] ?? &quot;Unknown product&quot; }))
+})
+
+setNotFoundRoute(async (_, container) =&gt; {
+  container.append(menu(), uiComponent({ type: &quot;h1&quot;, text: &quot;Not found&quot; }))
+})
+
+const navigate = () =&gt; showRoute(location.hash.slice(1) || &quot;/&quot;, app)
+window.addEventListener(&quot;hashchange&quot;, navigate)
+navigate()
+</code></pre>
+
+<h2 id="common-mistakes">Common mistakes</h2>
+
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Always &ldquo;Page not found.&rdquo;</td>
+<td>Passing <code>#/about</code> instead of <code>/about</code></td>
+<td><code>location.hash.slice(1)</code></td>
+</tr>
+
+<tr>
+<td>Clicking links does nothing</td>
+<td>No <code>hashchange</code> listener</td>
+<td>Add it, as above</td>
+</tr>
+
+<tr>
+<td>Pages pile up</td>
+<td>Drawing into <code>document.body</code></td>
+<td>Draw into <code>container</code></td>
+</tr>
+
+<tr>
+<td>Reload gives 404 with clean addresses</td>
+<td>Server doesn&rsquo;t serve <code>index.html</code> for every path</td>
+<td>Use hash addresses, or configure the server</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./guides/http">Talking to a server →</a></p>

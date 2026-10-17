@@ -1,0 +1,326 @@
+<h1 id="welcome-to-gtd">Welcome to GTD 👋</h1>
+
+<p><strong>GTD</strong> (<em>Getting Things Done</em>) is a tiny TypeScript library for building web applications.</p>
+
+<p>It has one idea: <strong>the browser already knows how to build apps — GTD just makes it shorter to
+write.</strong> There is no virtual DOM, no special syntax, no compiler plugin and nothing to &ldquo;learn
+instead of&rdquo; JavaScript. A button made with GTD is a normal <code>&lt;button&gt;</code>. A request made with GTD is a
+normal <code>fetch</code>. If you know a little HTML and TypeScript, you already know most of GTD.</p>
+
+<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
+
+const title = uiComponent({ type: &quot;h1&quot;, text: &quot;Hello, world!&quot; })
+document.body.appendChild(title)
+</code></pre>
+
+<p>That is a complete GTD program. 🎉</p>
+
+<p><strong>No Node.js, no npm.</strong> You copy GTD&rsquo;s files into your project and build with
+<a href="https://esbuild.github.io" target="_blank">esbuild</a>, a single program. No <code>node_modules</code>, no configuration files.</p>
+
+<h2 id="is-gtd-for-me">Is GTD for me?</h2>
+
+<p>GTD is a good fit when you want:</p>
+
+<ul>
+<li>✅ A small app, a tool, a dashboard or a personal site, without a big framework.</li>
+<li>✅ To understand every line that runs in your page.</li>
+<li>✅ To learn how the web platform works, while still writing less code.</li>
+</ul>
+
+<p>You may want something else when you need server-side rendering, a large component ecosystem or
+automatic re-rendering when data changes.</p>
+
+<h2 id="where-to-start">Where to start</h2>
+
+<p>New here? Follow these in order — the first two take about <strong>10 minutes</strong> together.</p>
+
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Page</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="./getting-started">Getting started</a> — create a project and see it in the browser</td>
+<td>5 min</td>
+</tr>
+
+<tr>
+<td>2</td>
+<td><a href="./concepts">How GTD thinks</a> — the six ideas behind every module</td>
+<td>5 min</td>
+</tr>
+
+<tr>
+<td>3</td>
+<td><a href="./tour">A tour of GTD</a> — build a small notes app using every module</td>
+<td>15 min</td>
+</tr>
+
+<tr>
+<td>🆘</td>
+<td><a href="./troubleshooting">Troubleshooting</a> — blank page? errors in the console? look here</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="guides-one-per-thing-you-want-to-do">Guides — one per thing you want to do</h2>
+
+<table>
+<thead>
+<tr>
+<th>I want to…</th>
+<th>Read</th>
+<th>Module</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Put things on the screen</td>
+<td><a href="./guides/dom">Building the interface</a></td>
+<td><code>dom.ts</code></td>
+</tr>
+
+<tr>
+<td>Have several pages</td>
+<td><a href="./guides/router">Views and routing</a></td>
+<td><code>router.ts</code>, <code>view.ts</code></td>
+</tr>
+
+<tr>
+<td>Load or send data to a server</td>
+<td><a href="./guides/http">Talking to a server</a></td>
+<td><code>http.ts</code></td>
+</tr>
+
+<tr>
+<td>Let parts of my app react to each other</td>
+<td><a href="./guides/signals">Signals</a></td>
+<td><code>signals.ts</code></td>
+</tr>
+
+<tr>
+<td>Show my app in several languages</td>
+<td><a href="./guides/i18n">Translations</a></td>
+<td><code>i18n.ts</code></td>
+</tr>
+
+<tr>
+<td>Remember user settings</td>
+<td><a href="./guides/configuration">Configuration</a></td>
+<td><code>configuration.ts</code></td>
+</tr>
+
+<tr>
+<td>Show icons</td>
+<td><a href="./guides/icons">Icons</a></td>
+<td><code>icons.ts</code></td>
+</tr>
+
+<tr>
+<td>React to keyboard shortcuts</td>
+<td><a href="./guides/shortcuts">Keyboard shortcuts</a></td>
+<td><code>shortcuts.ts</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="small-helpers">Small helpers</h2>
+
+<table>
+<thead>
+<tr>
+<th>I want to…</th>
+<th>Read</th>
+<th>Module</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Know the screen size, dark mode or the device</td>
+<td><a href="./reference/browser">Browser</a></td>
+<td><code>browser.ts</code></td>
+</tr>
+
+<tr>
+<td>Style the page differently on phones</td>
+<td><a href="./reference/display">Display</a></td>
+<td><code>display.ts</code></td>
+</tr>
+
+<tr>
+<td>Type text letter by letter, or fade things in</td>
+<td><a href="./reference/animations">Animations</a></td>
+<td><code>animations.ts</code></td>
+</tr>
+
+<tr>
+<td>Wait some milliseconds</td>
+<td><a href="./reference/time">Time</a></td>
+<td><code>time.ts</code></td>
+</tr>
+
+<tr>
+<td>Make it look good (buttons, cards, dark theme)</td>
+<td><a href="./reference/html">HTML tags and Bubble UI</a></td>
+<td><code>bubble.ts</code>, <code>html.ts</code></td>
+</tr>
+
+<tr>
+<td>Read parts of a URL or download a file</td>
+<td><a href="./reference/paths">Paths</a></td>
+<td><code>paths.ts</code></td>
+</tr>
+
+<tr>
+<td>Generate a random unique id</td>
+<td><a href="./reference/crypto">Crypto</a></td>
+<td><code>crypto.ts</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="helping-with-gtd">Helping with GTD</h2>
+
+<table>
+<thead>
+<tr>
+<th>Page</th>
+<th>What it covers</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="./contributing">Contributing and testing</a></td>
+<td>Running the tests, code style, writing these docs</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="all-the-modules-at-a-glance">All the modules at a glance</h2>
+
+<p>Each module is one file. If you copy a module on its own, copy the modules it <strong>depends on</strong> too.</p>
+
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Depends on</th>
+<th>What it gives you</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>dom.ts</code></td>
+<td>—</td>
+<td><code>uiComponent</code> and helpers to change elements</td>
+</tr>
+
+<tr>
+<td><code>view.ts</code></td>
+<td>—</td>
+<td>The <code>viewHandler</code> type</td>
+</tr>
+
+<tr>
+<td><code>router.ts</code></td>
+<td><code>view.ts</code></td>
+<td><code>setRoute</code>, <code>setHomeRoute</code>, <code>setNotFoundRoute</code>, <code>showRoute</code></td>
+</tr>
+
+<tr>
+<td><code>http.ts</code></td>
+<td>—</td>
+<td><code>httpGet</code>, <code>httpPost</code>, <code>httpPut</code>, <code>httpPatch</code>, <code>httpDelete</code>, <code>httpHead</code>, <code>httpOptions</code>, <code>handleResponseStatus</code></td>
+</tr>
+
+<tr>
+<td><code>signals.ts</code></td>
+<td><code>crypto.ts</code></td>
+<td><code>setSignal</code>, <code>connectToSignal</code>, <code>disconnectSignal</code>, <code>emitSignal</code></td>
+</tr>
+
+<tr>
+<td><code>i18n.ts</code></td>
+<td>—</td>
+<td><code>setCurrentLanguage</code>, <code>loadTextBundle</code>, <code>getText</code></td>
+</tr>
+
+<tr>
+<td><code>configuration.ts</code></td>
+<td>—</td>
+<td><code>loadConfiguration</code>, <code>setConfiguration</code>, <code>getConfiguration</code>, <code>isConfigurationSet</code>, <code>isConfigurationActive</code></td>
+</tr>
+
+<tr>
+<td><code>icons.ts</code></td>
+<td><code>dom.ts</code></td>
+<td><code>loadIcons</code>, <code>getIcon</code></td>
+</tr>
+
+<tr>
+<td><code>browser.ts</code></td>
+<td>—</td>
+<td><code>isSmallDevice</code>, <code>prefersDarkMode</code>, <code>isMobile</code>, <code>getOs</code>…</td>
+</tr>
+
+<tr>
+<td><code>paths.ts</code></td>
+<td>—</td>
+<td><code>getUrlGetParameters</code>, <code>downloadFile</code>…</td>
+</tr>
+
+<tr>
+<td><code>crypto.ts</code></td>
+<td>—</td>
+<td><code>uuidv4</code></td>
+</tr>
+
+<tr>
+<td><code>display.ts</code></td>
+<td><code>browser.ts</code>, <code>configuration.ts</code>, <code>dom.ts</code></td>
+<td><code>checkDisplayType</code>, <code>isMobileDisplay</code> (default)</td>
+</tr>
+
+<tr>
+<td><code>shortcuts.ts</code></td>
+<td><code>crypto.ts</code></td>
+<td><code>Shortcuts</code> (default), <code>KeyInteraction</code>, <code>Shortcut</code></td>
+</tr>
+
+<tr>
+<td><code>animations.ts</code></td>
+<td><code>html.ts</code>, <code>time.ts</code></td>
+<td><code>Animations</code> (default)</td>
+</tr>
+
+<tr>
+<td><code>time.ts</code></td>
+<td>—</td>
+<td><code>sleep</code>, <code>sleepIf</code></td>
+</tr>
+
+<tr>
+<td><code>html.ts</code></td>
+<td>—</td>
+<td><code>Html</code> (tag names)</td>
+</tr>
+
+<tr>
+<td><code>bubble.ts</code></td>
+<td>—</td>
+<td><code>BubbleUI</code> (class names of <code>styles/bubbleui-v3.0.0.css</code>)</td>
+</tr>
+</tbody>
+</table>

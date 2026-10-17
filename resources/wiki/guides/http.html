@@ -1,0 +1,300 @@
+<h1 id="talking-to-a-server">Talking to a server 🌐</h1>
+
+<p><strong>Module:</strong> <code>http.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p>Apps load and save data: a list of products, a user profile, a new comment. <code>http.ts</code> sends those
+requests for you, with sensible defaults, using the browser&rsquo;s own <code>fetch</code>.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { httpGet, httpPost } from &quot;./gtd/http.js&quot;
+
+// read
+const response = await httpGet({ url: &quot;https://jsonplaceholder.typicode.com/todos/1&quot;, parameters: {} })
+const todo = await response.json()
+console.log(todo.title)
+
+// write
+await httpPost({ url: &quot;/api/notes&quot;, parameters: { text: &quot;Buy milk&quot; } })
+</code></pre>
+
+<blockquote>
+<p>💡 <code>await</code> means &ldquo;wait for the answer before going on&rdquo;. Every function here is <code>async</code>, so put
+<code>await</code> in front of it, inside an <code>async</code> function or at the top of a module.</p>
+</blockquote>
+
+<h2 id="the-request-object">The request object</h2>
+
+<p>Every function takes one object:</p>
+
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>What it is</th>
+<th>Default</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td>✅</td>
+<td>Where to send the request</td>
+<td>—</td>
+</tr>
+
+<tr>
+<td><code>parameters</code></td>
+<td>✅</td>
+<td>The data to send. Use <code>{}</code> when there is none</td>
+<td>—</td>
+</tr>
+
+<tr>
+<td><code>headers</code></td>
+<td></td>
+<td>Extra headers, like a login token</td>
+<td>none</td>
+</tr>
+
+<tr>
+<td><code>contentType</code></td>
+<td></td>
+<td>The data format</td>
+<td><code>&quot;application/json&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>charset</code></td>
+<td></td>
+<td>The text encoding</td>
+<td><code>&quot;UTF-8&quot;</code></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="one-function-per-http-method">One function per HTTP method</h2>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Use it to…</th>
+<th>Sends <code>parameters</code>?</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>httpGet</code></td>
+<td>read something</td>
+<td>❌ — put values in the URL instead</td>
+</tr>
+
+<tr>
+<td><code>httpPost</code></td>
+<td>create something</td>
+<td>✅ as JSON</td>
+</tr>
+
+<tr>
+<td><code>httpPut</code></td>
+<td>replace something</td>
+<td>✅ as JSON</td>
+</tr>
+
+<tr>
+<td><code>httpPatch</code></td>
+<td>change part of something</td>
+<td>✅ as JSON</td>
+</tr>
+
+<tr>
+<td><code>httpDelete</code></td>
+<td>delete something</td>
+<td>✅ as JSON</td>
+</tr>
+
+<tr>
+<td><code>httpHead</code></td>
+<td>check something exists, without the body</td>
+<td>✅</td>
+</tr>
+
+<tr>
+<td><code>httpOptions</code></td>
+<td>ask what the server allows</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="sending-values-with-get">Sending values with GET</h3>
+
+<p><code>GET</code> has no body, so values go in the address:</p>
+
+<pre><code class="language-ts">const search = encodeURIComponent(&quot;blue shoes&quot;)
+await httpGet({ url: `/api/products?search=${search}&amp;page=2`, parameters: {} })
+</code></pre>
+
+<h2 id="reading-the-answer">Reading the answer</h2>
+
+<p>You get back a standard <a href="https://developer.mozilla.org/docs/Web/API/Response" target="_blank"><code>Response</code></a>:</p>
+
+<pre><code class="language-ts">const response = await httpGet({ url: &quot;/api/me&quot;, parameters: {} })
+
+response.ok        // true for 200–299
+response.status    // 200, 404, 500…
+await response.json()  // the body, parsed as JSON
+await response.text()  // or as plain text
+</code></pre>
+
+<blockquote>
+<p>⚠️ A <code>404</code> or <code>500</code> is <strong>not</strong> an error for <code>fetch</code>: you still get a <code>Response</code>. Always check
+<code>response.ok</code> or the status. Errors (<code>throw</code>) only happen when there is no answer at all — no
+internet, wrong domain, blocked by CORS.</p>
+</blockquote>
+
+<h2 id="reacting-to-each-status">Reacting to each status</h2>
+
+<p><code>handleResponseStatus</code> picks a function by status code, so your happy path and your error paths
+stay tidy:</p>
+
+<pre><code class="language-ts">import { handleResponseStatus } from &quot;./gtd/http.js&quot;
+
+const response = await httpGet({ url: &quot;/api/me&quot;, parameters: {} })
+
+await handleResponseStatus(
+  response,
+  new Map([
+    [200, async res =&gt; showProfile(await res.json())],
+    [401, async () =&gt; location.hash = &quot;/login&quot;],
+    [404, async () =&gt; showMessage(&quot;User not found&quot;)],
+  ]),
+  async res =&gt; showMessage(`Something went wrong (${res.status})`), // everything else
+)
+</code></pre>
+
+<p>Without that last function, unknown statuses are written to the console.</p>
+
+<h2 id="logging-in-adding-headers">Logging in: adding headers</h2>
+
+<pre><code class="language-ts">const token = getConfiguration(&quot;token&quot;)
+
+await httpGet({
+  url: &quot;/api/me&quot;,
+  parameters: {},
+  headers: { Authorization: `Bearer ${token}` },
+})
+</code></pre>
+
+<h2 id="uploading-files">Uploading files</h2>
+
+<p>Put the files in a <code>FormData</code> and send it as <code>parameters</code>. GTD sends it as <code>multipart/form-data</code>
+automatically.</p>
+
+<pre><code class="language-ts">const input = uiComponent({ type: &quot;input&quot;, attributes: { type: &quot;file&quot; } }) as HTMLInputElement
+
+setDomEvents(input, {
+  change: async () =&gt; {
+    const form = new FormData()
+    form.append(&quot;picture&quot;, input.files[0])
+    form.append(&quot;title&quot;, &quot;My cat&quot;)
+    await httpPost({ url: &quot;/api/upload&quot;, parameters: form })
+  },
+})
+</code></pre>
+
+<h2 id="other-formats">Other formats</h2>
+
+<p>The <code>MimeType</code> and <code>TextEncoding</code> enums list common values, so you don&rsquo;t have to remember them:</p>
+
+<pre><code class="language-ts">import { httpPost, MimeType, TextEncoding } from &quot;./gtd/http.js&quot;
+
+await httpPost({
+  url: &quot;/api/import&quot;,
+  parameters: &quot;name,age\nAda,36&quot;,
+  contentType: MimeType.Csv,
+  charset: TextEncoding.Utf8,
+})
+</code></pre>
+
+<h2 id="full-example-load-and-show-a-list-with-errors-handled">Full example: load and show a list, with errors handled</h2>
+
+<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
+import { httpGet } from &quot;./gtd/http.js&quot;
+
+type Todo = { id: number, title: string, completed: boolean }
+
+async function showTodos(container: HTMLElement) {
+  const status = uiComponent({ type: &quot;p&quot;, text: &quot;Loading…&quot; })
+  container.append(status)
+
+  try {
+    const response = await httpGet({ url: &quot;https://jsonplaceholder.typicode.com/todos?_limit=5&quot;, parameters: {} })
+    if (!response.ok) {
+      status.textContent = `The server answered ${response.status}`
+      return
+    }
+
+    const todos: Todo[] = await response.json()
+    status.remove()
+
+    const list = uiComponent({ type: &quot;ul&quot; })
+    for (const todo of todos) {
+      const item = uiComponent({ type: &quot;li&quot; })
+      item.textContent = `${todo.completed ? &quot;✅&quot; : &quot;⬜&quot;} ${todo.title}`
+      list.append(item)
+    }
+    container.append(list)
+  } catch {
+    status.textContent = &quot;Could not reach the server. Are you online?&quot;
+  }
+}
+
+showTodos(document.body)
+</code></pre>
+
+<h2 id="common-mistakes">Common mistakes</h2>
+
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>blocked by CORS policy</code></td>
+<td>The server doesn&rsquo;t allow your page&rsquo;s address</td>
+<td>Fix on the server (<code>Access-Control-Allow-Origin</code>)</td>
+</tr>
+
+<tr>
+<td>Data sent with <code>httpGet</code> never arrives</td>
+<td><code>GET</code> ignores <code>parameters</code></td>
+<td>Put values in the URL</td>
+</tr>
+
+<tr>
+<td><code>response.json()</code> throws</td>
+<td>The answer is not JSON (often an HTML error page)</td>
+<td>Check <code>response.ok</code> first</td>
+</tr>
+
+<tr>
+<td>Got a <code>Promise</code> instead of data</td>
+<td>Missing <code>await</code></td>
+<td><code>await response.json()</code></td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./guides/signals">Signals →</a></p>

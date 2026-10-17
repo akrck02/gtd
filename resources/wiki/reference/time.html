@@ -1,0 +1,55 @@
+<h1 id="time">Time ⏱️</h1>
+
+<p><strong>Module:</strong> <code>time.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p>Wait some milliseconds inside an <code>async</code> function.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { sleep, sleepIf } from &quot;./gtd/time.js&quot;
+
+status.textContent = &quot;Saved ✓&quot;
+await sleep(2000)              // wait two seconds
+status.textContent = &quot;&quot;
+</code></pre>
+
+<h2 id="the-functions">The functions</h2>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>await sleep(ms)</code></td>
+<td>Waits <code>ms</code> milliseconds</td>
+</tr>
+
+<tr>
+<td><code>await sleepIf(ms, condition)</code></td>
+<td>Waits <code>ms</code> milliseconds only if <code>condition</code> is <code>true</code>; otherwise continues at once</td>
+</tr>
+</tbody>
+</table>
+<p><code>sleepIf</code> is handy for things that should be skippable:</p>
+
+<pre><code class="language-ts">const animate = !prefersReducedMotion()
+
+for (const item of items) {
+  list.append(item)
+  await sleepIf(80, animate) // a little cascade, unless the user asked for less motion
+}
+</code></pre>
+
+<blockquote>
+<p>💡 <code>sleep</code> pauses only <strong>your</strong> function: the page keeps responding to clicks and scrolls while
+it waits.</p>
+</blockquote>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

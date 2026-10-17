@@ -1,0 +1,65 @@
+<h1 id="animations">Animations 🎞️</h1>
+
+<p><strong>Module:</strong> <code>animations.ts</code> · <strong>Depends on:</strong> <code>html.ts</code>, <code>time.ts</code></p>
+
+<p>Two small effects: text that <strong>types itself</strong> letter by letter, and elements that <strong>appear</strong>.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import Animations from &quot;./gtd/animations.js&quot;
+
+Animations.enabled = true                      // off by default
+
+const title = uiComponent({ type: &quot;h1&quot;, text: &quot;Hello, I'm GTD&quot; })
+document.body.append(title)
+await Animations.typing(title)                 // H… He… Hel… Hello, I'm GTD
+</code></pre>
+
+<p><img src="./images/typing.gif" alt="A title being typed letter by letter" /></p>
+
+<h2 id="turning-animations-on-and-off">Turning animations on and off</h2>
+
+<p><code>Animations.enabled</code> is <code>false</code> until you set it. While it is <code>false</code>, every animation finishes at
+once, so the page simply shows its final state. Respect people who asked their system for less
+motion:</p>
+
+<pre><code class="language-ts">import { prefersReducedMotion } from &quot;./gtd/browser.js&quot;
+
+Animations.enabled = !prefersReducedMotion()
+</code></pre>
+
+<h2 id="animations-typing-element"><code>Animations.typing(element)</code></h2>
+
+<p>Empties the text of the element and types it back at the speed of a fast typist. If the element
+has children, they are typed one after the other. It works on text elements: <code>p</code>, <code>span</code>, <code>a</code>,
+<code>div</code>, <code>pre</code>, <code>code</code> and <code>h1</code>–<code>h6</code>.</p>
+
+<p>Put the element <strong>on the page first</strong>, then <code>await</code> the animation:</p>
+
+<pre><code class="language-ts">container.append(title, subtitle)
+await Animations.typing(title)
+await Animations.typing(subtitle) // starts when the title is done
+</code></pre>
+
+<h2 id="animations-show-element"><code>Animations.show(element)</code></h2>
+
+<p>Adds the class <code>show</code> to the element, after letting the browser draw it once without it. Your CSS
+decides what &ldquo;appearing&rdquo; looks like:</p>
+
+<pre><code class="language-css">.card { opacity: 0; transform: translateY(8px); transition: all .3s; }
+.card.show { opacity: 1; transform: none; }
+</code></pre>
+
+<pre><code class="language-ts">const card = uiComponent({ classes: [&quot;card&quot;], text: &quot;New message&quot; })
+container.append(card)
+await Animations.show(card)
+</code></pre>
+
+<blockquote>
+<p>⚠️ Without <code>Animations.enabled = true</code> the class is still added — just without the small
+pause — so make sure your CSS also works when the element appears at once.</p>
+</blockquote>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

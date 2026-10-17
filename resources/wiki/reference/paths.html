@@ -1,0 +1,72 @@
+<h1 id="paths">Paths 🔗</h1>
+
+<p><strong>Module:</strong> <code>paths.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p>Read pieces of a web address, and make the browser download a file.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { getUrlGetParameters, downloadFile } from &quot;./gtd/paths.js&quot;
+
+getUrlGetParameters(&quot;https://shop.example.org/?search=shoes&amp;page=2&quot;)
+// { search: &quot;shoes&quot;, page: &quot;2&quot; }
+
+downloadFile(&quot;./reports/2026.pdf&quot;, &quot;report.pdf&quot;)
+</code></pre>
+
+<h2 id="query-parameters-key-value">Query parameters (<code>?key=value</code>)</h2>
+
+<pre><code class="language-ts">const query = getUrlGetParameters(location.href)
+const page = Number(query[&quot;page&quot;] ?? &quot;1&quot;)
+</code></pre>
+
+<p>Values come back exactly as written in the address. If they may contain spaces or symbols
+(<code>%20</code>…), decode them: <code>decodeURIComponent(query[&quot;search&quot;])</code>.</p>
+
+<h2 id="segments-a-b-c">Segments (<code>/a/b/c</code>)</h2>
+
+<p><strong>After a word</strong> — everything that follows a given segment:</p>
+
+<pre><code class="language-ts">getUrlParametersByBreakPoint(&quot;https://example.org/search/user/1/page/2&quot;, &quot;search&quot;)
+// [&quot;user&quot;, &quot;1&quot;, &quot;page&quot;, &quot;2&quot;]
+
+getUrlParametersByBreakPoint(&quot;https://example.org/about&quot;, &quot;search&quot;)
+// [] — &quot;search&quot; is not in the address
+</code></pre>
+
+<p><strong>From a position</strong> — splits on every <code>/</code> and keeps from that index:</p>
+
+<pre><code class="language-ts">getUrlParametersByIndex(&quot;search/user/1/page/2&quot;, 2)
+// [&quot;1&quot;, &quot;page&quot;, &quot;2&quot;]
+</code></pre>
+
+<p>With a full address, remember that <code>https:</code>, an empty piece and the domain count as the first
+three positions.</p>
+
+<blockquote>
+<p>💡 Using the <a href="./guides/router">router</a>? It already gives your views the values of <code>$</code>
+segments — you rarely need these functions for that.</p>
+</blockquote>
+
+<h2 id="downloading-a-file">Downloading a file</h2>
+
+<pre><code class="language-ts">downloadFile(address, fileName)
+</code></pre>
+
+<p>Works with files on your site and with data you create in the page:</p>
+
+<pre><code class="language-ts">// a file from your site
+downloadFile(&quot;./docs/manual.pdf&quot;, &quot;manual.pdf&quot;)
+
+// a file made on the fly
+const csv = &quot;name,age\nAda,36\nAlan,41&quot;
+const address = URL.createObjectURL(new Blob([csv], { type: &quot;text/csv&quot; }))
+downloadFile(address, &quot;people.csv&quot;)
+</code></pre>
+
+<p>The browser only uses your <code>fileName</code> for files from your own site or created in the page; files
+from other sites keep their own name, or open in a new tab.</p>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

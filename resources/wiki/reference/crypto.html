@@ -1,0 +1,34 @@
+<h1 id="crypto">Crypto 🔑</h1>
+
+<p><strong>Module:</strong> <code>crypto.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p>Create random, unique identifiers.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { uuidv4 } from &quot;./gtd/crypto.js&quot;
+
+const id = uuidv4() // &quot;3b241101-e2bb-4255-8caf-4136c566a962&quot;
+</code></pre>
+
+<h2 id="when-to-use-it">When to use it</h2>
+
+<p>Whenever you create something on the page that needs an id before the server gives it one:</p>
+
+<pre><code class="language-ts">const note = { id: uuidv4(), text: &quot;Buy milk&quot; }
+</code></pre>
+
+<p>Every call gives a new value; the chance of two being equal is so small you can ignore it.</p>
+
+<h2 id="good-to-know">Good to know</h2>
+
+<ul>
+<li>It follows the standard UUID version 4 format, which databases and servers understand.</li>
+<li>It uses the browser&rsquo;s secure random generator, so ids can&rsquo;t be guessed.</li>
+<li>Unlike the browser&rsquo;s <code>crypto.randomUUID()</code>, it also works on plain <code>http://</code> addresses, for
+example on your local network while developing.</li>
+</ul>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

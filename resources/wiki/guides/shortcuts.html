@@ -1,0 +1,151 @@
+<h1 id="keyboard-shortcuts">Keyboard shortcuts ⌨️</h1>
+
+<p><strong>Module:</strong> <code>shortcuts.ts</code> · <strong>Depends on:</strong> <code>crypto.ts</code></p>
+
+<p>Let people use your app from the keyboard: <code>Ctrl</code> + <code>S</code> to save, <code>Esc</code> to close, <code>/</code> to search.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import Shortcuts, { KeyInteraction } from &quot;./gtd/shortcuts.js&quot;
+
+const keys = Shortcuts.register(document)
+
+Shortcuts.set(keys, {
+  interaction: KeyInteraction.keyDown,
+  key: &quot;s&quot;,
+  ctrlKey: true,
+  preventDefault: true,        // stop the browser's own &quot;save page&quot;
+  callback: () =&gt; save(),
+})
+</code></pre>
+
+<h2 id="two-steps">Two steps</h2>
+
+<ol>
+<li><strong>Register</strong> where to listen: <code>Shortcuts.register(target)</code> returns an id. Use <code>document</code> for
+shortcuts that work everywhere, or an element for shortcuts that only work while it has the focus
+(an editor, a dialog).</li>
+<li><strong>Set</strong> shortcuts on that id: <code>Shortcuts.set(id, shortcut)</code>. Setting the same combination again
+replaces it.</li>
+</ol>
+
+<pre><code class="language-ts">const everywhere = Shortcuts.register(document)
+const inEditor = Shortcuts.register(editorElement)
+</code></pre>
+
+<h2 id="the-shortcut-object">The shortcut object</h2>
+
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Required</th>
+<th>Meaning</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>key</code></td>
+<td>✅</td>
+<td>The key, as the browser names it: <code>&quot;s&quot;</code>, <code>&quot;Enter&quot;</code>, <code>&quot;Escape&quot;</code>, <code>&quot;ArrowUp&quot;</code>, <code>&quot;/&quot;</code>… Letters ignore case</td>
+</tr>
+
+<tr>
+<td><code>interaction</code></td>
+<td>✅</td>
+<td><code>KeyInteraction.keyDown</code> (when pressed, the usual one) or <code>KeyInteraction.keyUp</code> (when released)</td>
+</tr>
+
+<tr>
+<td><code>callback</code></td>
+<td>✅</td>
+<td>The function to run</td>
+</tr>
+
+<tr>
+<td><code>ctrlKey</code>, <code>shiftKey</code>, <code>altKey</code>, <code>metaKey</code></td>
+<td></td>
+<td>Keys that must be held. <code>metaKey</code> is <code>⌘</code> on a Mac, <code>⊞</code> on Windows</td>
+</tr>
+
+<tr>
+<td><code>preventDefault</code></td>
+<td></td>
+<td>Stop what the browser would do with that key (<code>Ctrl</code> + <code>S</code> saving the page…)</td>
+</tr>
+
+<tr>
+<td><code>stopPropagation</code></td>
+<td></td>
+<td>Stop other listeners from seeing the key</td>
+</tr>
+
+<tr>
+<td><code>repeatable</code></td>
+<td></td>
+<td>Run again while the key is held down. Off by default</td>
+</tr>
+
+<tr>
+<td><code>omitEditableContent</code></td>
+<td></td>
+<td>Do nothing while the user types in an input, a textarea or editable content</td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>💡 The modifiers must match <strong>exactly</strong>: a shortcut for <code>Ctrl</code> + <code>S</code> does not run on
+<code>Ctrl</code> + <code>Shift</code> + <code>S</code>, and a shortcut for <code>S</code> alone does not run while <code>Ctrl</code> is held.</p>
+</blockquote>
+
+<h2 id="common-recipes">Common recipes</h2>
+
+<p><strong>Close a dialog with <code>Esc</code>:</strong></p>
+
+<pre><code class="language-ts">Shortcuts.set(keys, { interaction: KeyInteraction.keyDown, key: &quot;Escape&quot;, callback: closeDialog })
+</code></pre>
+
+<p><strong><code>/</code> to search, but not while typing:</strong></p>
+
+<pre><code class="language-ts">Shortcuts.set(keys, {
+  interaction: KeyInteraction.keyDown,
+  key: &quot;/&quot;,
+  omitEditableContent: true, // typing &quot;/&quot; in a text field must still type it
+  preventDefault: true,
+  callback: () =&gt; searchInput.focus(),
+})
+</code></pre>
+
+<p><strong>Move through a list holding an arrow:</strong></p>
+
+<pre><code class="language-ts">Shortcuts.set(keys, { interaction: KeyInteraction.keyDown, key: &quot;ArrowDown&quot;, repeatable: true, callback: selectNext })
+</code></pre>
+
+<p><strong><code>Ctrl</code> on Windows and Linux, <code>⌘</code> on a Mac:</strong></p>
+
+<pre><code class="language-ts">import { getOs } from &quot;./gtd/browser.js&quot;
+
+const mac = &quot;MacOS&quot; == getOs()
+Shortcuts.set(keys, {
+  interaction: KeyInteraction.keyDown,
+  key: &quot;k&quot;,
+  ctrlKey: !mac,
+  metaKey: mac,
+  preventDefault: true,
+  callback: openSearch,
+})
+</code></pre>
+
+<h2 id="showing-shortcuts-to-people">Showing shortcuts to people</h2>
+
+<p>Shortcuts nobody knows about are not used. Show them next to the action:</p>
+
+<pre><code class="language-ts">const hint = uiComponent({ type: &quot;kbd&quot;, text: mac ? &quot;⌘ K&quot; : &quot;Ctrl K&quot; })
+searchButton.append(hint)
+</code></pre>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

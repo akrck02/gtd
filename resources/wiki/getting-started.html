@@ -1,0 +1,256 @@
+<h1 id="getting-started">Getting started 🚀</h1>
+
+<p>By the end of this page you will have a GTD app running in your browser, with two pages and a
+button. It takes about <strong>five minutes</strong>.</p>
+
+<h2 id="no-node-js-no-npm">No Node.js, no npm</h2>
+
+<p>GTD does <strong>not</strong> use Node.js, npm or <code>node_modules</code>. You need only two small programs:</p>
+
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+<th>Size</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><a href="https://esbuild.github.io" target="_blank"><strong>esbuild</strong></a></td>
+<td>Turns your TypeScript into one JavaScript file for the browser</td>
+<td>one file, ~10 MB</td>
+</tr>
+
+<tr>
+<td><strong>Python 3</strong></td>
+<td>Serves the page on <code>localhost</code> while you work (already installed on Linux and macOS)</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Nothing gets installed globally, there is no <code>package.json</code>, and your project folder stays tiny.</p>
+
+<blockquote>
+<p>💡 <strong>Why a local server?</strong> Browsers refuse to load scripts from a file opened by double-click
+(<code>file://…</code>) in many cases. Any static server works; Python&rsquo;s is just already there.</p>
+</blockquote>
+
+<h2 id="step-1-get-gtd">Step 1 — Get GTD</h2>
+
+<pre><code class="language-sh">git clone --depth 1 https://github.com/akrck02/gtd gtd-download
+mkdir -p my-app/src my-app/bin
+cp -r gtd-download/src my-app/src/gtd
+cp -r gtd-download/styles my-app/styles
+cd my-app
+</code></pre>
+
+<p>GTD is not a package you install: it is a folder of source files that you <strong>copy into your
+project</strong>. You own them — you can read them, and even change them.</p>
+
+<p>The <code>styles/</code> folder holds <strong>Bubble UI</strong>, the stylesheet that goes with GTD: nice buttons, colours,
+a dark theme and layout classes, in one 9 KB file. It is optional, but it makes your app look good
+from the first minute.</p>
+
+<h2 id="step-2-get-esbuild">Step 2 — Get esbuild</h2>
+
+<p><strong>On Linux (x86-64)</strong> the GTD repository already ships it:</p>
+
+<pre><code class="language-sh">cp ../gtd-download/bin/esbuild bin/
+</code></pre>
+
+<p><strong>On macOS, Windows or ARM</strong>, use esbuild&rsquo;s own installer, which downloads a single file:</p>
+
+<pre><code class="language-sh">curl -fsSL https://esbuild.github.io/dl/v0.25.8 | sh
+mv esbuild bin/
+</code></pre>
+
+<p>Check it works:</p>
+
+<pre><code class="language-sh">./bin/esbuild --version     # 0.25.8
+</code></pre>
+
+<p>Your project now looks like this:</p>
+
+<pre><code>my-app/
+├── bin/
+│   └── esbuild        ← the builder
+├── styles/
+│   └── bubbleui-v3.0.0.css   ← the looks
+└── src/
+    └── gtd/           ← GTD, one file per module
+        ├── dom.ts
+        ├── router.ts
+        └── …
+</code></pre>
+
+<h2 id="step-3-write-the-page">Step 3 — Write the page</h2>
+
+<p>Create <strong><code>index.html</code></strong> in <code>my-app/</code>:</p>
+
+<pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+  &lt;head&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+    &lt;title&gt;My app&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./styles/bubbleui-v3.0.0.css&quot;&gt;
+    &lt;style&gt;
+      #app { padding: 2rem; gap: .5rem; }
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;main id=&quot;app&quot; class=&quot;box-column box-center&quot;&gt;&lt;/main&gt;
+    &lt;script type=&quot;module&quot; src=&quot;./out/main.js&quot;&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p><code>&lt;main id=&quot;app&quot;&gt;</code> is the box where our pages will be drawn; Bubble&rsquo;s <code>box-column box-center</code>
+classes stack what we put in it and centre it. The <code>&lt;script&gt;</code> loads our code — it points to
+<code>out/main.js</code>, the file esbuild will <strong>build</strong>, not to the <code>.ts</code> file.</p>
+
+<h2 id="step-4-write-the-app">Step 4 — Write the app</h2>
+
+<p>Create <strong><code>src/main.ts</code></strong>:</p>
+
+<pre><code class="language-ts">import { uiComponent, setDomEvents } from &quot;./gtd/dom.js&quot;
+import { setRoute, showRoute } from &quot;./gtd/router.js&quot;
+import { BubbleUI } from &quot;./gtd/bubble.js&quot;
+
+// 1. Find the box where pages are drawn
+const app = document.getElementById(&quot;app&quot;)
+
+// 2. Describe the home page
+setRoute(&quot;/&quot;, async (_params, container) =&gt; {
+  const title = uiComponent({ type: &quot;h1&quot;, text: &quot;My first GTD app&quot; })
+  const button = uiComponent({ type: &quot;button&quot;, text: &quot;Say hello&quot;, classes: [BubbleUI.Primary] })
+
+  setDomEvents(button, {
+    click: () =&gt; location.hash = &quot;/hello/world&quot;,
+  })
+
+  container.append(title, button)
+})
+
+// 3. Describe a second page; &quot;$&quot; means &quot;any word here&quot;
+setRoute(&quot;/hello/$&quot;, async ([name], container) =&gt; {
+  const greeting = uiComponent({ type: &quot;h1&quot;, text: `Hello, ${name}!` })
+  const back = uiComponent({ type: &quot;a&quot;, text: &quot;← Back&quot;, attributes: { href: &quot;#/&quot; } })
+  container.append(greeting, back)
+})
+
+// 4. Draw the right page now, and every time the address changes
+const navigate = () =&gt; showRoute(location.hash.slice(1) || &quot;/&quot;, app)
+window.addEventListener(&quot;hashchange&quot;, navigate)
+navigate()
+</code></pre>
+
+<blockquote>
+<p>💡 The imports end in <strong><code>.js</code></strong> even though the files are <code>.ts</code>. That is the standard way to
+write imports in TypeScript for the browser, and esbuild understands it.</p>
+</blockquote>
+
+<h2 id="step-5-build-and-run">Step 5 — Build and run</h2>
+
+<pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format=esm --outfile=out/main.js
+python3 -m http.server 8000
+</code></pre>
+
+<p>The first command reads <code>main.ts</code>, follows every <code>import</code>, and writes <strong>one</strong> file,
+<code>out/main.js</code>. It takes a few milliseconds.</p>
+
+<p>Open <strong><a href="http://localhost:8000" target="_blank">http://localhost:8000</a></strong> in your browser. You should see:</p>
+
+<p><img src="./images/getting-started-home.png" alt="The home page: a &ldquo;My first GTD app&rdquo; title and a &ldquo;Say hello&rdquo; button" /></p>
+
+<p>Click <strong>Say hello</strong> → the address ends in <code>#/hello/world</code> and the page greets you:</p>
+
+<p><img src="./images/getting-started-hello.png" alt="The second page says &ldquo;Hello, world!&rdquo; with a link back" /></p>
+
+<p>Click <strong>← Back</strong> → you are home again. Try typing <code>#/hello/Ada</code> in the address bar too.</p>
+
+<p>🎉 <strong>That&rsquo;s it — you have a GTD app with routing.</strong></p>
+
+<p>Nothing on screen? Head to <a href="./troubleshooting">Troubleshooting</a>.</p>
+
+<h2 id="making-changes">Making changes</h2>
+
+<p>Leave esbuild <strong>watching</strong> in a second terminal; it rebuilds every time you save:</p>
+
+<pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format=esm --outfile=out/main.js --watch
+</code></pre>
+
+<p>Then just reload the browser after each change.</p>
+
+<h2 id="getting-ready-to-publish">Getting ready to publish</h2>
+
+<p>Add <code>--minify</code> to make the file small, and copy <code>index.html</code> and <code>out/</code> to any static host
+(GitHub Pages, Netlify, your own server…):</p>
+
+<pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format=esm --minify --outfile=out/main.js
+</code></pre>
+
+<h2 id="checking-types-optional">Checking types (optional)</h2>
+
+<p>esbuild builds fast because it <strong>does not check types</strong>: a typo like <code>contaner</code> shows up in the
+browser, not in the terminal. Editors such as VS Code check types as you type. To check from the
+terminal too, the GTD repository has a script that downloads the native TypeScript compiler, again
+without Node:</p>
+
+<pre><code class="language-sh">cp ../gtd-download/bin/install-ts.sh bin/
+./bin/install-ts.sh        # downloads bin/tsgo once
+./bin/tsgo --noEmit --target ES2022 --module ESNext --lib ES2022,DOM,DOM.Iterable src/main.ts
+</code></pre>
+
+<h2 id="what-just-happened">What just happened?</h2>
+
+<p><img src="./images/build-flow.svg" alt="How a GTD app is built: your TypeScript and GTD go through esbuild into one JavaScript file that index.html loads" /></p>
+
+<table>
+<thead>
+<tr>
+<th>You wrote</th>
+<th>What it does</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>uiComponent({...})</code></td>
+<td>Creates a real HTML element — see <a href="./guides/dom">Building the interface</a></td>
+</tr>
+
+<tr>
+<td><code>BubbleUI.Primary</code></td>
+<td>The name of Bubble&rsquo;s <code>primary</code> class: the blue, rounded button — see <a href="./reference/html">HTML tags and Bubble UI</a></td>
+</tr>
+
+<tr>
+<td><code>setDomEvents(button, { click })</code></td>
+<td>Adds a click listener — same as <code>addEventListener</code></td>
+</tr>
+
+<tr>
+<td><code>setRoute(&quot;/hello/$&quot;, view)</code></td>
+<td>Says which function draws which address — see <a href="./guides/router">Views and routing</a></td>
+</tr>
+
+<tr>
+<td><code>showRoute(path, app)</code></td>
+<td>Clears <code>app</code> and draws the matching page</td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="next-steps">Next steps</h2>
+
+<ul>
+<li>🧠 <a href="./concepts">How GTD thinks</a> — six ideas that make every other page easier.</li>
+<li>🗺️ <a href="./tour">A tour of GTD</a> — build a small notes app, step by step.</li>
+</ul>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

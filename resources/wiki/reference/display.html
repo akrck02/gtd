@@ -1,0 +1,64 @@
+<h1 id="display">Display 📱</h1>
+
+<p><strong>Module:</strong> <code>display.ts</code> · <strong>Depends on:</strong> <code>browser.ts</code>, <code>configuration.ts</code>, <code>dom.ts</code></p>
+
+<p>Decides once whether the app looks like a <strong>phone</strong> or a <strong>desktop</strong> app, and writes it on the
+page, so CSS and code can adapt.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import isMobileDisplay, { checkDisplayType } from &quot;./gtd/display.js&quot;
+
+checkDisplayType()
+window.addEventListener(&quot;resize&quot;, checkDisplayType)
+
+if (isMobileDisplay()) showBottomMenu()
+</code></pre>
+
+<h2 id="what-checkdisplaytype-does">What <code>checkDisplayType</code> does</h2>
+
+<p>It is <strong>mobile</strong> on a phone or tablet, or in a window up to 1024 pixels wide; otherwise <strong>desktop</strong>.
+Then it:</p>
+
+<ol>
+<li>Sets <code>data-display</code> on <code>&lt;html&gt;</code>: <code>&lt;html data-display=&quot;mobile&quot;&gt;</code> or <code>&quot;desktop&quot;</code>.</li>
+<li>Saves <code>&quot;display&quot;</code> in the <a href="./guides/configuration">configuration</a>, which <code>isMobileDisplay()</code>
+reads.</li>
+</ol>
+
+<h2 id="styling-with-it">Styling with it</h2>
+
+<pre><code class="language-css">nav { display: flex; gap: 1rem; }
+
+[data-display=&quot;mobile&quot;] nav {
+  position: fixed;
+  bottom: 0;
+  justify-content: space-around;
+}
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Desktop</th>
+<th>Mobile</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><img src="./images/display-desktop.png" alt="A menu at the top on a wide window" /></td>
+<td><img src="./images/display-mobile.png" alt="The same menu at the bottom on a phone" /></td>
+</tr>
+</tbody>
+</table>
+
+<blockquote>
+<p>💡 Why not only CSS media queries? Because <code>data-display</code> also knows phones held sideways, which
+are wider than 1024 pixels sometimes, and because code can ask the same question with
+<code>isMobileDisplay()</code>, so CSS and TypeScript always agree.</p>
+</blockquote>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

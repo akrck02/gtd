@@ -1,0 +1,157 @@
+<h1 id="contributing-and-testing">Contributing and testing</h1>
+
+<h2 id="layout">Layout</h2>
+
+<pre><code>src/          the library, one module per file
+test/         unit tests, one file per module (dom.test.ts tests dom.ts)
+test/lib/     the small test runner
+bin/          esbuild, and scripts to test and check types
+docs/         this documentation, published to GitHub Pages
+</code></pre>
+
+<h2 id="no-node-js">No Node.js</h2>
+
+<p>Like the apps made with it, GTD itself needs no Node.js or npm. Everything runs with the files in
+<code>bin/</code>, a shell and a browser.</p>
+
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>bin/test.sh</code></td>
+<td>Builds the tests with esbuild and runs them in headless Chrome or Chromium</td>
+</tr>
+
+<tr>
+<td><code>bin/test.sh --build</code></td>
+<td>Only builds them; open <code>test/index.html</code> in any browser to see the results</td>
+</tr>
+
+<tr>
+<td><code>bin/install-ts.sh</code></td>
+<td>Downloads the native TypeScript compiler (<code>bin/tsgo</code>) with curl, once</td>
+</tr>
+
+<tr>
+<td><code>bin/tsgo -p .</code></td>
+<td>Checks the types of <code>src/</code> and <code>test/</code></td>
+</tr>
+</tbody>
+</table>
+<p>If your Chrome is not found, point to it: <code>CHROME=/path/to/chrome bin/test.sh</code>.</p>
+
+<p><code>test/index.html</code> is also a visual report: green for passing tests, red for failing ones, with the
+reason.</p>
+
+<p><img src="./images/test-report.png" alt="The test report in the browser: every module with its tests in green" /></p>
+
+<p>GitHub runs the type check and the tests on <strong>every push and pull request</strong>
+(<code>.github/workflows/test.yaml</code>).</p>
+
+<h2 id="writing-a-test">Writing a test</h2>
+
+<pre><code class="language-ts">import { describe, expect, it, mock } from &quot;./lib/test.js&quot;
+import { setDomEvents } from &quot;../src/dom.js&quot;
+
+describe(&quot;dom&quot;, () =&gt; {
+  it(&quot;adds listeners&quot;, () =&gt; {
+    const button = document.createElement(&quot;button&quot;)
+    const click = mock(() =&gt; {})
+    setDomEvents(button, { click })
+    button.click()
+    expect(click).toHaveBeenCalledTimes(1)
+  })
+})
+</code></pre>
+
+<p>Then import the new file in <code>test/index.ts</code>.</p>
+
+<table>
+<thead>
+<tr>
+<th>Helper</th>
+<th>Use it to</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>expect(x).toBe / toEqual / toContain / toMatch / toBeTruthy / toBeFalsy</code></td>
+<td>Check values</td>
+</tr>
+
+<tr>
+<td><code>mock(fn?)</code></td>
+<td>Make a function that remembers its calls; check with <code>toHaveBeenCalledTimes</code> / <code>toHaveBeenCalledWith</code></td>
+</tr>
+
+<tr>
+<td><code>fakeFetch({ path: body })</code></td>
+<td>Answer <code>fetch</code> from memory during the test (404 for other paths)</td>
+</tr>
+
+<tr>
+<td><code>replace(object, key, value)</code></td>
+<td>Swap a property, like <code>window.matchMedia</code>, during the test</td>
+</tr>
+
+<tr>
+<td><code>quiet(&quot;error&quot; \| &quot;warn&quot;)</code></td>
+<td>Silence and count console messages during the test</td>
+</tr>
+
+<tr>
+<td><code>afterThis(fn)</code></td>
+<td>Clean up after the test, even when it fails</td>
+</tr>
+</tbody>
+</table>
+<p>Some habits that keep the suite reliable:</p>
+
+<ul>
+<li><strong>Network:</strong> never call a real server; use <code>fakeFetch</code>.</li>
+<li><strong>Module state:</strong> <code>router.ts</code> and <code>i18n.ts</code> keep state for the whole page. Their tests run in
+order and build on each other; add new ones at the end.</li>
+<li><strong>The page:</strong> remove what you add to <code>document.body</code> with <code>afterThis</code>.</li>
+</ul>
+
+<h2 id="conventions">Conventions</h2>
+
+<ul>
+<li>Every exported function has a JSDoc comment.</li>
+<li>Compare with the constant first: <code>undefined == value</code>, <code>false == buffer.has(id)</code>.</li>
+<li>A module imports its siblings with <code>.js</code> (<code>./dom.js</code>), as TypeScript and esbuild expect.</li>
+<li>A new module gets a test file and a page in <code>docs/</code>, linked from <code>docs/README.md</code>.</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>GTD is simple, and its docs should feel the same. Someone who has never used it should have
+something on screen in minutes. When you write a page:</p>
+
+<ul>
+<li><strong>Start with &ldquo;In 30 seconds&rdquo;</strong>: the smallest example that works, then explain.</li>
+<li><strong>Show, then tell</strong>: code first, then a table or a sentence about it.</li>
+<li><strong>Write for a junior</strong>: short sentences, plain words, explain any term the first time
+(or link <a href="./concepts">How GTD thinks</a>).</li>
+<li><strong>Every example must run</strong> as written: imports with <code>.js</code>, <code>await</code> where needed.</li>
+<li><strong>End with a full example and &ldquo;Common mistakes&rdquo;</strong> when the module has pitfalls.</li>
+<li><strong>Link both ways</strong>: from <code>docs/README.md</code> to the page, and back with <code>[← All the documentation]</code>.</li>
+</ul>
+
+<p>The <code>docs/</code> folder is published with <a href="https://github.com/akrck02/papiro" target="_blank">papiro</a> by
+<code>.github/workflows/publish-docs.yaml</code> on every push to <code>main</code>. Link pages with relative <code>.md</code> links:
+they work on GitHub and papiro turns them into site links.</p>
+
+<p>GitHub Pages must serve the <code>gh-pages</code> branch: <strong>Settings → Pages → Deploy from a branch →
+<code>gh-pages</code> / root</strong>.</p>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a></p>

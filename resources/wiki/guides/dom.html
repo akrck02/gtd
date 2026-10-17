@@ -1,0 +1,346 @@
+<h1 id="building-the-interface">Building the interface 🧱</h1>
+
+<p><strong>Module:</strong> <code>dom.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p>Everything you see on a web page is an <strong>element</strong>: a title, a button, an image. <code>dom.ts</code> helps you
+create elements and change them with less typing than plain JavaScript.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
+
+const hello = uiComponent({ type: &quot;h1&quot;, text: &quot;Hello!&quot;, classes: [&quot;big&quot;] })
+document.body.appendChild(hello)
+</code></pre>
+
+<p>Result on the page:</p>
+
+<pre><code class="language-html">&lt;h1 class=&quot;big&quot;&gt;Hello!&lt;/h1&gt;
+</code></pre>
+
+<h2 id="why-not-just-document-createelement">Why not just <code>document.createElement</code>?</h2>
+
+<p>You can! GTD only saves you the repetition. Compare:</p>
+
+<pre><code class="language-ts">// plain JavaScript
+const link = document.createElement(&quot;a&quot;)
+link.textContent = &quot;Docs&quot;
+link.id = &quot;docs-link&quot;
+link.classList.add(&quot;nav&quot;, &quot;active&quot;)
+link.setAttribute(&quot;href&quot;, &quot;/docs&quot;)
+link.dataset.section = &quot;help&quot;
+
+// GTD
+const link = uiComponent({
+  type: &quot;a&quot;,
+  text: &quot;Docs&quot;,
+  id: &quot;docs-link&quot;,
+  classes: [&quot;nav&quot;, &quot;active&quot;],
+  attributes: { href: &quot;/docs&quot; },
+  data: { section: &quot;help&quot; },
+})
+</code></pre>
+
+<p>Both give you exactly the same <code>&lt;a&gt;</code> element.</p>
+
+<h2 id="creating-an-element">Creating an element</h2>
+
+<p><code>uiComponent</code> takes <strong>one object</strong> describing the element. Every field is optional.</p>
+
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What it sets</th>
+<th>Example</th>
+<th>Default</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>The tag</td>
+<td><code>&quot;button&quot;</code></td>
+<td><code>&quot;div&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>text</code></td>
+<td>What is inside (as HTML)</td>
+<td><code>&quot;Save&quot;</code></td>
+<td>empty</td>
+</tr>
+
+<tr>
+<td><code>id</code></td>
+<td>The <code>id</code></td>
+<td><code>&quot;save-button&quot;</code></td>
+<td>none</td>
+</tr>
+
+<tr>
+<td><code>classes</code></td>
+<td>CSS classes</td>
+<td><code>[&quot;primary&quot;, &quot;big&quot;]</code></td>
+<td>none</td>
+</tr>
+
+<tr>
+<td><code>attributes</code></td>
+<td>Any HTML attribute</td>
+<td><code>{ href: &quot;/home&quot; }</code></td>
+<td>none</td>
+</tr>
+
+<tr>
+<td><code>styles</code></td>
+<td>Inline CSS, in camelCase</td>
+<td><code>{ backgroundColor: &quot;red&quot; }</code></td>
+<td>none</td>
+</tr>
+
+<tr>
+<td><code>data</code></td>
+<td><code>data-*</code> attributes</td>
+<td><code>{ userId: &quot;7&quot; }</code> → <code>data-user-id=&quot;7&quot;</code></td>
+<td>none</td>
+</tr>
+
+<tr>
+<td><code>selectable</code></td>
+<td>Can the user select its text?</td>
+<td><code>false</code></td>
+<td><code>true</code></td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="text">Text</h3>
+
+<pre><code class="language-ts">uiComponent({ type: &quot;p&quot;, text: &quot;A paragraph.&quot; })
+uiComponent({ type: &quot;p&quot;, text: &quot;Some &lt;strong&gt;bold&lt;/strong&gt; words.&quot; }) // HTML works
+</code></pre>
+
+<blockquote>
+<p>⚠️ <strong>Never put text typed by users into <code>text</code>.</strong> It is read as HTML, so a user could inject
+scripts into your page. For user text, set <code>textContent</code> after creating the element:</p>
+
+<pre><code class="language-ts">&gt; const comment = uiComponent({ type: &quot;p&quot;, classes: [&quot;comment&quot;] })
+&gt; comment.textContent = userInput // always shown as plain text, safe
+&gt; ```
+
+### Classes
+
+The usual way to style elements: write CSS in a stylesheet and add the class.
+
+```ts
+uiComponent({ type: &quot;button&quot;, text: &quot;Delete&quot;, classes: [&quot;button&quot;, &quot;danger&quot;] })
+</code></pre>
+</blockquote>
+
+<h3 id="attributes">Attributes</h3>
+
+<p>Anything you would write inside the HTML tag:</p>
+
+<pre><code class="language-ts">uiComponent({ type: &quot;img&quot;, attributes: { src: &quot;./cat.png&quot;, alt: &quot;A sleeping cat&quot; } })
+uiComponent({ type: &quot;input&quot;, attributes: { type: &quot;email&quot;, placeholder: &quot;you@example.org&quot; } })
+uiComponent({ type: &quot;a&quot;, text: &quot;GTD&quot;, attributes: { href: &quot;https://github.com/akrck02/gtd&quot;, target: &quot;_blank&quot; } })
+</code></pre>
+
+<h3 id="inline-styles">Inline styles</h3>
+
+<p>Good for quick experiments. Use the JavaScript names (<code>backgroundColor</code>, not <code>background-color</code>):</p>
+
+<pre><code class="language-ts">uiComponent({ text: &quot;Warning!&quot;, styles: { color: &quot;white&quot;, backgroundColor: &quot;crimson&quot;, padding: &quot;8px&quot; } })
+</code></pre>
+
+<h3 id="data-attributes">Data attributes</h3>
+
+<p>Store small pieces of information on an element, and read them later with <code>dataset</code>:</p>
+
+<pre><code class="language-ts">const row = uiComponent({ type: &quot;li&quot;, text: &quot;Ada&quot;, data: { userId: &quot;7&quot; } })
+row.dataset.userId // &quot;7&quot;
+</code></pre>
+
+<h2 id="putting-elements-inside-elements">Putting elements inside elements</h2>
+
+<p><code>uiComponent</code> gives you a normal element, so use the normal <code>append</code>:</p>
+
+<pre><code class="language-ts">const card = uiComponent({ classes: [&quot;card&quot;] })
+card.append(
+  uiComponent({ type: &quot;h2&quot;, text: &quot;Ada Lovelace&quot; }),
+  uiComponent({ type: &quot;p&quot;, text: &quot;The first programmer.&quot; }),
+)
+document.body.append(card)
+</code></pre>
+
+<p>A good habit: write a small <strong>function per piece</strong> of interface. It is GTD&rsquo;s version of a
+&ldquo;component&rdquo;:</p>
+
+<pre><code class="language-ts">function userCard(name: string, bio: string): HTMLElement {
+  const card = uiComponent({ classes: [&quot;card&quot;] })
+  card.append(
+    uiComponent({ type: &quot;h2&quot;, text: name }),
+    uiComponent({ type: &quot;p&quot;, text: bio }),
+  )
+  return card
+}
+
+document.body.append(userCard(&quot;Ada&quot;, &quot;First programmer&quot;), userCard(&quot;Alan&quot;, &quot;Codebreaker&quot;))
+</code></pre>
+
+<h2 id="reacting-to-clicks-and-other-events">Reacting to clicks and other events</h2>
+
+<pre><code class="language-ts">import { setDomEvents } from &quot;./gtd/dom.js&quot;
+
+const button = uiComponent({ type: &quot;button&quot;, text: &quot;Click me&quot; })
+
+setDomEvents(button, {
+  click: () =&gt; alert(&quot;Clicked!&quot;),
+  mouseenter: () =&gt; button.classList.add(&quot;hover&quot;),
+  mouseleave: () =&gt; button.classList.remove(&quot;hover&quot;),
+})
+</code></pre>
+
+<p>Any <a href="https://developer.mozilla.org/docs/Web/Events" target="_blank">DOM event</a> name works: <code>click</code>, <code>input</code>,
+<code>submit</code>, <code>keydown</code>…</p>
+
+<p>To remove a listener later, you need the <strong>same function</strong>, so keep it in a variable:</p>
+
+<pre><code class="language-ts">const onClick = () =&gt; console.log(&quot;clicked&quot;)
+setDomEvents(button, { click: onClick })
+removeDomEvents(button, { click: onClick }) // works
+
+removeDomEvents(button, { click: () =&gt; console.log(&quot;clicked&quot;) }) // ❌ a different function, nothing happens
+</code></pre>
+
+<h2 id="changing-an-element-after-creating-it">Changing an element after creating it</h2>
+
+<p>Each <code>set…</code> has a matching <code>remove…</code>. They all return the element, so you can chain them.</p>
+
+<table>
+<thead>
+<tr>
+<th>To add</th>
+<th>To remove</th>
+<th><code>remove</code> takes</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>setDomClasses(el, [&quot;active&quot;])</code></td>
+<td><code>removeDomClasses(el, [&quot;active&quot;])</code></td>
+<td>class names</td>
+</tr>
+
+<tr>
+<td><code>setDomAttributes(el, { disabled: &quot;&quot; })</code></td>
+<td><code>removeDomAttributes(el, [&quot;disabled&quot;])</code></td>
+<td>attribute names</td>
+</tr>
+
+<tr>
+<td><code>setDomStyles(el, { color: &quot;red&quot; })</code></td>
+<td><code>removeDomStyles(el, [&quot;color&quot;])</code></td>
+<td>CSS names: <code>&quot;background-color&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>setDomDataset(el, { state: &quot;open&quot; })</code></td>
+<td><code>removeDomDataset(el, [&quot;state&quot;])</code></td>
+<td>dataset keys</td>
+</tr>
+
+<tr>
+<td><code>setDomEvents(el, { click: fn })</code></td>
+<td><code>removeDomEvents(el, { click: fn })</code></td>
+<td>the same functions</td>
+</tr>
+</tbody>
+</table>
+
+<pre><code class="language-ts">// show a button as &quot;loading&quot; while saving
+setDomAttributes(button, { disabled: &quot;&quot; })
+setDomClasses(button, [&quot;loading&quot;])
+
+await save()
+
+removeDomAttributes(button, [&quot;disabled&quot;])
+removeDomClasses(button, [&quot;loading&quot;])
+</code></pre>
+
+<p>If you pass <code>undefined</code> instead of the element or the values, nothing happens — no errors.</p>
+
+<h2 id="removing-elements-from-the-page">Removing elements from the page</h2>
+
+<pre><code class="language-ts">import { removeDomById, removeAllDomBySelector } from &quot;./gtd/dom.js&quot;
+
+removeDomById(&quot;welcome-banner&quot;)                   // the element with id=&quot;welcome-banner&quot;
+const count = removeAllDomBySelector(&quot;.toast&quot;)    // every element with class &quot;toast&quot;
+console.log(`${count} toasts removed`)
+</code></pre>
+
+<p>Or on an element you already have: <code>element.remove()</code>.</p>
+
+<h2 id="full-example-a-counter">Full example: a counter</h2>
+
+<pre><code class="language-ts">import { uiComponent, setDomEvents } from &quot;./gtd/dom.js&quot;
+
+let count = 0
+
+const label = uiComponent({ type: &quot;p&quot;, text: &quot;Clicked 0 times&quot; })
+const button = uiComponent({ type: &quot;button&quot;, text: &quot;+1&quot; })
+
+setDomEvents(button, {
+  click: () =&gt; {
+    count++
+    label.textContent = `Clicked ${count} times`
+  },
+})
+
+document.body.append(label, button)
+</code></pre>
+
+<h2 id="common-mistakes">Common mistakes</h2>
+
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>The element is created but not visible</td>
+<td>It was never added to the page</td>
+<td><code>parent.append(element)</code></td>
+</tr>
+
+<tr>
+<td><code>styles: { &quot;background-color&quot;: … }</code> does nothing</td>
+<td>Inline styles use camelCase</td>
+<td><code>backgroundColor</code></td>
+</tr>
+
+<tr>
+<td><code>removeDomStyles(el, [&quot;backgroundColor&quot;])</code> does nothing</td>
+<td>Removing uses CSS names</td>
+<td><code>&quot;background-color&quot;</code></td>
+</tr>
+
+<tr>
+<td>Text with <code>&lt;</code> shows weird or breaks the layout</td>
+<td><code>text</code> is HTML</td>
+<td>Use <code>textContent</code> for plain text</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./guides/router">Views and routing →</a></p>

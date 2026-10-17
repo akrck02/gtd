@@ -1,0 +1,155 @@
+<h1 id="configuration">Configuration ⚙️</h1>
+
+<p><strong>Module:</strong> <code>configuration.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p>Store settings — the API address, the theme, the language — so they <strong>survive reloads</strong>. They are
+kept in the browser, on the user&rsquo;s device, as one JSON object.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<pre><code class="language-ts">import { setConfiguration, getConfiguration } from &quot;./gtd/configuration.js&quot;
+
+setConfiguration(&quot;theme&quot;, &quot;dark&quot;)
+getConfiguration(&quot;theme&quot;) // &quot;dark&quot;, even after closing the browser
+</code></pre>
+
+<h2 id="first-step-name-your-configuration">First step: name your configuration</h2>
+
+<p>Open <code>src/gtd/configuration.ts</code> and change the id to your app&rsquo;s name:</p>
+
+<pre><code class="language-ts">const configurationId: string = &quot;my-notes-app&quot;
+</code></pre>
+
+<p>All your settings are saved together under that name. Two apps on the same address (for example
+both on <code>localhost:8000</code>) with the same id would share — and overwrite — their settings.</p>
+
+<h2 id="reading-and-writing">Reading and writing</h2>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>setConfiguration(key, value)</code></td>
+<td>Saves <code>value</code> under <code>key</code></td>
+</tr>
+
+<tr>
+<td><code>getConfiguration(key)</code></td>
+<td>Returns the value, or <code>undefined</code> if it was never saved</td>
+</tr>
+
+<tr>
+<td><code>isConfigurationSet(key)</code></td>
+<td><code>true</code> if <code>key</code> has a value</td>
+</tr>
+
+<tr>
+<td><code>isConfigurationActive(key)</code></td>
+<td><code>true</code> only if the value is exactly <code>true</code> — handy for on/off options</td>
+</tr>
+
+<tr>
+<td><code>await loadConfiguration(path)</code></td>
+<td>Saves every key of a JSON file</td>
+</tr>
+</tbody>
+</table>
+<p>Values can be <strong>anything JSON can hold</strong>: text, numbers, booleans, lists and objects. They come
+back with the same type:</p>
+
+<pre><code class="language-ts">setConfiguration(&quot;fontSize&quot;, 18)
+setConfiguration(&quot;favourites&quot;, [&quot;1&quot;, &quot;4&quot;])
+setConfiguration(&quot;animations&quot;, true)
+
+getConfiguration(&quot;fontSize&quot;) + 2         // 20
+getConfiguration(&quot;favourites&quot;).length    // 2
+isConfigurationActive(&quot;animations&quot;)      // true
+</code></pre>
+
+<h2 id="defaults-from-a-file">Defaults from a file</h2>
+
+<p>Put the defaults in <strong><code>config.json</code></strong>, next to <code>index.html</code>:</p>
+
+<pre><code class="language-json">{
+  &quot;api&quot;: &quot;https://example.org/api&quot;,
+  &quot;theme&quot;: &quot;light&quot;,
+  &quot;animations&quot;: true
+}
+</code></pre>
+
+<p>and load it when the app starts:</p>
+
+<pre><code class="language-ts">await loadConfiguration(&quot;./config.json&quot;)
+</code></pre>
+
+<p>Each key of the file is saved; keys that are only in the browser are kept. If a key is in both,
+<strong>the file wins</strong>. To keep what the user chose, load the file only the first time:</p>
+
+<pre><code class="language-ts">if (!isConfigurationSet(&quot;api&quot;))
+  await loadConfiguration(&quot;./config.json&quot;)
+</code></pre>
+
+<h2 id="full-example-a-theme-switch-that-remembers">Full example: a theme switch that remembers</h2>
+
+<p>Bubble UI has a dark theme built in: it turns on with <code>data-theme=&quot;dark&quot;</code> on <code>&lt;html&gt;</code>.</p>
+
+<pre><code class="language-ts">import { uiComponent, setDomEvents } from &quot;./gtd/dom.js&quot;
+import { getConfiguration, setConfiguration } from &quot;./gtd/configuration.js&quot;
+import { prefersDarkMode } from &quot;./gtd/browser.js&quot;
+import { BubbleUI } from &quot;./gtd/bubble.js&quot;
+
+function applyTheme(theme: string) {
+  document.documentElement.dataset.theme = theme // Bubble UI: &quot;light&quot; or &quot;dark&quot;
+}
+
+// use the saved theme, or the system preference the first time
+let theme = getConfiguration(&quot;theme&quot;) ?? (prefersDarkMode() ? &quot;dark&quot; : &quot;light&quot;)
+applyTheme(theme)
+
+const toggle = uiComponent({ type: &quot;button&quot;, text: &quot;Toggle theme&quot;, classes: [BubbleUI.Primary] })
+setDomEvents(toggle, {
+  click: () =&gt; {
+    theme = &quot;dark&quot; == theme ? &quot;light&quot; : &quot;dark&quot;
+    setConfiguration(&quot;theme&quot;, theme)
+    applyTheme(theme)
+  },
+})
+document.body.append(toggle)
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Light</th>
+<th>Dark</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><img src="./images/theme-light.png" alt="The theme example in light mode" /></td>
+<td><img src="./images/theme-dark.png" alt="The same page after pressing the button, in dark mode" /></td>
+</tr>
+</tbody>
+</table>
+
+<h2 id="good-to-know">Good to know</h2>
+
+<ul>
+<li>Settings are saved in <code>localStorage</code>: per site and per browser, so they don&rsquo;t travel between
+devices.</li>
+<li>Users can clear them at any time, so always have a default.</li>
+<li>Don&rsquo;t store passwords or other secrets there: any script on the page can read them.</li>
+<li>To see what&rsquo;s stored: developer tools → <em>Application</em> (<em>Storage</em> in Firefox) → <em>Local Storage</em> →
+your <code>configurationId</code>.</li>
+</ul>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./guides/icons">Icons →</a></p>

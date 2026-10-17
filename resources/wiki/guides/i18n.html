@@ -1,0 +1,196 @@
+<h1 id="translations">Translations 🌍</h1>
+
+<p><strong>Module:</strong> <code>i18n.ts</code> · <strong>Depends on:</strong> nothing</p>
+
+<p><em>i18n</em> is short for <em>internationalisation</em> (an i, 18 letters, an n). This module lets your app show
+its texts in the user&rsquo;s language, keeping every text in JSON files instead of in the code.</p>
+
+<h2 id="in-30-seconds">In 30 seconds</h2>
+
+<p>Create <strong><code>resources/i18n/en/home.json</code></strong>:</p>
+
+<pre><code class="language-json">{ &quot;welcome&quot;: &quot;Welcome!&quot; }
+</code></pre>
+
+<p>…and <strong><code>resources/i18n/es/home.json</code></strong>:</p>
+
+<pre><code class="language-json">{ &quot;welcome&quot;: &quot;¡Bienvenido!&quot; }
+</code></pre>
+
+<p>Then:</p>
+
+<pre><code class="language-ts">import { setCurrentLanguage, loadTextBundle, getText } from &quot;./gtd/i18n.js&quot;
+
+await setCurrentLanguage(navigator.language) // the browser's language, like &quot;es-ES&quot;
+await loadTextBundle(&quot;home&quot;)
+
+uiComponent({ type: &quot;h1&quot;, text: getText(&quot;home&quot;, &quot;welcome&quot;) }) // &quot;¡Bienvenido!&quot; in Spanish browsers
+</code></pre>
+
+<h2 id="where-the-files-go">Where the files go</h2>
+
+<pre><code>my-app/
+├── index.html
+└── resources/
+    └── i18n/
+        ├── en/
+        │   ├── home.json
+        │   └── settings.json
+        └── es/
+            ├── home.json
+            └── settings.json
+</code></pre>
+
+<ul>
+<li>One folder per language (<code>en</code>, <code>es</code>…).</li>
+<li>One JSON file per <strong>bundle</strong>: a group of texts, usually one per page or feature.</li>
+<li>Each bundle has the <strong>same keys</strong> in every language.</li>
+<li><code>resources/</code> sits next to <code>index.html</code> (paths are relative to the page). To use another
+folder, change <code>I18N_PATH</code> at the top of <code>i18n.ts</code>.</li>
+</ul>
+
+<p>Splitting texts into bundles means each page only downloads the texts it needs.</p>
+
+<h2 id="the-three-functions">The three functions</h2>
+
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>What it does</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>await setCurrentLanguage(locale)</code></td>
+<td>Chooses the language: <code>&quot;es&quot;</code>, <code>&quot;es-ES&quot;</code>, <code>navigator.language</code>…</td>
+</tr>
+
+<tr>
+<td><code>await loadTextBundle(bundle)</code></td>
+<td>Downloads <code>resources/i18n/&lt;language&gt;/&lt;bundle&gt;.json</code>, once</td>
+</tr>
+
+<tr>
+<td><code>getText(bundle, key)</code></td>
+<td>Returns the text, or <code>&quot;&quot;</code> if it&rsquo;s not there</td>
+</tr>
+</tbody>
+</table>
+<p>Load bundles <strong>before</strong> drawing the views that use them, for example at the start of the view:</p>
+
+<pre><code class="language-ts">setRoute(&quot;/settings&quot;, async (_, container) =&gt; {
+  await loadTextBundle(&quot;settings&quot;) // does nothing if it is already loaded
+  container.append(uiComponent({ type: &quot;h1&quot;, text: getText(&quot;settings&quot;, &quot;title&quot;) }))
+})
+</code></pre>
+
+<h2 id="letting-the-user-change-language">Letting the user change language</h2>
+
+<pre><code class="language-ts">await setCurrentLanguage(&quot;es&quot;, true) // true = download the loaded bundles again, in Spanish
+navigate()                            // draw the current page again with the new texts
+</code></pre>
+
+<p>Remember the choice with <a href="./guides/configuration">Configuration</a>, and use it at start:</p>
+
+<pre><code class="language-ts">setConfiguration(&quot;lang&quot;, &quot;es&quot;)
+// next time the app opens:
+await setCurrentLanguage(getConfiguration(&quot;lang&quot;) ?? navigator.language)
+</code></pre>
+
+<h2 id="which-languages-are-available">Which languages are available</h2>
+
+<p>Out of the box, <strong>English</strong>, <strong>Spanish</strong>, <strong>Galician</strong> and <strong>Catalan</strong> can be used. Any other locale
+falls back to English, with a warning in the console.</p>
+
+<p>To add a language, open <code>src/gtd/i18n.ts</code> and edit two places at the top:</p>
+
+<pre><code class="language-ts">export const Languages = {
+  English: { name: &quot;english&quot;, main: &quot;en&quot;, locales: [&quot;en&quot;, &quot;en-US&quot;, &quot;en-GB&quot;] },
+  Spanish: { name: &quot;spanish&quot;, main: &quot;es&quot;, locales: [&quot;es&quot;, &quot;es-ES&quot;] },
+  Galician: { name: &quot;galician&quot;, main: &quot;gl&quot;, locales: [&quot;gl&quot;, &quot;gl-ES&quot;] },
+  Catala: { name: &quot;catala&quot;, main: &quot;ca&quot;, locales: [&quot;ca&quot;, &quot;ca-ES&quot;] },
+  French: { name: &quot;french&quot;, main: &quot;fr&quot;, locales: [&quot;fr&quot;, &quot;fr-FR&quot;, &quot;fr-CA&quot;] }, // ← new
+}
+
+const AVAILABLE_LANGUAGES = [
+  Languages.Spanish,
+  Languages.English,
+  Languages.Galician,
+  Languages.Catala,
+  Languages.French, // ← and enable it
+]
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>main</code></td>
+<td>The folder name under <code>i18n/</code></td>
+</tr>
+
+<tr>
+<td><code>locales</code></td>
+<td>Every code that should pick this language (<code>navigator.language</code> gives values like <code>&quot;fr-CA&quot;</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Then create <code>resources/i18n/fr/</code> with the same bundles. To start in another language when the
+locale is unknown, change <code>DEFAULT_LANGUAGE</code>.</p>
+
+<h2 id="texts-with-values-inside">Texts with values inside</h2>
+
+<p><code>getText</code> returns plain strings, so use placeholders and <code>replace</code>:</p>
+
+<pre><code class="language-json">{ &quot;greeting&quot;: &quot;Hello, {name}!&quot; }
+</code></pre>
+
+<pre><code class="language-ts">getText(&quot;home&quot;, &quot;greeting&quot;).replace(&quot;{name}&quot;, user.name)
+</code></pre>
+
+<h2 id="when-something-is-missing">When something is missing</h2>
+
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>What you get</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Bundle not loaded yet</td>
+<td><code>&quot;&quot;</code></td>
+</tr>
+
+<tr>
+<td>Key not in the bundle</td>
+<td><code>&quot;&quot;</code></td>
+</tr>
+
+<tr>
+<td>Bundle file missing or broken</td>
+<td>Skipped quietly; texts read <code>&quot;&quot;</code></td>
+</tr>
+
+<tr>
+<td>Retry a flaky network</td>
+<td><code>loadTextBundle(&quot;home&quot;, false, 3)</code> tries up to 3 times</td>
+</tr>
+</tbody>
+</table>
+<p>An empty text on screen almost always means a missing <code>await loadTextBundle(...)</code> or a typo in a
+key. Check the <em>Network</em> tab for a 404 on the JSON file.</p>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./guides/configuration">Configuration →</a></p>

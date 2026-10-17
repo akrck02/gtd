@@ -1,0 +1,164 @@
+<h1 id="how-gtd-thinks">How GTD thinks 🧠</h1>
+
+<p>GTD is small on purpose. Six ideas explain how every module behaves. Once you know them, you can
+guess how most of the library works before reading about it.</p>
+
+<h2 id="1-everything-is-the-real-thing">1. Everything is the real thing</h2>
+
+<p>GTD never hides the browser from you.</p>
+
+<ul>
+<li><code>uiComponent</code> returns an <strong><code>HTMLElement</code></strong>, the same object <code>document.createElement</code> gives you.</li>
+<li><code>httpGet</code> returns the same <strong><code>Response</code></strong> that <code>fetch</code> gives you.</li>
+<li>Settings are stored in <strong><code>localStorage</code></strong>.</li>
+</ul>
+
+<p>So anything you find on <a href="https://developer.mozilla.org" target="_blank">MDN</a> or Stack Overflow still works:</p>
+
+<pre><code class="language-ts">const button = uiComponent({ type: &quot;button&quot;, text: &quot;Save&quot; })
+button.disabled = true       // plain DOM
+button.focus()               // plain DOM
+button.textContent = &quot;Saved&quot; // plain DOM
+</code></pre>
+
+<h2 id="2-nothing-to-install">2. Nothing to install</h2>
+
+<p>No Node.js, no npm, no <code>node_modules</code>. GTD is a folder of <code>.ts</code> files, and
+<a href="https://esbuild.github.io" target="_blank">esbuild</a> — one program, one command — turns your app into one <code>.js</code>
+file. Your project has no dependencies that can break, go out of date or need updating.</p>
+
+<h2 id="3-one-file-one-job">3. One file, one job</h2>
+
+<p>Each module lives in its own file and does one thing: <code>dom.ts</code> builds elements, <code>router.ts</code> picks
+pages, <code>http.ts</code> talks to servers. Import only what you use:</p>
+
+<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
+import { httpGet } from &quot;./gtd/http.js&quot;
+</code></pre>
+
+<p>You can even delete the modules you don&rsquo;t need from your copy.</p>
+
+<h2 id="4-functions-not-classes">4. Functions, not classes</h2>
+
+<p>There are no classes to extend and no lifecycle to learn. You call functions and pass plain
+objects (the few helpers grouped in a class, like <code>Shortcuts</code>, are used the same way, with no
+<code>new</code>):</p>
+
+<pre><code class="language-ts">uiComponent({ type: &quot;h1&quot;, text: &quot;Hi&quot; })
+httpPost({ url: &quot;/api/notes&quot;, parameters: { text: &quot;Buy milk&quot; } })
+setRoute(&quot;/notes&quot;, showNotes)
+</code></pre>
+
+<h2 id="5-you-draw-gtd-doesn-t-re-draw">5. You draw, GTD doesn&rsquo;t re-draw</h2>
+
+<p>GTD does <strong>not</strong> watch your data. When something changes, you update the element yourself, or draw
+the page again:</p>
+
+<pre><code class="language-ts">let count = 0
+const counter = uiComponent({ type: &quot;p&quot;, text: &quot;0&quot; })
+const button = uiComponent({ type: &quot;button&quot;, text: &quot;+1&quot; })
+
+setDomEvents(button, {
+  click: () =&gt; {
+    count++
+    counter.textContent = `${count}` // you decide what changes
+  },
+})
+</code></pre>
+
+<p>This is a bit more typing than in big frameworks, but there is no magic: what you see in your code
+is exactly what happens on screen.</p>
+
+<h2 id="6-quiet-when-things-are-missing">6. Quiet when things are missing</h2>
+
+<p>GTD prefers doing nothing over crashing your page:</p>
+
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>What GTD does</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><code>setDomClasses(element, undefined)</code></td>
+<td>Returns the element unchanged</td>
+</tr>
+
+<tr>
+<td><code>getText(&quot;bundle&quot;, &quot;missing-key&quot;)</code></td>
+<td>Returns <code>&quot;&quot;</code></td>
+</tr>
+
+<tr>
+<td><code>getIcon(&quot;icons&quot;, &quot;missing&quot;)</code></td>
+<td>Returns <code>undefined</code></td>
+</tr>
+
+<tr>
+<td>A route nobody registered</td>
+<td>Shows the &ldquo;not found&rdquo; view</td>
+</tr>
+</tbody>
+</table>
+<p>When something does not show up, check the browser console: GTD writes a warning there when it
+can.</p>
+
+<h2 id="a-few-words-you-will-see">A few words you will see</h2>
+
+<table>
+<thead>
+<tr>
+<th>Word</th>
+<th>Meaning</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td><strong>Element</strong></td>
+<td>A piece of the page, like <code>&lt;h1&gt;</code> or <code>&lt;button&gt;</code>. In code, an <code>HTMLElement</code>.</td>
+</tr>
+
+<tr>
+<td><strong>Module</strong></td>
+<td>A <code>.ts</code> file that exports functions.</td>
+</tr>
+
+<tr>
+<td><strong>esbuild</strong></td>
+<td>The program that turns your <code>.ts</code> files into one <code>.js</code> file for the browser.</td>
+</tr>
+
+<tr>
+<td><strong>View</strong></td>
+<td>A function that draws one page into a container.</td>
+</tr>
+
+<tr>
+<td><strong>Route</strong></td>
+<td>An address, like <code>/user/7</code>, linked to a view.</td>
+</tr>
+
+<tr>
+<td><strong>Signal</strong></td>
+<td>A named event that several parts of the app can listen to.</td>
+</tr>
+
+<tr>
+<td><strong>Bundle</strong></td>
+<td>A JSON file with the texts of one part of the app, in one language.</td>
+</tr>
+
+<tr>
+<td><strong><code>async</code> / <code>await</code></strong></td>
+<td>How JavaScript waits for slow things (network, files) without freezing the page. Most GTD functions that touch the network are <code>async</code>, so put <code>await</code> in front of them.</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./tour">A tour of GTD →</a></p>
