@@ -188,4 +188,4 @@ showTodos(document.body)
 
 ---
 
-[← All the documentation](../README.md) · Next: [Signals →](signals.md)
+[← All the documentation](../1-overview.md) · Next: [Signals →](4-signals.md)

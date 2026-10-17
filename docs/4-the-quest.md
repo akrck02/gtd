@@ -18,7 +18,7 @@ your own pace — each level leaves you with a working app.
 
 ## Before you start
 
-You need the project from [Getting started](getting-started.md) (5 minutes, if you haven't done it
+You need the project from [Getting started](2-getting-started.md) (5 minutes, if you haven't done it
 yet). Open **two terminals** in your project folder and leave these running the whole quest:
 
 ```sh
@@ -121,7 +121,7 @@ Add a page at `#/about` that says who made the app.
 
 ![Achievement unlocked: Builder](images/quest/achievement-builder.svg)
 
-Learn more: [Building the interface](guides/dom.md) · [Views and routing](guides/router.md)
+Learn more: [Building the interface](5-guides/1-building-the-interface.md) · [Views and routing](5-guides/2-views-and-routing.md)
 
 ---
 
@@ -190,7 +190,7 @@ console.log(`Welcome back! Visit number ${visits}`)</code></pre>
 
 ![Achievement unlocked: Keeper](images/quest/achievement-keeper.svg)
 
-Learn more: [Configuration](guides/configuration.md)
+Learn more: [Configuration](5-guides/6-configuration.md)
 
 ---
 
@@ -281,7 +281,7 @@ if (!response.ok)
 
 ![Achievement unlocked: Messenger](images/quest/achievement-messenger.svg)
 
-Learn more: [Talking to a server](guides/http.md) · [Bubble UI](reference/html.md)
+Learn more: [Talking to a server](5-guides/3-talking-to-a-server.md) · [Bubble UI](6-reference/5-tags-and-styles.md)
 
 ---
 
@@ -356,7 +356,7 @@ localStorage.notes = '{"api":"./api","lang":"gl"}'</code></pre>
 
 ![Achievement unlocked: Polyglot](images/quest/achievement-polyglot.svg)
 
-Learn more: [Translations](guides/i18n.md)
+Learn more: [Translations](5-guides/5-translations.md)
 
 ---
 
@@ -443,7 +443,7 @@ container.append(card)</code></pre>
 
 ![Achievement unlocked: Artist](images/quest/achievement-artist.svg)
 
-Learn more: [Icons](guides/icons.md) · [Building the interface](guides/dom.md)
+Learn more: [Icons](5-guides/7-icons.md) · [Building the interface](5-guides/1-building-the-interface.md)
 
 ---
 
@@ -509,7 +509,7 @@ connectToSignal(languageChanged, async lang => {
 
 ![Achievement unlocked: Broadcaster](images/quest/achievement-broadcaster.svg)
 
-Learn more: [Signals](guides/signals.md)
+Learn more: [Signals](5-guides/4-signals.md)
 
 ---
 
@@ -550,7 +550,7 @@ a phone: bigger text, cards as wide as the screen.
 
 ![Achievement unlocked: Shape-shifter](images/quest/achievement-shape-shifter.svg)
 
-Learn more: [Display](reference/display.md) · [Browser](reference/browser.md)
+Learn more: [Display](6-reference/2-display.md) · [Browser](6-reference/1-browser.md)
 
 ---
 
@@ -604,7 +604,7 @@ Make `Esc` go home too.
 
 ![Achievement unlocked: Speedrunner](images/quest/achievement-speedrunner.svg)
 
-Learn more: [Keyboard shortcuts](guides/shortcuts.md)
+Learn more: [Keyboard shortcuts](5-guides/8-keyboard-shortcuts.md)
 
 ---
 
@@ -624,7 +624,7 @@ This time there is no step-by-step, but you already have every piece:
 | Keep the notes after a reload | Level 2 |
 | Start from `api/notes.json` the first time | Level 3 |
 | React to the button | Level 5 |
-| Give each note a unique id | `uuidv4()` from [`crypto.ts`](reference/crypto.md) |
+| Give each note a unique id | `uuidv4()` from [`crypto.ts`](6-reference/7-crypto.md) |
 
 **The goal:** a text box and an **+ Add** button on the home page. Type *"Water the plants"*, press **+ Add**, and
 a new card appears. Reload: it is still there.
@@ -679,13 +679,13 @@ You built a real app, and you can read every line of it. That is the GTD way.
 | Idea | Difficulty | Hint |
 |---|---|---|
 | Delete a note | ⭐ | A button on the note page, `notes.splice(…)`, `setConfiguration` |
-| Dark mode switch | ⭐ | `document.documentElement.dataset.theme = "dark"` — see [Configuration](guides/configuration.md) |
-| Type the title letter by letter | ⭐⭐ | [Animations](reference/animations.md) |
+| Dark mode switch | ⭐ | `document.documentElement.dataset.theme = "dark"` — see [Configuration](5-guides/6-configuration.md) |
+| Type the title letter by letter | ⭐⭐ | [Animations](6-reference/3-animations.md) |
 | Search your notes | ⭐⭐ | An input, `notes.filter(…)`, draw again on `input` events |
-| Save notes on a real server | ⭐⭐⭐ | `httpPost` — see [Talking to a server](guides/http.md) |
+| Save notes on a real server | ⭐⭐⭐ | `httpPost` — see [Talking to a server](5-guides/3-talking-to-a-server.md) |
 
-Stuck at any point? See [Troubleshooting](troubleshooting.md).
+Stuck at any point? See [Troubleshooting](7-troubleshooting.md).
 
 ---
 
-[← All the documentation](README.md)
+[← All the documentation](1-overview.md)

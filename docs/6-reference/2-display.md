@@ -22,7 +22,7 @@ It is **mobile** on a phone or tablet, or in a window up to 1024 pixels wide; ot
 Then it:
 
 1. Sets `data-display` on `<html>`: `<html data-display="mobile">` or `"desktop"`.
-2. Saves `"display"` in the [configuration](../guides/configuration.md), which `isMobileDisplay()`
+2. Saves `"display"` in the [configuration](../5-guides/6-configuration.md), which `isMobileDisplay()`
    reads.
 
 ## Styling with it
@@ -47,4 +47,4 @@ nav { display: flex; gap: 1rem; }
 
 ---
 
-[← All the documentation](../README.md)
+[← All the documentation](../1-overview.md)

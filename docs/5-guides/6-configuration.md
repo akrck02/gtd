@@ -118,4 +118,4 @@ document.body.append(toggle)
 
 ---
 
-[← All the documentation](../README.md) · Next: [Icons →](icons.md)
+[← All the documentation](../1-overview.md) · Next: [Icons →](7-icons.md)

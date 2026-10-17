@@ -141,4 +141,4 @@ document.body.append(badge, ...products)
 
 ---
 
-[← All the documentation](../README.md) · Next: [Translations →](i18n.md)
+[← All the documentation](../1-overview.md) · Next: [Translations →](5-translations.md)

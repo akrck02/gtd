@@ -5,7 +5,7 @@
 | 🎯 **Goal** | Your first GTD app in the browser: two pages and a button |
 | ⏱️ **Time** | About 5 minutes |
 | 🧰 **You need** | A terminal, git and Python 3 — no Node.js |
-| 🗺️ **Then** | [The GTD quest](tour.md): a notes app, step by step |
+| 🗺️ **Then** | [The GTD quest](4-the-quest.md): a notes app, step by step |
 
 Think of this page as **level 0**: you set up your tools here, and the quest starts on the next
 page.
@@ -182,7 +182,7 @@ Click **← Back** → you are home again. Try typing `#/hello/Ada` in the addre
 
 🎉 **That's it — you have a GTD app with routing.** You are ready for the quest.
 
-Nothing on screen? Head to [Troubleshooting](troubleshooting.md).
+Nothing on screen? Head to [Troubleshooting](7-troubleshooting.md).
 
 ---
 
@@ -226,10 +226,10 @@ cp ../gtd-download/bin/install-ts.sh bin/
 
 | You wrote | What it does |
 |---|---|
-| `uiComponent({...})` | Creates a real HTML element — see [Building the interface](guides/dom.md) |
-| `BubbleUI.Primary` | The name of Bubble's `primary` class: the blue, rounded button — see [HTML tags and Bubble UI](reference/html.md) |
+| `uiComponent({...})` | Creates a real HTML element — see [Building the interface](5-guides/1-building-the-interface.md) |
+| `BubbleUI.Primary` | The name of Bubble's `primary` class: the blue, rounded button — see [HTML tags and Bubble UI](6-reference/5-tags-and-styles.md) |
 | `setDomEvents(button, { click })` | Adds a click listener — same as `addEventListener` |
-| `setRoute("/hello/$", view)` | Says which function draws which address — see [Views and routing](guides/router.md) |
+| `setRoute("/hello/$", view)` | Says which function draws which address — see [Views and routing](5-guides/2-views-and-routing.md) |
 | `showRoute(path, app)` | Clears `app` and draws the matching page |
 
 ---
@@ -238,10 +238,10 @@ cp ../gtd-download/bin/install-ts.sh bin/
 
 | | Path | What you get |
 |---|---|---|
-| 🗺️ | **[The GTD quest](tour.md)** (recommended) | Build a notes app in 8 short levels, learning by doing |
-| 🧠 | [How GTD thinks](concepts.md) | Six ideas, five minutes, every other page becomes easier |
-| 📚 | [The guides](README.md#guides--one-per-thing-you-want-to-do) | Look up one thing when you need it |
+| 🗺️ | **[The GTD quest](4-the-quest.md)** (recommended) | Build a notes app in 8 short levels, learning by doing |
+| 🧠 | [How GTD thinks](3-core-ideas.md) | Six ideas, five minutes, every other page becomes easier |
+| 📚 | [The guides](1-overview.md#guides--one-per-thing-you-want-to-do) | Look up one thing when you need it |
 
 ---
 
-[← All the documentation](README.md)
+[← All the documentation](1-overview.md)

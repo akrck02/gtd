@@ -136,4 +136,4 @@ can.
 
 ---
 
-[← All the documentation](README.md) · Next: [The GTD quest →](tour.md)
+[← All the documentation](1-overview.md) · Next: [The GTD quest →](4-the-quest.md)
