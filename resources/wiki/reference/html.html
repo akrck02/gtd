@@ -144,18 +144,16 @@ stylesheet that makes GTD apps look good with almost no CSS.</p>
 <blockquote>
 <p>💡 Colours are CSS variables (<code>--primary-color</code>, <code>--surface-1</code>…). Change them in your own CSS to
 give your app its own palette:</p>
-<pre><code class="language-css"><span class="o">&gt;</span> <span class="p">:</span><span class="nd">root</span> <span class="p">{</span> <span class="nv">--primary-color</span><span class="p">:</span> <span class="mh">#00796b</span><span class="p">;</span> <span class="p">}</span>
-<span class="o">&gt;</span> <span class="err">```</span>
-
-<span class="err">##</span> <span class="err">`</span><span class="nt">Html</span><span class="err">`</span><span class="o">:</span> <span class="nt">tag</span> <span class="nt">names</span>
-
-<span class="err">```</span><span class="nt">ts</span>
-<span class="nt">import</span> <span class="p">{</span> <span class="err">Html</span> <span class="p">}</span> <span class="nt">from</span> <span class="s2">&#34;./gtd/html.js&#34;</span>
-
-<span class="nt">uiComponent</span><span class="o">(</span><span class="p">{</span> <span class="n">type</span><span class="p">:</span> <span class="n">Html</span><span class="o">.</span><span class="n">Button</span><span class="p">,</span> <span class="kc">text</span><span class="o">:</span> <span class="s2">&#34;Save&#34;</span> <span class="p">}</span><span class="o">)</span>   <span class="o">//</span> <span class="nt">instead</span> <span class="nt">of</span> <span class="nt">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span>
-<span class="nt">uiComponent</span><span class="o">(</span><span class="p">{</span> <span class="n">type</span><span class="p">:</span> <span class="n">Html</span><span class="o">.</span><span class="n">Section</span> <span class="p">}</span><span class="o">)</span>
-</code></pre>
 </blockquote>
+<pre><code class="language-css"><span class="p">:</span><span class="nd">root</span> <span class="p">{</span> <span class="nv">--primary-color</span><span class="p">:</span> <span class="mh">#00796b</span><span class="p">;</span> <span class="p">}</span>
+</code></pre>
+
+<h2 id="html-tag-names"><code>Html</code>: tag names</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">Html</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/html.js&#34;</span>
+
+<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="nx">Html</span><span class="p">.</span><span class="nx">Button</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Save&#34;</span> <span class="p">})</span>   <span class="c1">// instead of type: &#34;button&#34;
+</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="nx">Html</span><span class="p">.</span><span class="nx">Section</span> <span class="p">})</span>
+</code></pre>
 
 <p>It has the common tags (<code>Div</code>, <code>Span</code>, <code>P</code>, <code>A</code>, <code>H1</code>–<code>H6</code>, <code>Img</code>, <code>Ul</code>, <code>Li</code>, <code>Table</code>…), form
 elements (<code>Input</code>, <code>Button</code>, <code>Select</code>, <code>Textarea</code>, <code>Label</code>…) and SVG tags (<code>Svg</code>, <code>Path</code>, <code>Circle</code>…).

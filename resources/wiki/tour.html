@@ -9,15 +9,13 @@ can stop at any step and still have a working app.</p>
 <blockquote>
 <p>Start from the project you made in <a href="./getting-started">Getting started</a>. Keep these two
 running in two terminals, and reload the browser after each step:</p>
-<pre><code class="language-sh">&gt; ./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js --watch
-&gt; python3 -m http.server <span class="m">8000</span>
-&gt; <span class="sb">```</span>
-
-<span class="c1">## The files we will end with</span>
-
+</blockquote>
+<pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js --watch
+python3 -m http.server <span class="m">8000</span>
 </code></pre>
 
-<p>my-app/
+<h2 id="the-files-we-will-end-with">The files we will end with</h2>
+<pre><code>my-app/
 ├── index.html
 ├── config.json          ← step 2
 ├── api/notes.json       ← step 3
@@ -25,34 +23,31 @@ running in two terminals, and reload the browser after each step:</p>
 │   ├── i18n/en/notes.json   ← step 4
 │   ├── i18n/es/notes.json   ← step 4
 │   └── icons.json           ← step 5
-└── src/</p>
-<pre><code>├── gtd/
-└── main.ts          ← every step
+└── src/
+    ├── gtd/
+    └── main.ts          ← every step
 </code></pre>
-<pre><code>
-## Step 1 — Pages (`dom` + `router`)
 
-Replace `src/main.ts` with a home page and a page for one note:
+<h2 id="step-1-pages-dom-router">Step 1 — Pages (<code>dom</code> + <code>router</code>)</h2>
 
-```ts
-import { uiComponent } from &#34;./gtd/dom.js&#34;
-import { setRoute, showRoute } from &#34;./gtd/router.js&#34;
+<p>Replace <code>src/main.ts</code> with a home page and a page for one note:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">setRoute</span><span class="p">,</span> <span class="nx">showRoute</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/router.js&#34;</span>
 
-const app = document.getElementById(&#34;app&#34;)
+<span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;app&#34;</span><span class="p">)</span>
 
-setRoute(&#34;/&#34;, async (_, container) =&gt; {
-  container.append(uiComponent({ type: &#34;h1&#34;, text: &#34;Notes&#34; }))
-})
+<span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Notes&#34;</span> <span class="p">}))</span>
+<span class="p">})</span>
 
-setRoute(&#34;/note/$&#34;, async ([id], container) =&gt; {
-  container.append(uiComponent({ type: &#34;h1&#34;, text: `Note ${id}` }))
-})
+<span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/note/$&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">([</span><span class="nx">id</span><span class="p">],</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="sb">`Note </span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb">`</span> <span class="p">}))</span>
+<span class="p">})</span>
 
-const navigate = () =&gt; showRoute(location.hash.slice(1) || &#34;/&#34;, app)
-window.addEventListener(&#34;hashchange&#34;, navigate)
-navigate()
+<span class="kr">const</span> <span class="nx">navigate</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">showRoute</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">||</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="nx">app</span><span class="p">)</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;hashchange&#34;</span><span class="p">,</span> <span class="nx">navigate</span><span class="p">)</span>
+<span class="nx">navigate</span><span class="p">()</span>
 </code></pre>
-</blockquote>
 
 <p>✅ <strong>Check:</strong> <a href="http://localhost:8000" target="_blank">http://localhost:8000</a> shows <strong>Notes</strong>; <code>#/note/3</code> shows <strong>Note 3</strong>.</p>
 

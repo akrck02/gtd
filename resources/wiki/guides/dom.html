@@ -121,18 +121,16 @@ create elements and change them with less typing than plain JavaScript.</p>
 <blockquote>
 <p>⚠️ <strong>Never put text typed by users into <code>text</code>.</strong> It is read as HTML, so a user could inject
 scripts into your page. For user text, set <code>textContent</code> after creating the element:</p>
-<pre><code class="language-ts"><span class="o">&gt;</span> <span class="kr">const</span> <span class="nx">comment</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;comment&#34;</span><span class="p">]</span> <span class="p">})</span>
-<span class="o">&gt;</span> <span class="nx">comment</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">userInput</span> <span class="c1">// always shown as plain text, safe
-</span><span class="o">&gt;</span> <span class="sb">```
-
-### Classes
-
-The usual way to style elements: write CSS in a stylesheet and add the class.
-
-```</span><span class="nx">ts</span>
-<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Delete&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="s2">&#34;danger&#34;</span><span class="p">]</span> <span class="p">})</span>
-</code></pre>
 </blockquote>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">comment</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;comment&#34;</span><span class="p">]</span> <span class="p">})</span>
+<span class="nx">comment</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">userInput</span> <span class="c1">// always shown as plain text, safe
+</span></code></pre>
+
+<h3 id="classes">Classes</h3>
+
+<p>The usual way to style elements: write CSS in a stylesheet and add the class.</p>
+<pre><code class="language-ts"><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Delete&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="s2">&#34;danger&#34;</span><span class="p">]</span> <span class="p">})</span>
+</code></pre>
 
 <h3 id="attributes">Attributes</h3>
 
