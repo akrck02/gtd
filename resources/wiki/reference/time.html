@@ -5,12 +5,11 @@
 <p>Wait some milliseconds inside an <code>async</code> function.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">sleep</span><span class="p">,</span> <span class="nx">sleepIf</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/time.js&#34;</span>
 
-<pre><code class="language-ts">import { sleep, sleepIf } from &quot;./gtd/time.js&quot;
-
-status.textContent = &quot;Saved ✓&quot;
-await sleep(2000)              // wait two seconds
-status.textContent = &quot;&quot;
+<span class="nx">status</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s2">&#34;Saved ✓&#34;</span>
+<span class="k">await</span> <span class="nx">sleep</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span>              <span class="c1">// wait two seconds
+</span><span class="nx">status</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span>
 </code></pre>
 
 <h2 id="the-functions">The functions</h2>
@@ -36,13 +35,12 @@ status.textContent = &quot;&quot;
 </tbody>
 </table>
 <p><code>sleepIf</code> is handy for things that should be skippable:</p>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">animate</span> <span class="o">=</span> <span class="o">!</span><span class="nx">prefersReducedMotion</span><span class="p">()</span>
 
-<pre><code class="language-ts">const animate = !prefersReducedMotion()
-
-for (const item of items) {
-  list.append(item)
-  await sleepIf(80, animate) // a little cascade, unless the user asked for less motion
-}
+<span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="nx">item</span> <span class="k">of</span> <span class="nx">items</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">list</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span>
+  <span class="k">await</span> <span class="nx">sleepIf</span><span class="p">(</span><span class="mi">80</span><span class="p">,</span> <span class="nx">animate</span><span class="p">)</span> <span class="c1">// a little cascade, unless the user asked for less motion
+</span><span class="p">}</span>
 </code></pre>
 
 <blockquote>

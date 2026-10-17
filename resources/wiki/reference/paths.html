@@ -5,19 +5,17 @@
 <p>Read pieces of a web address, and make the browser download a file.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">getUrlGetParameters</span><span class="p">,</span> <span class="nx">downloadFile</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/paths.js&#34;</span>
 
-<pre><code class="language-ts">import { getUrlGetParameters, downloadFile } from &quot;./gtd/paths.js&quot;
-
-getUrlGetParameters(&quot;https://shop.example.org/?search=shoes&amp;page=2&quot;)
-// { search: &quot;shoes&quot;, page: &quot;2&quot; }
-
-downloadFile(&quot;./reports/2026.pdf&quot;, &quot;report.pdf&quot;)
+<span class="nx">getUrlGetParameters</span><span class="p">(</span><span class="s2">&#34;https://shop.example.org/?search=shoes&amp;page=2&#34;</span><span class="p">)</span>
+<span class="c1">// { search: &#34;shoes&#34;, page: &#34;2&#34; }
+</span>
+<span class="nx">downloadFile</span><span class="p">(</span><span class="s2">&#34;./reports/2026.pdf&#34;</span><span class="p">,</span> <span class="s2">&#34;report.pdf&#34;</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="query-parameters-key-value">Query parameters (<code>?key=value</code>)</h2>
-
-<pre><code class="language-ts">const query = getUrlGetParameters(location.href)
-const page = Number(query[&quot;page&quot;] ?? &quot;1&quot;)
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">query</span> <span class="o">=</span> <span class="nx">getUrlGetParameters</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">href</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">page</span> <span class="o">=</span> <span class="nb">Number</span><span class="p">(</span><span class="nx">query</span><span class="p">[</span><span class="s2">&#34;page&#34;</span><span class="p">]</span> <span class="o">??</span> <span class="s2">&#34;1&#34;</span><span class="p">)</span>
 </code></pre>
 
 <p>Values come back exactly as written in the address. If they may contain spaces or symbols
@@ -26,19 +24,17 @@ const page = Number(query[&quot;page&quot;] ?? &quot;1&quot;)
 <h2 id="segments-a-b-c">Segments (<code>/a/b/c</code>)</h2>
 
 <p><strong>After a word</strong> — everything that follows a given segment:</p>
-
-<pre><code class="language-ts">getUrlParametersByBreakPoint(&quot;https://example.org/search/user/1/page/2&quot;, &quot;search&quot;)
-// [&quot;user&quot;, &quot;1&quot;, &quot;page&quot;, &quot;2&quot;]
-
-getUrlParametersByBreakPoint(&quot;https://example.org/about&quot;, &quot;search&quot;)
-// [] — &quot;search&quot; is not in the address
-</code></pre>
+<pre><code class="language-ts"><span class="nx">getUrlParametersByBreakPoint</span><span class="p">(</span><span class="s2">&#34;https://example.org/search/user/1/page/2&#34;</span><span class="p">,</span> <span class="s2">&#34;search&#34;</span><span class="p">)</span>
+<span class="c1">// [&#34;user&#34;, &#34;1&#34;, &#34;page&#34;, &#34;2&#34;]
+</span>
+<span class="nx">getUrlParametersByBreakPoint</span><span class="p">(</span><span class="s2">&#34;https://example.org/about&#34;</span><span class="p">,</span> <span class="s2">&#34;search&#34;</span><span class="p">)</span>
+<span class="c1">// [] — &#34;search&#34; is not in the address
+</span></code></pre>
 
 <p><strong>From a position</strong> — splits on every <code>/</code> and keeps from that index:</p>
-
-<pre><code class="language-ts">getUrlParametersByIndex(&quot;search/user/1/page/2&quot;, 2)
-// [&quot;1&quot;, &quot;page&quot;, &quot;2&quot;]
-</code></pre>
+<pre><code class="language-ts"><span class="nx">getUrlParametersByIndex</span><span class="p">(</span><span class="s2">&#34;search/user/1/page/2&#34;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1">// [&#34;1&#34;, &#34;page&#34;, &#34;2&#34;]
+</span></code></pre>
 
 <p>With a full address, remember that <code>https:</code>, an empty piece and the domain count as the first
 three positions.</p>
@@ -49,19 +45,17 @@ segments — you rarely need these functions for that.</p>
 </blockquote>
 
 <h2 id="downloading-a-file">Downloading a file</h2>
-
-<pre><code class="language-ts">downloadFile(address, fileName)
+<pre><code class="language-ts"><span class="nx">downloadFile</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="nx">fileName</span><span class="p">)</span>
 </code></pre>
 
 <p>Works with files on your site and with data you create in the page:</p>
+<pre><code class="language-ts"><span class="c1">// a file from your site
+</span><span class="nx">downloadFile</span><span class="p">(</span><span class="s2">&#34;./docs/manual.pdf&#34;</span><span class="p">,</span> <span class="s2">&#34;manual.pdf&#34;</span><span class="p">)</span>
 
-<pre><code class="language-ts">// a file from your site
-downloadFile(&quot;./docs/manual.pdf&quot;, &quot;manual.pdf&quot;)
-
-// a file made on the fly
-const csv = &quot;name,age\nAda,36\nAlan,41&quot;
-const address = URL.createObjectURL(new Blob([csv], { type: &quot;text/csv&quot; }))
-downloadFile(address, &quot;people.csv&quot;)
+<span class="c1">// a file made on the fly
+</span><span class="kr">const</span> <span class="nx">csv</span> <span class="o">=</span> <span class="s2">&#34;name,age\nAda,36\nAlan,41&#34;</span>
+<span class="kr">const</span> <span class="nx">address</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="k">new</span> <span class="nx">Blob</span><span class="p">([</span><span class="nx">csv</span><span class="p">],</span> <span class="p">{</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;text/csv&#34;</span> <span class="p">}))</span>
+<span class="nx">downloadFile</span><span class="p">(</span><span class="nx">address</span><span class="p">,</span> <span class="s2">&#34;people.csv&#34;</span><span class="p">)</span>
 </code></pre>
 
 <p>The browser only uses your <code>fileName</code> for files from your own site or created in the page; files

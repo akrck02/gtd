@@ -10,18 +10,17 @@ the header shows their name, the menu shows more options, the cart loads. A <str
 <em>observer pattern</em>.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setSignal</span><span class="p">,</span> <span class="nx">connectToSignal</span><span class="p">,</span> <span class="nx">emitSignal</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/signals.js&#34;</span>
 
-<pre><code class="language-ts">import { setSignal, connectToSignal, emitSignal } from &quot;./gtd/signals.js&quot;
+<span class="kr">const</span> <span class="nx">userLoggedIn</span> <span class="o">=</span> <span class="nx">setSignal</span><span class="p">()</span>                       <span class="c1">// 1. create
+</span>
+<span class="nx">connectToSignal</span><span class="p">(</span><span class="nx">userLoggedIn</span><span class="p">,</span> <span class="kr">async</span> <span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>          <span class="c1">// 2. listen
+</span>  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`Welcome, </span><span class="si">${</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">!`</span><span class="p">)</span>
+<span class="p">})</span>
 
-const userLoggedIn = setSignal()                       // 1. create
-
-connectToSignal(userLoggedIn, async user =&gt; {          // 2. listen
-  console.log(`Welcome, ${user.name}!`)
-})
-
-await emitSignal(userLoggedIn, { name: &quot;Ada&quot; })        // 3. announce
+<span class="k">await</span> <span class="nx">emitSignal</span><span class="p">(</span><span class="nx">userLoggedIn</span><span class="p">,</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;Ada&#34;</span> <span class="p">})</span>        <span class="c1">// 3. announce
 // → Welcome, Ada!
-</code></pre>
+</span></code></pre>
 
 <p><img src="./images/signals-flow.svg" alt="The login emits userLoggedIn; the header, the menu and the cart react, without knowing each other" /></p>
 
@@ -66,29 +65,25 @@ await emitSignal(userLoggedIn, { name: &quot;Ada&quot; })        // 3. announce
 <h2 id="organising-signals-in-a-real-app">Organising signals in a real app</h2>
 
 <p>Create all the signals in <strong>one file</strong>, so everyone imports the same ids:</p>
+<pre><code class="language-ts"><span class="c1">// src/events.ts
+</span><span class="kr">import</span> <span class="p">{</span> <span class="nx">setSignal</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/signals.js&#34;</span>
 
-<pre><code class="language-ts">// src/events.ts
-import { setSignal } from &quot;./gtd/signals.js&quot;
-
-export const userLoggedIn = setSignal()
-export const cartChanged = setSignal()
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">userLoggedIn</span> <span class="o">=</span> <span class="nx">setSignal</span><span class="p">()</span>
+<span class="kr">export</span> <span class="kr">const</span> <span class="nx">cartChanged</span> <span class="o">=</span> <span class="nx">setSignal</span><span class="p">()</span>
 </code></pre>
+<pre><code class="language-ts"><span class="c1">// src/header.ts
+</span><span class="kr">import</span> <span class="p">{</span> <span class="nx">connectToSignal</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/signals.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">userLoggedIn</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./events.js&#34;</span>
 
-<pre><code class="language-ts">// src/header.ts
-import { connectToSignal } from &quot;./gtd/signals.js&quot;
-import { userLoggedIn } from &quot;./events.js&quot;
-
-connectToSignal(userLoggedIn, async user =&gt; {
-  greeting.textContent = `Hi, ${user.name}`
-})
+<span class="nx">connectToSignal</span><span class="p">(</span><span class="nx">userLoggedIn</span><span class="p">,</span> <span class="kr">async</span> <span class="nx">user</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">greeting</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="sb">`Hi, </span><span class="si">${</span><span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="si">}</span><span class="sb">`</span>
+<span class="p">})</span>
 </code></pre>
-
-<pre><code class="language-ts">// src/cart.ts
-connectToSignal(userLoggedIn, async user =&gt; loadCart(user.id))
+<pre><code class="language-ts"><span class="c1">// src/cart.ts
+</span><span class="nx">connectToSignal</span><span class="p">(</span><span class="nx">userLoggedIn</span><span class="p">,</span> <span class="kr">async</span> <span class="nx">user</span> <span class="o">=&gt;</span> <span class="nx">loadCart</span><span class="p">(</span><span class="nx">user</span><span class="p">.</span><span class="nx">id</span><span class="p">))</span>
 </code></pre>
-
-<pre><code class="language-ts">// src/login.ts — knows nothing about the header or the cart
-await emitSignal(userLoggedIn, { id: 7, name: &quot;Ada&quot; })
+<pre><code class="language-ts"><span class="c1">// src/login.ts — knows nothing about the header or the cart
+</span><span class="k">await</span> <span class="nx">emitSignal</span><span class="p">(</span><span class="nx">userLoggedIn</span><span class="p">,</span> <span class="p">{</span> <span class="nx">id</span>: <span class="kt">7</span><span class="p">,</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;Ada&#34;</span> <span class="p">})</span>
 </code></pre>
 
 <p>Adding a new reaction later means adding one <code>connectToSignal</code>, without touching <code>login.ts</code>.</p>
@@ -138,51 +133,48 @@ others.</p>
 <p>A view that connects to a signal every time it is drawn would pile up handlers. Connect long-lived
 parts of the app (a header, a cart) once, at start. For a signal that belongs to one page, clear it
 before drawing the page again:</p>
-
-<pre><code class="language-ts">setRoute(&quot;/chat&quot;, async (_, container) =&gt; {
-  disconnectSignal(messageArrived) // forget the previous visit's handlers
-  connectToSignal(messageArrived, async message =&gt; container.append(bubble(message)))
-})
+<pre><code class="language-ts"><span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/chat&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">disconnectSignal</span><span class="p">(</span><span class="nx">messageArrived</span><span class="p">)</span> <span class="c1">// forget the previous visit&#39;s handlers
+</span>  <span class="nx">connectToSignal</span><span class="p">(</span><span class="nx">messageArrived</span><span class="p">,</span> <span class="kr">async</span> <span class="nx">message</span> <span class="o">=&gt;</span> <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">bubble</span><span class="p">(</span><span class="nx">message</span><span class="p">)))</span>
+<span class="p">})</span>
 </code></pre>
 
 <h2 id="typing-the-data">Typing the data</h2>
 
 <p>Handlers receive <code>any</code>. Give the data a type to get autocompletion:</p>
+<pre><code class="language-ts"><span class="kr">type</span> <span class="nx">User</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">id</span>: <span class="kt">number</span><span class="p">,</span> <span class="nx">name</span>: <span class="kt">string</span> <span class="p">}</span>
 
-<pre><code class="language-ts">type User = { id: number, name: string }
-
-connectToSignal(userLoggedIn, async (user: User) =&gt; {
-  user.name // autocompleted
-})
+<span class="nx">connectToSignal</span><span class="p">(</span><span class="nx">userLoggedIn</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">user</span>: <span class="kt">User</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">user</span><span class="p">.</span><span class="nx">name</span> <span class="c1">// autocompleted
+</span><span class="p">})</span>
 </code></pre>
 
 <h2 id="full-example-a-cart-badge">Full example: a cart badge</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span><span class="p">,</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">setSignal</span><span class="p">,</span> <span class="nx">connectToSignal</span><span class="p">,</span> <span class="nx">emitSignal</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/signals.js&#34;</span>
 
-<pre><code class="language-ts">import { uiComponent, setDomEvents } from &quot;./gtd/dom.js&quot;
-import { setSignal, connectToSignal, emitSignal } from &quot;./gtd/signals.js&quot;
+<span class="kr">const</span> <span class="nx">cartChanged</span> <span class="o">=</span> <span class="nx">setSignal</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">cart</span>: <span class="kt">string</span><span class="p">[]</span> <span class="o">=</span> <span class="p">[]</span>
 
-const cartChanged = setSignal()
-const cart: string[] = []
+<span class="c1">// the badge only listens
+</span><span class="kr">const</span> <span class="nx">badge</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;span&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;🛒 0&#34;</span> <span class="p">})</span>
+<span class="nx">connectToSignal</span><span class="p">(</span><span class="nx">cartChanged</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">items</span>: <span class="kt">string</span><span class="p">[])</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">badge</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="sb">`🛒 </span><span class="si">${</span><span class="nx">items</span><span class="p">.</span><span class="nx">length</span><span class="si">}</span><span class="sb">`</span>
+<span class="p">})</span>
 
-// the badge only listens
-const badge = uiComponent({ type: &quot;span&quot;, text: &quot;🛒 0&quot; })
-connectToSignal(cartChanged, async (items: string[]) =&gt; {
-  badge.textContent = `🛒 ${items.length}`
-})
+<span class="c1">// the buttons only announce
+</span><span class="kr">const</span> <span class="nx">products</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&#34;Pencil&#34;</span><span class="p">,</span> <span class="s2">&#34;Notebook&#34;</span><span class="p">].</span><span class="nx">map</span><span class="p">(</span><span class="nx">name</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="sb">`Add </span><span class="si">${</span><span class="nx">name</span><span class="si">}</span><span class="sb">`</span> <span class="p">})</span>
+  <span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span>
+    <span class="nx">click</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+      <span class="nx">cart</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span>
+      <span class="nx">emitSignal</span><span class="p">(</span><span class="nx">cartChanged</span><span class="p">,</span> <span class="nx">cart</span><span class="p">)</span>
+    <span class="p">},</span>
+  <span class="p">})</span>
+  <span class="k">return</span> <span class="nx">button</span>
+<span class="p">})</span>
 
-// the buttons only announce
-const products = [&quot;Pencil&quot;, &quot;Notebook&quot;].map(name =&gt; {
-  const button = uiComponent({ type: &quot;button&quot;, text: `Add ${name}` })
-  setDomEvents(button, {
-    click: () =&gt; {
-      cart.push(name)
-      emitSignal(cartChanged, cart)
-    },
-  })
-  return button
-})
-
-document.body.append(badge, ...products)
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">badge</span><span class="p">,</span> <span class="p">...</span><span class="nx">products</span><span class="p">)</span>
 </code></pre>
 
 <hr>

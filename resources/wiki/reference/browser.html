@@ -6,11 +6,10 @@
 returns <code>true</code> or <code>false</code>.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">isSmallDevice</span><span class="p">,</span> <span class="nx">prefersDarkMode</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/browser.js&#34;</span>
 
-<pre><code class="language-ts">import { isSmallDevice, prefersDarkMode } from &quot;./gtd/browser.js&quot;
-
-if (isSmallDevice()) document.body.classList.add(&quot;mobile-layout&quot;)
-if (prefersDarkMode()) document.body.classList.add(&quot;dark&quot;)
+<span class="k">if</span> <span class="p">(</span><span class="nx">isSmallDevice</span><span class="p">())</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&#34;mobile-layout&#34;</span><span class="p">)</span>
+<span class="k">if</span> <span class="p">(</span><span class="nx">prefersDarkMode</span><span class="p">())</span> <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&#34;dark&#34;</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="screen-size">Screen size</h2>
@@ -45,10 +44,9 @@ if (prefersDarkMode()) document.body.classList.add(&quot;dark&quot;)
 </tbody>
 </table>
 <p>They check the size <strong>when you call them</strong>. To react when the user resizes the window:</p>
-
-<pre><code class="language-ts">window.addEventListener(&quot;resize&quot;, () =&gt; {
-  document.body.classList.toggle(&quot;mobile-layout&quot;, isSmallDevice())
-})
+<pre><code class="language-ts"><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;resize&#34;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">toggle</span><span class="p">(</span><span class="s2">&#34;mobile-layout&#34;</span><span class="p">,</span> <span class="nx">isSmallDevice</span><span class="p">())</span>
+<span class="p">})</span>
 </code></pre>
 
 <blockquote>
@@ -90,10 +88,9 @@ these functions when the <strong>code</strong> must change, e.g. to draw a diffe
 </tr>
 </tbody>
 </table>
-
-<pre><code class="language-ts">const animate = !prefersReducedMotion()
-const touchOnly = mediaQuery(&quot;(hover: none)&quot;)
-const printing = mediaQuery(&quot;print&quot;)
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">animate</span> <span class="o">=</span> <span class="o">!</span><span class="nx">prefersReducedMotion</span><span class="p">()</span>
+<span class="kr">const</span> <span class="nx">touchOnly</span> <span class="o">=</span> <span class="nx">mediaQuery</span><span class="p">(</span><span class="s2">&#34;(hover: none)&#34;</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">printing</span> <span class="o">=</span> <span class="nx">mediaQuery</span><span class="p">(</span><span class="s2">&#34;print&#34;</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="device-and-system">Device and system</h2>
@@ -118,9 +115,8 @@ const printing = mediaQuery(&quot;print&quot;)
 </tr>
 </tbody>
 </table>
-
-<pre><code class="language-ts">const shortcut = &quot;MacOS&quot; == getOs() ? &quot;⌘ + S&quot; : &quot;Ctrl + S&quot;
-uiComponent({ type: &quot;small&quot;, text: `Save with ${shortcut}` })
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">shortcut</span> <span class="o">=</span> <span class="s2">&#34;MacOS&#34;</span> <span class="o">==</span> <span class="nx">getOs</span><span class="p">()</span> <span class="o">?</span> <span class="s2">&#34;⌘ + S&#34;</span> <span class="o">:</span> <span class="s2">&#34;Ctrl + S&#34;</span>
+<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;small&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="sb">`Save with </span><span class="si">${</span><span class="nx">shortcut</span><span class="si">}</span><span class="sb">`</span> <span class="p">})</span>
 </code></pre>
 
 <p>These read the browser&rsquo;s <em>user agent</em> text, which can be changed or faked. Use them for small

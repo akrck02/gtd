@@ -6,39 +6,36 @@
 create elements and change them with less typing than plain JavaScript.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
 
-<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
-
-const hello = uiComponent({ type: &quot;h1&quot;, text: &quot;Hello!&quot;, classes: [&quot;big&quot;] })
-document.body.appendChild(hello)
+<span class="kr">const</span> <span class="nx">hello</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Hello!&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;big&#34;</span><span class="p">]</span> <span class="p">})</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">hello</span><span class="p">)</span>
 </code></pre>
 
 <p>Result on the page:</p>
-
-<pre><code class="language-html">&lt;h1 class=&quot;big&quot;&gt;Hello!&lt;/h1&gt;
+<pre><code class="language-html"><span class="p">&lt;</span><span class="nt">h1</span> <span class="na">class</span><span class="o">=</span><span class="s">&#34;big&#34;</span><span class="p">&gt;</span>Hello!<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
 </code></pre>
 
 <h2 id="why-not-just-document-createelement">Why not just <code>document.createElement</code>?</h2>
 
 <p>You can! GTD only saves you the repetition. Compare:</p>
+<pre><code class="language-ts"><span class="c1">// plain JavaScript
+</span><span class="kr">const</span> <span class="nx">link</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&#34;a&#34;</span><span class="p">)</span>
+<span class="nx">link</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s2">&#34;Docs&#34;</span>
+<span class="nx">link</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">&#34;docs-link&#34;</span>
+<span class="nx">link</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&#34;nav&#34;</span><span class="p">,</span> <span class="s2">&#34;active&#34;</span><span class="p">)</span>
+<span class="nx">link</span><span class="p">.</span><span class="nx">setAttribute</span><span class="p">(</span><span class="s2">&#34;href&#34;</span><span class="p">,</span> <span class="s2">&#34;/docs&#34;</span><span class="p">)</span>
+<span class="nx">link</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">section</span> <span class="o">=</span> <span class="s2">&#34;help&#34;</span>
 
-<pre><code class="language-ts">// plain JavaScript
-const link = document.createElement(&quot;a&quot;)
-link.textContent = &quot;Docs&quot;
-link.id = &quot;docs-link&quot;
-link.classList.add(&quot;nav&quot;, &quot;active&quot;)
-link.setAttribute(&quot;href&quot;, &quot;/docs&quot;)
-link.dataset.section = &quot;help&quot;
-
-// GTD
-const link = uiComponent({
-  type: &quot;a&quot;,
-  text: &quot;Docs&quot;,
-  id: &quot;docs-link&quot;,
-  classes: [&quot;nav&quot;, &quot;active&quot;],
-  attributes: { href: &quot;/docs&quot; },
-  data: { section: &quot;help&quot; },
-})
+<span class="c1">// GTD
+</span><span class="kr">const</span> <span class="nx">link</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span>
+  <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;a&#34;</span><span class="p">,</span>
+  <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Docs&#34;</span><span class="p">,</span>
+  <span class="nx">id</span><span class="o">:</span> <span class="s2">&#34;docs-link&#34;</span><span class="p">,</span>
+  <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;nav&#34;</span><span class="p">,</span> <span class="s2">&#34;active&#34;</span><span class="p">],</span>
+  <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span> <span class="nx">href</span><span class="o">:</span> <span class="s2">&#34;/docs&#34;</span> <span class="p">},</span>
+  <span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">section</span><span class="o">:</span> <span class="s2">&#34;help&#34;</span> <span class="p">},</span>
+<span class="p">})</span>
 </code></pre>
 
 <p>Both give you exactly the same <code>&lt;a&gt;</code> element.</p>
@@ -117,103 +114,94 @@ const link = uiComponent({
 </table>
 
 <h3 id="text">Text</h3>
-
-<pre><code class="language-ts">uiComponent({ type: &quot;p&quot;, text: &quot;A paragraph.&quot; })
-uiComponent({ type: &quot;p&quot;, text: &quot;Some &lt;strong&gt;bold&lt;/strong&gt; words.&quot; }) // HTML works
-</code></pre>
+<pre><code class="language-ts"><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;A paragraph.&#34;</span> <span class="p">})</span>
+<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Some &lt;strong&gt;bold&lt;/strong&gt; words.&#34;</span> <span class="p">})</span> <span class="c1">// HTML works
+</span></code></pre>
 
 <blockquote>
 <p>⚠️ <strong>Never put text typed by users into <code>text</code>.</strong> It is read as HTML, so a user could inject
 scripts into your page. For user text, set <code>textContent</code> after creating the element:</p>
-
-<pre><code class="language-ts">&gt; const comment = uiComponent({ type: &quot;p&quot;, classes: [&quot;comment&quot;] })
-&gt; comment.textContent = userInput // always shown as plain text, safe
-&gt; ```
+<pre><code class="language-ts"><span class="o">&gt;</span> <span class="kr">const</span> <span class="nx">comment</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;comment&#34;</span><span class="p">]</span> <span class="p">})</span>
+<span class="o">&gt;</span> <span class="nx">comment</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="nx">userInput</span> <span class="c1">// always shown as plain text, safe
+</span><span class="o">&gt;</span> <span class="sb">```
 
 ### Classes
 
 The usual way to style elements: write CSS in a stylesheet and add the class.
 
-```ts
-uiComponent({ type: &quot;button&quot;, text: &quot;Delete&quot;, classes: [&quot;button&quot;, &quot;danger&quot;] })
+```</span><span class="nx">ts</span>
+<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Delete&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="s2">&#34;danger&#34;</span><span class="p">]</span> <span class="p">})</span>
 </code></pre>
 </blockquote>
 
 <h3 id="attributes">Attributes</h3>
 
 <p>Anything you would write inside the HTML tag:</p>
-
-<pre><code class="language-ts">uiComponent({ type: &quot;img&quot;, attributes: { src: &quot;./cat.png&quot;, alt: &quot;A sleeping cat&quot; } })
-uiComponent({ type: &quot;input&quot;, attributes: { type: &quot;email&quot;, placeholder: &quot;you@example.org&quot; } })
-uiComponent({ type: &quot;a&quot;, text: &quot;GTD&quot;, attributes: { href: &quot;https://github.com/akrck02/gtd&quot;, target: &quot;_blank&quot; } })
+<pre><code class="language-ts"><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;img&#34;</span><span class="p">,</span> <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span> <span class="nx">src</span><span class="o">:</span> <span class="s2">&#34;./cat.png&#34;</span><span class="p">,</span> <span class="nx">alt</span><span class="o">:</span> <span class="s2">&#34;A sleeping cat&#34;</span> <span class="p">}</span> <span class="p">})</span>
+<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;input&#34;</span><span class="p">,</span> <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;email&#34;</span><span class="p">,</span> <span class="nx">placeholder</span><span class="o">:</span> <span class="s2">&#34;you@example.org&#34;</span> <span class="p">}</span> <span class="p">})</span>
+<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;GTD&#34;</span><span class="p">,</span> <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span> <span class="nx">href</span><span class="o">:</span> <span class="s2">&#34;https://github.com/akrck02/gtd&#34;</span><span class="p">,</span> <span class="nx">target</span><span class="o">:</span> <span class="s2">&#34;_blank&#34;</span> <span class="p">}</span> <span class="p">})</span>
 </code></pre>
 
 <h3 id="inline-styles">Inline styles</h3>
 
 <p>Good for quick experiments. Use the JavaScript names (<code>backgroundColor</code>, not <code>background-color</code>):</p>
-
-<pre><code class="language-ts">uiComponent({ text: &quot;Warning!&quot;, styles: { color: &quot;white&quot;, backgroundColor: &quot;crimson&quot;, padding: &quot;8px&quot; } })
+<pre><code class="language-ts"><span class="nx">uiComponent</span><span class="p">({</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Warning!&#34;</span><span class="p">,</span> <span class="nx">styles</span><span class="o">:</span> <span class="p">{</span> <span class="nx">color</span><span class="o">:</span> <span class="s2">&#34;white&#34;</span><span class="p">,</span> <span class="nx">backgroundColor</span><span class="o">:</span> <span class="s2">&#34;crimson&#34;</span><span class="p">,</span> <span class="nx">padding</span><span class="o">:</span> <span class="s2">&#34;8px&#34;</span> <span class="p">}</span> <span class="p">})</span>
 </code></pre>
 
 <h3 id="data-attributes">Data attributes</h3>
 
 <p>Store small pieces of information on an element, and read them later with <code>dataset</code>:</p>
-
-<pre><code class="language-ts">const row = uiComponent({ type: &quot;li&quot;, text: &quot;Ada&quot;, data: { userId: &quot;7&quot; } })
-row.dataset.userId // &quot;7&quot;
-</code></pre>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">row</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;li&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Ada&#34;</span><span class="p">,</span> <span class="nx">data</span><span class="o">:</span> <span class="p">{</span> <span class="nx">userId</span><span class="o">:</span> <span class="s2">&#34;7&#34;</span> <span class="p">}</span> <span class="p">})</span>
+<span class="nx">row</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">userId</span> <span class="c1">// &#34;7&#34;
+</span></code></pre>
 
 <h2 id="putting-elements-inside-elements">Putting elements inside elements</h2>
 
 <p><code>uiComponent</code> gives you a normal element, so use the normal <code>append</code>:</p>
-
-<pre><code class="language-ts">const card = uiComponent({ classes: [&quot;card&quot;] })
-card.append(
-  uiComponent({ type: &quot;h2&quot;, text: &quot;Ada Lovelace&quot; }),
-  uiComponent({ type: &quot;p&quot;, text: &quot;The first programmer.&quot; }),
-)
-document.body.append(card)
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;card&#34;</span><span class="p">]</span> <span class="p">})</span>
+<span class="nx">card</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span>
+  <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h2&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Ada Lovelace&#34;</span> <span class="p">}),</span>
+  <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;The first programmer.&#34;</span> <span class="p">}),</span>
+<span class="p">)</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">card</span><span class="p">)</span>
 </code></pre>
 
 <p>A good habit: write a small <strong>function per piece</strong> of interface. It is GTD&rsquo;s version of a
 &ldquo;component&rdquo;:</p>
+<pre><code class="language-ts"><span class="kd">function</span> <span class="nx">userCard</span><span class="p">(</span><span class="nx">name</span>: <span class="kt">string</span><span class="p">,</span> <span class="nx">bio</span>: <span class="kt">string</span><span class="p">)</span><span class="o">:</span> <span class="nx">HTMLElement</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;card&#34;</span><span class="p">]</span> <span class="p">})</span>
+  <span class="nx">card</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span>
+    <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h2&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">name</span> <span class="p">}),</span>
+    <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">bio</span> <span class="p">}),</span>
+  <span class="p">)</span>
+  <span class="k">return</span> <span class="nx">card</span>
+<span class="p">}</span>
 
-<pre><code class="language-ts">function userCard(name: string, bio: string): HTMLElement {
-  const card = uiComponent({ classes: [&quot;card&quot;] })
-  card.append(
-    uiComponent({ type: &quot;h2&quot;, text: name }),
-    uiComponent({ type: &quot;p&quot;, text: bio }),
-  )
-  return card
-}
-
-document.body.append(userCard(&quot;Ada&quot;, &quot;First programmer&quot;), userCard(&quot;Alan&quot;, &quot;Codebreaker&quot;))
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">userCard</span><span class="p">(</span><span class="s2">&#34;Ada&#34;</span><span class="p">,</span> <span class="s2">&#34;First programmer&#34;</span><span class="p">),</span> <span class="nx">userCard</span><span class="p">(</span><span class="s2">&#34;Alan&#34;</span><span class="p">,</span> <span class="s2">&#34;Codebreaker&#34;</span><span class="p">))</span>
 </code></pre>
 
 <h2 id="reacting-to-clicks-and-other-events">Reacting to clicks and other events</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
 
-<pre><code class="language-ts">import { setDomEvents } from &quot;./gtd/dom.js&quot;
+<span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Click me&#34;</span> <span class="p">})</span>
 
-const button = uiComponent({ type: &quot;button&quot;, text: &quot;Click me&quot; })
-
-setDomEvents(button, {
-  click: () =&gt; alert(&quot;Clicked!&quot;),
-  mouseenter: () =&gt; button.classList.add(&quot;hover&quot;),
-  mouseleave: () =&gt; button.classList.remove(&quot;hover&quot;),
-})
+<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">click</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">alert</span><span class="p">(</span><span class="s2">&#34;Clicked!&#34;</span><span class="p">),</span>
+  <span class="nx">mouseenter</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">button</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s2">&#34;hover&#34;</span><span class="p">),</span>
+  <span class="nx">mouseleave</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">button</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s2">&#34;hover&#34;</span><span class="p">),</span>
+<span class="p">})</span>
 </code></pre>
 
 <p>Any <a href="https://developer.mozilla.org/docs/Web/Events" target="_blank">DOM event</a> name works: <code>click</code>, <code>input</code>,
 <code>submit</code>, <code>keydown</code>…</p>
 
 <p>To remove a listener later, you need the <strong>same function</strong>, so keep it in a variable:</p>
-
-<pre><code class="language-ts">const onClick = () =&gt; console.log(&quot;clicked&quot;)
-setDomEvents(button, { click: onClick })
-removeDomEvents(button, { click: onClick }) // works
-
-removeDomEvents(button, { click: () =&gt; console.log(&quot;clicked&quot;) }) // ❌ a different function, nothing happens
-</code></pre>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">onClick</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;clicked&#34;</span><span class="p">)</span>
+<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span> <span class="nx">click</span>: <span class="kt">onClick</span> <span class="p">})</span>
+<span class="nx">removeDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span> <span class="nx">click</span>: <span class="kt">onClick</span> <span class="p">})</span> <span class="c1">// works
+</span>
+<span class="nx">removeDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span> <span class="nx">click</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;clicked&#34;</span><span class="p">)</span> <span class="p">})</span> <span class="c1">// ❌ a different function, nothing happens
+</span></code></pre>
 
 <h2 id="changing-an-element-after-creating-it">Changing an element after creating it</h2>
 
@@ -260,47 +248,44 @@ removeDomEvents(button, { click: () =&gt; console.log(&quot;clicked&quot;) }) //
 </tr>
 </tbody>
 </table>
+<pre><code class="language-ts"><span class="c1">// show a button as &#34;loading&#34; while saving
+</span><span class="nx">setDomAttributes</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span> <span class="nx">disabled</span><span class="o">:</span> <span class="s2">&#34;&#34;</span> <span class="p">})</span>
+<span class="nx">setDomClasses</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">[</span><span class="s2">&#34;loading&#34;</span><span class="p">])</span>
 
-<pre><code class="language-ts">// show a button as &quot;loading&quot; while saving
-setDomAttributes(button, { disabled: &quot;&quot; })
-setDomClasses(button, [&quot;loading&quot;])
+<span class="k">await</span> <span class="nx">save</span><span class="p">()</span>
 
-await save()
-
-removeDomAttributes(button, [&quot;disabled&quot;])
-removeDomClasses(button, [&quot;loading&quot;])
+<span class="nx">removeDomAttributes</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">[</span><span class="s2">&#34;disabled&#34;</span><span class="p">])</span>
+<span class="nx">removeDomClasses</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">[</span><span class="s2">&#34;loading&#34;</span><span class="p">])</span>
 </code></pre>
 
 <p>If you pass <code>undefined</code> instead of the element or the values, nothing happens — no errors.</p>
 
 <h2 id="removing-elements-from-the-page">Removing elements from the page</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">removeDomById</span><span class="p">,</span> <span class="nx">removeAllDomBySelector</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
 
-<pre><code class="language-ts">import { removeDomById, removeAllDomBySelector } from &quot;./gtd/dom.js&quot;
-
-removeDomById(&quot;welcome-banner&quot;)                   // the element with id=&quot;welcome-banner&quot;
-const count = removeAllDomBySelector(&quot;.toast&quot;)    // every element with class &quot;toast&quot;
-console.log(`${count} toasts removed`)
+<span class="nx">removeDomById</span><span class="p">(</span><span class="s2">&#34;welcome-banner&#34;</span><span class="p">)</span>                   <span class="c1">// the element with id=&#34;welcome-banner&#34;
+</span><span class="kr">const</span> <span class="nx">count</span> <span class="o">=</span> <span class="nx">removeAllDomBySelector</span><span class="p">(</span><span class="s2">&#34;.toast&#34;</span><span class="p">)</span>    <span class="c1">// every element with class &#34;toast&#34;
+</span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="sb">`</span><span class="si">${</span><span class="nx">count</span><span class="si">}</span><span class="sb"> toasts removed`</span><span class="p">)</span>
 </code></pre>
 
 <p>Or on an element you already have: <code>element.remove()</code>.</p>
 
 <h2 id="full-example-a-counter">Full example: a counter</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span><span class="p">,</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
 
-<pre><code class="language-ts">import { uiComponent, setDomEvents } from &quot;./gtd/dom.js&quot;
+<span class="kd">let</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span>
 
-let count = 0
+<span class="kr">const</span> <span class="nx">label</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Clicked 0 times&#34;</span> <span class="p">})</span>
+<span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;+1&#34;</span> <span class="p">})</span>
 
-const label = uiComponent({ type: &quot;p&quot;, text: &quot;Clicked 0 times&quot; })
-const button = uiComponent({ type: &quot;button&quot;, text: &quot;+1&quot; })
+<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">click</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">count</span><span class="o">++</span>
+    <span class="nx">label</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="sb">`Clicked </span><span class="si">${</span><span class="nx">count</span><span class="si">}</span><span class="sb"> times`</span>
+  <span class="p">},</span>
+<span class="p">})</span>
 
-setDomEvents(button, {
-  click: () =&gt; {
-    count++
-    label.textContent = `Clicked ${count} times`
-  },
-})
-
-document.body.append(label, button)
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">label</span><span class="p">,</span> <span class="nx">button</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="common-mistakes">Common mistakes</h2>

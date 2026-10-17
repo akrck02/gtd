@@ -9,12 +9,11 @@ can stop at any step and still have a working app.</p>
 <blockquote>
 <p>Start from the project you made in <a href="./getting-started">Getting started</a>. Keep these two
 running in two terminals, and reload the browser after each step:</p>
+<pre><code class="language-sh">&gt; ./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js --watch
+&gt; python3 -m http.server <span class="m">8000</span>
+&gt; <span class="sb">```</span>
 
-<pre><code class="language-sh">&gt; ./bin/esbuild src/main.ts --bundle --format=esm --outfile=out/main.js --watch
-&gt; python3 -m http.server 8000
-&gt; ```
-
-## The files we will end with
+<span class="c1">## The files we will end with</span>
 
 </code></pre>
 
@@ -27,32 +26,30 @@ running in two terminals, and reload the browser after each step:</p>
 │   ├── i18n/es/notes.json   ← step 4
 │   └── icons.json           ← step 5
 └── src/</p>
-
 <pre><code>├── gtd/
 └── main.ts          ← every step
 </code></pre>
-
 <pre><code>
 ## Step 1 — Pages (`dom` + `router`)
 
 Replace `src/main.ts` with a home page and a page for one note:
 
 ```ts
-import { uiComponent } from &quot;./gtd/dom.js&quot;
-import { setRoute, showRoute } from &quot;./gtd/router.js&quot;
+import { uiComponent } from &#34;./gtd/dom.js&#34;
+import { setRoute, showRoute } from &#34;./gtd/router.js&#34;
 
-const app = document.getElementById(&quot;app&quot;)
+const app = document.getElementById(&#34;app&#34;)
 
-setRoute(&quot;/&quot;, async (_, container) =&gt; {
-  container.append(uiComponent({ type: &quot;h1&quot;, text: &quot;Notes&quot; }))
+setRoute(&#34;/&#34;, async (_, container) =&gt; {
+  container.append(uiComponent({ type: &#34;h1&#34;, text: &#34;Notes&#34; }))
 })
 
-setRoute(&quot;/note/$&quot;, async ([id], container) =&gt; {
-  container.append(uiComponent({ type: &quot;h1&quot;, text: `Note ${id}` }))
+setRoute(&#34;/note/$&#34;, async ([id], container) =&gt; {
+  container.append(uiComponent({ type: &#34;h1&#34;, text: `Note ${id}` }))
 })
 
-const navigate = () =&gt; showRoute(location.hash.slice(1) || &quot;/&quot;, app)
-window.addEventListener(&quot;hashchange&quot;, navigate)
+const navigate = () =&gt; showRoute(location.hash.slice(1) || &#34;/&#34;, app)
+window.addEventListener(&#34;hashchange&#34;, navigate)
 navigate()
 </code></pre>
 </blockquote>
@@ -66,17 +63,15 @@ navigate()
 <h2 id="step-2-settings-configuration">Step 2 — Settings (<code>configuration</code>)</h2>
 
 <p>Create <strong><code>config.json</code></strong> next to <code>index.html</code>:</p>
-
-<pre><code class="language-json">{ &quot;api&quot;: &quot;./api&quot;, &quot;lang&quot;: &quot;en&quot; }
+<pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;api&#34;</span><span class="p">:</span> <span class="s2">&#34;./api&#34;</span><span class="p">,</span> <span class="nt">&#34;lang&#34;</span><span class="p">:</span> <span class="s2">&#34;en&#34;</span> <span class="p">}</span>
 </code></pre>
 
 <p>At the top of <code>src/main.ts</code>, after the imports:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">loadConfiguration</span><span class="p">,</span> <span class="nx">getConfiguration</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/configuration.js&#34;</span>
 
-<pre><code class="language-ts">import { loadConfiguration, getConfiguration } from &quot;./gtd/configuration.js&quot;
-
-// Load the defaults only the first time, so user changes are kept
-if (undefined == getConfiguration(&quot;api&quot;))
-  await loadConfiguration(&quot;./config.json&quot;)
+<span class="c1">// Load the defaults only the first time, so user changes are kept
+</span><span class="k">if</span> <span class="p">(</span><span class="kc">undefined</span> <span class="o">==</span> <span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;api&#34;</span><span class="p">))</span>
+  <span class="k">await</span> <span class="nx">loadConfiguration</span><span class="p">(</span><span class="s2">&#34;./config.json&#34;</span><span class="p">)</span>
 </code></pre>
 
 <p>Also open <code>src/gtd/configuration.ts</code> and change <code>configurationId</code> to <code>&quot;notes&quot;</code>: it is the name
@@ -89,48 +84,44 @@ under which your settings are saved in the browser.</p>
 <h2 id="step-3-data-http">Step 3 — Data (<code>http</code>)</h2>
 
 <p>Create <strong><code>api/notes.json</code></strong>:</p>
-
-<pre><code class="language-json">[
-  { &quot;id&quot;: &quot;1&quot;, &quot;text&quot;: &quot;Buy milk&quot; },
-  { &quot;id&quot;: &quot;2&quot;, &quot;text&quot;: &quot;Call Ada&quot; },
-  { &quot;id&quot;: &quot;3&quot;, &quot;text&quot;: &quot;Learn GTD&quot; }
-]
+<pre><code class="language-json"><span class="p">[</span>
+  <span class="p">{</span> <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="nt">&#34;text&#34;</span><span class="p">:</span> <span class="s2">&#34;Buy milk&#34;</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;2&#34;</span><span class="p">,</span> <span class="nt">&#34;text&#34;</span><span class="p">:</span> <span class="s2">&#34;Call Ada&#34;</span> <span class="p">},</span>
+  <span class="p">{</span> <span class="nt">&#34;id&#34;</span><span class="p">:</span> <span class="s2">&#34;3&#34;</span><span class="p">,</span> <span class="nt">&#34;text&#34;</span><span class="p">:</span> <span class="s2">&#34;Learn GTD&#34;</span> <span class="p">}</span>
+<span class="p">]</span>
 </code></pre>
 
 <p>Load it once, and draw each note as a <strong>card</strong> on the home page. A card is a link with Bubble&rsquo;s
 <code>surface-1</code> class, which gives it a soft background and rounded corners:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">httpGet</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/http.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">BubbleUI</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/bubble.js&#34;</span>
 
-<pre><code class="language-ts">import { httpGet } from &quot;./gtd/http.js&quot;
-import { BubbleUI } from &quot;./gtd/bubble.js&quot;
+<span class="kr">type</span> <span class="nx">Note</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">id</span>: <span class="kt">string</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">string</span> <span class="p">}</span>
 
-type Note = { id: string, text: string }
-
-const response = await httpGet({ url: `${getConfiguration(&quot;api&quot;)}/notes.json`, parameters: {} })
-const notes: Note[] = await response.json()
+<span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="sb">`</span><span class="si">${</span><span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;api&#34;</span><span class="p">)</span><span class="si">}</span><span class="sb">/notes.json`</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{}</span> <span class="p">})</span>
+<span class="kr">const</span> <span class="nx">notes</span>: <span class="kt">Note</span><span class="p">[]</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()</span>
 </code></pre>
+<pre><code class="language-ts"><span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Notes&#34;</span> <span class="p">}))</span>
 
-<pre><code class="language-ts">setRoute(&quot;/&quot;, async (_, container) =&gt; {
-  container.append(uiComponent({ type: &quot;h1&quot;, text: &quot;Notes&quot; }))
+  <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="nx">note</span> <span class="k">of</span> <span class="nx">notes</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span>
+      <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;a&#34;</span><span class="p">,</span>
+      <span class="nx">text</span>: <span class="kt">note.text</span><span class="p">,</span>
+      <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;note&#34;</span><span class="p">,</span> <span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">Surface1</span><span class="p">],</span>
+      <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span> <span class="nx">href</span><span class="o">:</span> <span class="sb">`#/note/</span><span class="si">${</span><span class="nx">note</span><span class="p">.</span><span class="nx">id</span><span class="si">}</span><span class="sb">`</span> <span class="p">},</span>
+    <span class="p">}))</span>
+  <span class="p">}</span>
+<span class="p">})</span>
 
-  for (const note of notes) {
-    container.append(uiComponent({
-      type: &quot;a&quot;,
-      text: note.text,
-      classes: [&quot;note&quot;, BubbleUI.Surface1],
-      attributes: { href: `#/note/${note.id}` },
-    }))
-  }
-})
-
-setRoute(&quot;/note/$&quot;, async ([id], container) =&gt; {
-  const note = notes.find(n =&gt; n.id == id)
-  container.append(uiComponent({ type: &quot;h1&quot;, text: note ? note.text : &quot;No such note&quot; }))
-})
+<span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/note/$&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">([</span><span class="nx">id</span><span class="p">],</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">note</span> <span class="o">=</span> <span class="nx">notes</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">n</span> <span class="o">=&gt;</span> <span class="nx">n</span><span class="p">.</span><span class="nx">id</span> <span class="o">==</span> <span class="nx">id</span><span class="p">)</span>
+  <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">note</span> <span class="o">?</span> <span class="nx">note</span><span class="p">.</span><span class="nx">text</span> <span class="o">:</span> <span class="s2">&#34;No such note&#34;</span> <span class="p">}))</span>
+<span class="p">})</span>
 </code></pre>
 
 <p>Give the cards some room in <code>index.html</code>&rsquo;s <code>&lt;style&gt;</code>:</p>
-
-<pre><code class="language-css">.note { width: 100%; max-width: 420px; padding: 1rem 1.25rem; color: inherit; }
+<pre><code class="language-css"><span class="p">.</span><span class="nc">note</span> <span class="p">{</span> <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span> <span class="k">max-width</span><span class="p">:</span> <span class="mi">420</span><span class="kt">px</span><span class="p">;</span> <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mf">1.25</span><span class="kt">rem</span><span class="p">;</span> <span class="k">color</span><span class="p">:</span> <span class="kc">inherit</span><span class="p">;</span> <span class="p">}</span>
 </code></pre>
 
 <p>✅ <strong>Check:</strong> the home page shows three cards, and each opens its note.</p>
@@ -142,23 +133,19 @@ setRoute(&quot;/note/$&quot;, async ([id], container) =&gt; {
 <h2 id="step-4-two-languages-i18n">Step 4 — Two languages (<code>i18n</code>)</h2>
 
 <p>Create <strong><code>resources/i18n/en/notes.json</code></strong> and <strong><code>resources/i18n/es/notes.json</code></strong>:</p>
-
-<pre><code class="language-json">{ &quot;title&quot;: &quot;Notes&quot;, &quot;missing&quot;: &quot;No such note&quot;, &quot;switch&quot;: &quot;Español&quot; }
+<pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;Notes&#34;</span><span class="p">,</span> <span class="nt">&#34;missing&#34;</span><span class="p">:</span> <span class="s2">&#34;No such note&#34;</span><span class="p">,</span> <span class="nt">&#34;switch&#34;</span><span class="p">:</span> <span class="s2">&#34;Español&#34;</span> <span class="p">}</span>
 </code></pre>
-
-<pre><code class="language-json">{ &quot;title&quot;: &quot;Notas&quot;, &quot;missing&quot;: &quot;No existe esa nota&quot;, &quot;switch&quot;: &quot;English&quot; }
+<pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;Notas&#34;</span><span class="p">,</span> <span class="nt">&#34;missing&#34;</span><span class="p">:</span> <span class="s2">&#34;No existe esa nota&#34;</span><span class="p">,</span> <span class="nt">&#34;switch&#34;</span><span class="p">:</span> <span class="s2">&#34;English&#34;</span> <span class="p">}</span>
 </code></pre>
 
 <p>Load the texts in the language from the configuration, and use <code>getText</code> instead of the English
 words:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setCurrentLanguage</span><span class="p">,</span> <span class="nx">loadTextBundle</span><span class="p">,</span> <span class="nx">getText</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/i18n.js&#34;</span>
 
-<pre><code class="language-ts">import { setCurrentLanguage, loadTextBundle, getText } from &quot;./gtd/i18n.js&quot;
-
-await setCurrentLanguage(getConfiguration(&quot;lang&quot;))
-await loadTextBundle(&quot;notes&quot;)
+<span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">))</span>
+<span class="k">await</span> <span class="nx">loadTextBundle</span><span class="p">(</span><span class="s2">&#34;notes&#34;</span><span class="p">)</span>
 </code></pre>
-
-<pre><code class="language-ts">container.append(uiComponent({ type: &quot;h1&quot;, text: getText(&quot;notes&quot;, &quot;title&quot;) }))
+<pre><code class="language-ts"><span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">getText</span><span class="p">(</span><span class="s2">&#34;notes&#34;</span><span class="p">,</span> <span class="s2">&#34;title&#34;</span><span class="p">)</span> <span class="p">}))</span>
 </code></pre>
 
 <p>English, Spanish, Galician and Catalan are ready to use; other languages are added in <code>i18n.ts</code>.</p>
@@ -171,37 +158,34 @@ the title is now <strong>Notas</strong>.</p>
 <h2 id="step-5-a-button-with-an-icon-icons-events">Step 5 — A button with an icon (<code>icons</code>, events)</h2>
 
 <p>Create <strong><code>resources/icons.json</code></strong> with one icon:</p>
-
-<pre><code class="language-json">{ &quot;translate&quot;: &quot;&lt;path d=\&quot;M12.9 15.1 10.4 12.6v-.1A17 17 0 0 0 14 6h3V4h-7V2H8v2H1v2h11.2A16 16 0 0 1 9 11.4 16 16 0 0 1 6.7 8h-2a18 18 0 0 0 3 4.6L2.6 17.6 4 19l5-5 3.1 3.1zM18.5 10h-2L12 22h2l1.1-3h4.8l1.1 3h2zm-2.6 7 1.6-4.3 1.6 4.3z\&quot;/&gt;&quot; }
+<pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;translate&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;path d=\&#34;M12.9 15.1 10.4 12.6v-.1A17 17 0 0 0 14 6h3V4h-7V2H8v2H1v2h11.2A16 16 0 0 1 9 11.4 16 16 0 0 1 6.7 8h-2a18 18 0 0 0 3 4.6L2.6 17.6 4 19l5-5 3.1 3.1zM18.5 10h-2L12 22h2l1.1-3h4.8l1.1 3h2zm-2.6 7 1.6-4.3 1.6 4.3z\&#34;/&gt;&#34;</span> <span class="p">}</span>
 </code></pre>
 
 <p>Add a button on the home page that switches language and draws the page again:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setConfiguration</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/configuration.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">loadIcons</span><span class="p">,</span> <span class="nx">getIcon</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/icons.js&#34;</span>
 
-<pre><code class="language-ts">import { setConfiguration } from &quot;./gtd/configuration.js&quot;
-import { setDomEvents } from &quot;./gtd/dom.js&quot;
-import { loadIcons, getIcon } from &quot;./gtd/icons.js&quot;
-
-await loadIcons(&quot;app&quot;, &quot;./resources/icons.json&quot;)
+<span class="k">await</span> <span class="nx">loadIcons</span><span class="p">(</span><span class="s2">&#34;app&#34;</span><span class="p">,</span> <span class="s2">&#34;./resources/icons.json&#34;</span><span class="p">)</span>
 </code></pre>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">switchButton</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span>
+  <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span>
+  <span class="nx">text</span>: <span class="kt">getText</span><span class="p">(</span><span class="s2">&#34;notes&#34;</span><span class="p">,</span> <span class="s2">&#34;switch&#34;</span><span class="p">),</span>
+  <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">Primary</span><span class="p">,</span> <span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">BoxYCenter</span><span class="p">],</span> <span class="c1">// blue, and icon and text side by side
+</span>  <span class="nx">styles</span><span class="o">:</span> <span class="p">{</span> <span class="nx">gap</span><span class="o">:</span> <span class="s2">&#34;6px&#34;</span> <span class="p">},</span>
+<span class="p">})</span>
+<span class="nx">switchButton</span><span class="p">.</span><span class="nx">prepend</span><span class="p">(</span><span class="nx">getIcon</span><span class="p">(</span><span class="s2">&#34;app&#34;</span><span class="p">,</span> <span class="s2">&#34;translate&#34;</span><span class="p">,</span> <span class="s2">&#34;16px&#34;</span><span class="p">,</span> <span class="s2">&#34;currentColor&#34;</span><span class="p">))</span>
 
-<pre><code class="language-ts">const switchButton = uiComponent({
-  type: &quot;button&quot;,
-  text: getText(&quot;notes&quot;, &quot;switch&quot;),
-  classes: [BubbleUI.Primary, BubbleUI.BoxYCenter], // blue, and icon and text side by side
-  styles: { gap: &quot;6px&quot; },
-})
-switchButton.prepend(getIcon(&quot;app&quot;, &quot;translate&quot;, &quot;16px&quot;, &quot;currentColor&quot;))
+<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">switchButton</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">click</span>: <span class="kt">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">lang</span> <span class="o">=</span> <span class="s2">&#34;es&#34;</span> <span class="o">==</span> <span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&#34;en&#34;</span> <span class="o">:</span> <span class="s2">&#34;es&#34;</span>
+    <span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">,</span> <span class="nx">lang</span><span class="p">)</span>
+    <span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="c1">// true: reload the loaded bundles
+</span>    <span class="nx">navigate</span><span class="p">()</span>                           <span class="c1">// draw the page again
+</span>  <span class="p">},</span>
+<span class="p">})</span>
 
-setDomEvents(switchButton, {
-  click: async () =&gt; {
-    const lang = &quot;es&quot; == getConfiguration(&quot;lang&quot;) ? &quot;en&quot; : &quot;es&quot;
-    setConfiguration(&quot;lang&quot;, lang)
-    await setCurrentLanguage(lang, true) // true: reload the loaded bundles
-    navigate()                           // draw the page again
-  },
-})
-
-container.append(switchButton)
+<span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">switchButton</span><span class="p">)</span>
 </code></pre>
 
 <p>✅ <strong>Check:</strong> the button flips the whole page between English and Spanish, and the choice survives
@@ -231,20 +215,18 @@ a reload.</p>
 <p>Say we want a counter in the page title of how many times the language changed, without the
 button knowing about the title. Create a signal, connect the title to it, and emit it from the
 button:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setSignal</span><span class="p">,</span> <span class="nx">connectToSignal</span><span class="p">,</span> <span class="nx">emitSignal</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/signals.js&#34;</span>
 
-<pre><code class="language-ts">import { setSignal, connectToSignal, emitSignal } from &quot;./gtd/signals.js&quot;
+<span class="kr">const</span> <span class="nx">languageChanged</span> <span class="o">=</span> <span class="nx">setSignal</span><span class="p">()</span>
 
-const languageChanged = setSignal()
-
-let changes = 0
-connectToSignal(languageChanged, async lang =&gt; {
-  changes++
-  document.title = `Notes (${lang}, ${changes} changes)`
-})
+<span class="kd">let</span> <span class="nx">changes</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="nx">connectToSignal</span><span class="p">(</span><span class="nx">languageChanged</span><span class="p">,</span> <span class="kr">async</span> <span class="nx">lang</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">changes</span><span class="o">++</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="sb">`Notes (</span><span class="si">${</span><span class="nx">lang</span><span class="si">}</span><span class="sb">, </span><span class="si">${</span><span class="nx">changes</span><span class="si">}</span><span class="sb"> changes)`</span>
+<span class="p">})</span>
 </code></pre>
-
-<pre><code class="language-ts">// inside the click handler, after setCurrentLanguage
-await emitSignal(languageChanged, lang)
+<pre><code class="language-ts"><span class="c1">// inside the click handler, after setCurrentLanguage
+</span><span class="k">await</span> <span class="nx">emitSignal</span><span class="p">(</span><span class="nx">languageChanged</span><span class="p">,</span> <span class="nx">lang</span><span class="p">)</span>
 </code></pre>
 
 <p>✅ <strong>Check:</strong> the browser tab title updates each time you press the button.</p>
@@ -252,16 +234,14 @@ await emitSignal(languageChanged, lang)
 <p>📖 <a href="./guides/signals">Signals</a></p>
 
 <h2 id="step-7-phones-display">Step 7 — Phones (<code>display</code>)</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">checkDisplayType</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/display.js&#34;</span>
 
-<pre><code class="language-ts">import { checkDisplayType } from &quot;./gtd/display.js&quot;
-
-checkDisplayType()                            // &lt;html data-display=&quot;mobile&quot;&gt; or &quot;desktop&quot;
-window.addEventListener(&quot;resize&quot;, checkDisplayType)
+<span class="nx">checkDisplayType</span><span class="p">()</span>                            <span class="c1">// &lt;html data-display=&#34;mobile&#34;&gt; or &#34;desktop&#34;
+</span><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;resize&#34;</span><span class="p">,</span> <span class="nx">checkDisplayType</span><span class="p">)</span>
 </code></pre>
 
 <p>Now plain CSS can adapt the app:</p>
-
-<pre><code class="language-css">[data-display=&quot;mobile&quot;] body { font-size: 18px; }
+<pre><code class="language-css"><span class="o">[</span><span class="nt">data-display</span><span class="o">=</span><span class="s2">&#34;mobile&#34;</span><span class="o">]</span> <span class="nt">body</span> <span class="p">{</span> <span class="k">font-size</span><span class="p">:</span> <span class="mi">18</span><span class="kt">px</span><span class="p">;</span> <span class="p">}</span>
 </code></pre>
 
 <p>✅ <strong>Check:</strong> open the developer tools&rsquo; device mode: the text gets bigger on a phone.</p>
@@ -271,17 +251,16 @@ window.addEventListener(&quot;resize&quot;, checkDisplayType)
 <h2 id="step-8-a-keyboard-shortcut-shortcuts">Step 8 — A keyboard shortcut (<code>shortcuts</code>)</h2>
 
 <p>Press <code>Ctrl</code> + <code>H</code> anywhere to go home:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="nx">Shortcuts</span><span class="p">,</span> <span class="p">{</span> <span class="nx">KeyInteraction</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/shortcuts.js&#34;</span>
 
-<pre><code class="language-ts">import Shortcuts, { KeyInteraction } from &quot;./gtd/shortcuts.js&quot;
-
-const keys = Shortcuts.register(document)
-Shortcuts.set(keys, {
-  interaction: KeyInteraction.keyDown,
-  key: &quot;h&quot;,
-  ctrlKey: true,
-  preventDefault: true,
-  callback: () =&gt; location.hash = &quot;/&quot;,
-})
+<span class="kr">const</span> <span class="nx">keys</span> <span class="o">=</span> <span class="nx">Shortcuts</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nb">document</span><span class="p">)</span>
+<span class="nx">Shortcuts</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">interaction</span>: <span class="kt">KeyInteraction.keyDown</span><span class="p">,</span>
+  <span class="nx">key</span><span class="o">:</span> <span class="s2">&#34;h&#34;</span><span class="p">,</span>
+  <span class="nx">ctrlKey</span>: <span class="kt">true</span><span class="p">,</span>
+  <span class="nx">preventDefault</span>: <span class="kt">true</span><span class="p">,</span>
+  <span class="nx">callback</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span>
+<span class="p">})</span>
 </code></pre>
 
 <p>✅ <strong>Check:</strong> open a note and press <code>Ctrl</code> + <code>H</code>.</p>

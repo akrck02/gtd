@@ -1,7 +1,6 @@
 <h1 id="contributing-and-testing">Contributing and testing</h1>
 
 <h2 id="layout">Layout</h2>
-
 <pre><code>src/          the library, one module per file
 test/         unit tests, one file per module (dom.test.ts tests dom.ts)
 test/lib/     the small test runner
@@ -55,19 +54,18 @@ reason.</p>
 (<code>.github/workflows/test.yaml</code>).</p>
 
 <h2 id="writing-a-test">Writing a test</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">describe</span><span class="p">,</span> <span class="nx">expect</span><span class="p">,</span> <span class="nx">it</span><span class="p">,</span> <span class="nx">mock</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./lib/test.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;../src/dom.js&#34;</span>
 
-<pre><code class="language-ts">import { describe, expect, it, mock } from &quot;./lib/test.js&quot;
-import { setDomEvents } from &quot;../src/dom.js&quot;
-
-describe(&quot;dom&quot;, () =&gt; {
-  it(&quot;adds listeners&quot;, () =&gt; {
-    const button = document.createElement(&quot;button&quot;)
-    const click = mock(() =&gt; {})
-    setDomEvents(button, { click })
-    button.click()
-    expect(click).toHaveBeenCalledTimes(1)
-  })
-})
+<span class="nx">describe</span><span class="p">(</span><span class="s2">&#34;dom&#34;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">it</span><span class="p">(</span><span class="s2">&#34;adds listeners&#34;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">&#34;button&#34;</span><span class="p">)</span>
+    <span class="kr">const</span> <span class="nx">click</span> <span class="o">=</span> <span class="nx">mock</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{})</span>
+    <span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span> <span class="nx">click</span> <span class="p">})</span>
+    <span class="nx">button</span><span class="p">.</span><span class="nx">click</span><span class="p">()</span>
+    <span class="nx">expect</span><span class="p">(</span><span class="nx">click</span><span class="p">).</span><span class="nx">toHaveBeenCalledTimes</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">})</span>
 </code></pre>
 
 <p>Then import the new file in <code>test/index.ts</code>.</p>

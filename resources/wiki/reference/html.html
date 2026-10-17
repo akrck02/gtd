@@ -8,19 +8,17 @@ stylesheet that makes GTD apps look good with almost no CSS.</p>
 <h2 id="bubble-ui-in-30-seconds">Bubble UI in 30 seconds</h2>
 
 <p>Link the stylesheet in <code>index.html</code>:</p>
-
-<pre><code class="language-html">&lt;link rel=&quot;stylesheet&quot; href=&quot;./styles/bubbleui-v3.0.0.css&quot;&gt;
+<pre><code class="language-html"><span class="p">&lt;</span><span class="nt">link</span> <span class="na">rel</span><span class="o">=</span><span class="s">&#34;stylesheet&#34;</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;./styles/bubbleui-v3.0.0.css&#34;</span><span class="p">&gt;</span>
 </code></pre>
 
 <p>and use its classes:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">BubbleUI</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/bubble.js&#34;</span>
 
-<pre><code class="language-ts">import { BubbleUI } from &quot;./gtd/bubble.js&quot;
-
-const card = uiComponent({ classes: [BubbleUI.Surface1, BubbleUI.BoxColumn], styles: { padding: &quot;1rem&quot; } })
-card.append(
-  uiComponent({ type: &quot;h2&quot;, text: &quot;Welcome&quot; }),
-  uiComponent({ type: &quot;button&quot;, text: &quot;Start&quot;, classes: [BubbleUI.Primary] }),
-)
+<span class="kr">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">Surface1</span><span class="p">,</span> <span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">BoxColumn</span><span class="p">],</span> <span class="nx">styles</span><span class="o">:</span> <span class="p">{</span> <span class="nx">padding</span><span class="o">:</span> <span class="s2">&#34;1rem&#34;</span> <span class="p">}</span> <span class="p">})</span>
+<span class="nx">card</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span>
+  <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h2&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Welcome&#34;</span> <span class="p">}),</span>
+  <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Start&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">Primary</span><span class="p">]</span> <span class="p">}),</span>
+<span class="p">)</span>
 </code></pre>
 
 <h2 id="what-the-stylesheet-gives-you-for-free">What the stylesheet gives you for free</h2>
@@ -35,8 +33,7 @@ card.append(
 <li><strong>Titles</strong> <code>h1</code>–<code>h6</code> with comfortable sizes and margins.</li>
 <li>A <strong>dark theme</strong>: set <code>data-theme=&quot;dark&quot;</code> on <code>&lt;html&gt;</code>.</li>
 </ul>
-
-<pre><code class="language-ts">document.documentElement.dataset.theme = prefersDarkMode() ? &quot;dark&quot; : &quot;light&quot;
+<pre><code class="language-ts"><span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">theme</span> <span class="o">=</span> <span class="nx">prefersDarkMode</span><span class="p">()</span> <span class="o">?</span> <span class="s2">&#34;dark&#34;</span> <span class="o">:</span> <span class="s2">&#34;light&#34;</span>
 </code></pre>
 
 <h2 id="bubbleui-the-class-names"><code>BubbleUI</code>: the class names</h2>
@@ -140,25 +137,23 @@ card.append(
 </tbody>
 </table>
 <p><strong>Text</strong>: <code>TextCenter</code>, <code>TextLeft</code>, <code>TextRight</code>, <code>TextTruncate</code> (cut with <code>…</code>), <code>Bold</code>, <code>Italic</code>.</p>
-
-<pre><code class="language-ts">const toolbar = uiComponent({ type: Html.Nav, classes: [BubbleUI.BoxRow, BubbleUI.BoxXBetween, BubbleUI.BoxYCenter] })
-const danger = uiComponent({ type: Html.Button, text: &quot;Delete&quot;, classes: [BubbleUI.Error] })
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">toolbar</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="nx">Html</span><span class="p">.</span><span class="nx">Nav</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">BoxRow</span><span class="p">,</span> <span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">BoxXBetween</span><span class="p">,</span> <span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">BoxYCenter</span><span class="p">]</span> <span class="p">})</span>
+<span class="kr">const</span> <span class="nx">danger</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="nx">Html</span><span class="p">.</span><span class="nx">Button</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Delete&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nb">Error</span><span class="p">]</span> <span class="p">})</span>
 </code></pre>
 
 <blockquote>
 <p>💡 Colours are CSS variables (<code>--primary-color</code>, <code>--surface-1</code>…). Change them in your own CSS to
 give your app its own palette:</p>
+<pre><code class="language-css"><span class="o">&gt;</span> <span class="p">:</span><span class="nd">root</span> <span class="p">{</span> <span class="nv">--primary-color</span><span class="p">:</span> <span class="mh">#00796b</span><span class="p">;</span> <span class="p">}</span>
+<span class="o">&gt;</span> <span class="err">```</span>
 
-<pre><code class="language-css">&gt; :root { --primary-color: #00796b; }
-&gt; ```
+<span class="err">##</span> <span class="err">`</span><span class="nt">Html</span><span class="err">`</span><span class="o">:</span> <span class="nt">tag</span> <span class="nt">names</span>
 
-## `Html`: tag names
+<span class="err">```</span><span class="nt">ts</span>
+<span class="nt">import</span> <span class="p">{</span> <span class="err">Html</span> <span class="p">}</span> <span class="nt">from</span> <span class="s2">&#34;./gtd/html.js&#34;</span>
 
-```ts
-import { Html } from &quot;./gtd/html.js&quot;
-
-uiComponent({ type: Html.Button, text: &quot;Save&quot; })   // instead of type: &quot;button&quot;
-uiComponent({ type: Html.Section })
+<span class="nt">uiComponent</span><span class="o">(</span><span class="p">{</span> <span class="n">type</span><span class="p">:</span> <span class="n">Html</span><span class="o">.</span><span class="n">Button</span><span class="p">,</span> <span class="kc">text</span><span class="o">:</span> <span class="s2">&#34;Save&#34;</span> <span class="p">}</span><span class="o">)</span>   <span class="o">//</span> <span class="nt">instead</span> <span class="nt">of</span> <span class="nt">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span>
+<span class="nt">uiComponent</span><span class="o">(</span><span class="p">{</span> <span class="n">type</span><span class="p">:</span> <span class="n">Html</span><span class="o">.</span><span class="n">Section</span> <span class="p">}</span><span class="o">)</span>
 </code></pre>
 </blockquote>
 

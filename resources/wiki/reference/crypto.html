@@ -5,17 +5,15 @@
 <p>Create random, unique identifiers.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uuidv4</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/crypto.js&#34;</span>
 
-<pre><code class="language-ts">import { uuidv4 } from &quot;./gtd/crypto.js&quot;
-
-const id = uuidv4() // &quot;3b241101-e2bb-4255-8caf-4136c566a962&quot;
-</code></pre>
+<span class="kr">const</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">uuidv4</span><span class="p">()</span> <span class="c1">// &#34;3b241101-e2bb-4255-8caf-4136c566a962&#34;
+</span></code></pre>
 
 <h2 id="when-to-use-it">When to use it</h2>
 
 <p>Whenever you create something on the page that needs an id before the server gives it one:</p>
-
-<pre><code class="language-ts">const note = { id: uuidv4(), text: &quot;Buy milk&quot; }
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">note</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">id</span>: <span class="kt">uuidv4</span><span class="p">(),</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Buy milk&#34;</span> <span class="p">}</span>
 </code></pre>
 
 <p>Every call gives a new value; the chance of two being equal is so small you can ignore it.</p>

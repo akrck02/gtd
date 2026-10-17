@@ -5,18 +5,17 @@
 <p>Let people use your app from the keyboard: <code>Ctrl</code> + <code>S</code> to save, <code>Esc</code> to close, <code>/</code> to search.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="nx">Shortcuts</span><span class="p">,</span> <span class="p">{</span> <span class="nx">KeyInteraction</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/shortcuts.js&#34;</span>
 
-<pre><code class="language-ts">import Shortcuts, { KeyInteraction } from &quot;./gtd/shortcuts.js&quot;
+<span class="kr">const</span> <span class="nx">keys</span> <span class="o">=</span> <span class="nx">Shortcuts</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nb">document</span><span class="p">)</span>
 
-const keys = Shortcuts.register(document)
-
-Shortcuts.set(keys, {
-  interaction: KeyInteraction.keyDown,
-  key: &quot;s&quot;,
-  ctrlKey: true,
-  preventDefault: true,        // stop the browser's own &quot;save page&quot;
-  callback: () =&gt; save(),
-})
+<span class="nx">Shortcuts</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">interaction</span>: <span class="kt">KeyInteraction.keyDown</span><span class="p">,</span>
+  <span class="nx">key</span><span class="o">:</span> <span class="s2">&#34;s&#34;</span><span class="p">,</span>
+  <span class="nx">ctrlKey</span>: <span class="kt">true</span><span class="p">,</span>
+  <span class="nx">preventDefault</span>: <span class="kt">true</span><span class="p">,</span>        <span class="c1">// stop the browser&#39;s own &#34;save page&#34;
+</span>  <span class="nx">callback</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">save</span><span class="p">(),</span>
+<span class="p">})</span>
 </code></pre>
 
 <h2 id="two-steps">Two steps</h2>
@@ -28,9 +27,8 @@ shortcuts that work everywhere, or an element for shortcuts that only work while
 <li><strong>Set</strong> shortcuts on that id: <code>Shortcuts.set(id, shortcut)</code>. Setting the same combination again
 replaces it.</li>
 </ol>
-
-<pre><code class="language-ts">const everywhere = Shortcuts.register(document)
-const inEditor = Shortcuts.register(editorElement)
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">everywhere</span> <span class="o">=</span> <span class="nx">Shortcuts</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nb">document</span><span class="p">)</span>
+<span class="kr">const</span> <span class="nx">inEditor</span> <span class="o">=</span> <span class="nx">Shortcuts</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nx">editorElement</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="the-shortcut-object">The shortcut object</h2>
@@ -103,47 +101,42 @@ const inEditor = Shortcuts.register(editorElement)
 <h2 id="common-recipes">Common recipes</h2>
 
 <p><strong>Close a dialog with <code>Esc</code>:</strong></p>
-
-<pre><code class="language-ts">Shortcuts.set(keys, { interaction: KeyInteraction.keyDown, key: &quot;Escape&quot;, callback: closeDialog })
+<pre><code class="language-ts"><span class="nx">Shortcuts</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="p">{</span> <span class="nx">interaction</span>: <span class="kt">KeyInteraction.keyDown</span><span class="p">,</span> <span class="nx">key</span><span class="o">:</span> <span class="s2">&#34;Escape&#34;</span><span class="p">,</span> <span class="nx">callback</span>: <span class="kt">closeDialog</span> <span class="p">})</span>
 </code></pre>
 
 <p><strong><code>/</code> to search, but not while typing:</strong></p>
-
-<pre><code class="language-ts">Shortcuts.set(keys, {
-  interaction: KeyInteraction.keyDown,
-  key: &quot;/&quot;,
-  omitEditableContent: true, // typing &quot;/&quot; in a text field must still type it
-  preventDefault: true,
-  callback: () =&gt; searchInput.focus(),
-})
+<pre><code class="language-ts"><span class="nx">Shortcuts</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">interaction</span>: <span class="kt">KeyInteraction.keyDown</span><span class="p">,</span>
+  <span class="nx">key</span><span class="o">:</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span>
+  <span class="nx">omitEditableContent</span>: <span class="kt">true</span><span class="p">,</span> <span class="c1">// typing &#34;/&#34; in a text field must still type it
+</span>  <span class="nx">preventDefault</span>: <span class="kt">true</span><span class="p">,</span>
+  <span class="nx">callback</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">searchInput</span><span class="p">.</span><span class="nx">focus</span><span class="p">(),</span>
+<span class="p">})</span>
 </code></pre>
 
 <p><strong>Move through a list holding an arrow:</strong></p>
-
-<pre><code class="language-ts">Shortcuts.set(keys, { interaction: KeyInteraction.keyDown, key: &quot;ArrowDown&quot;, repeatable: true, callback: selectNext })
+<pre><code class="language-ts"><span class="nx">Shortcuts</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="p">{</span> <span class="nx">interaction</span>: <span class="kt">KeyInteraction.keyDown</span><span class="p">,</span> <span class="nx">key</span><span class="o">:</span> <span class="s2">&#34;ArrowDown&#34;</span><span class="p">,</span> <span class="nx">repeatable</span>: <span class="kt">true</span><span class="p">,</span> <span class="nx">callback</span>: <span class="kt">selectNext</span> <span class="p">})</span>
 </code></pre>
 
 <p><strong><code>Ctrl</code> on Windows and Linux, <code>⌘</code> on a Mac:</strong></p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">getOs</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/browser.js&#34;</span>
 
-<pre><code class="language-ts">import { getOs } from &quot;./gtd/browser.js&quot;
-
-const mac = &quot;MacOS&quot; == getOs()
-Shortcuts.set(keys, {
-  interaction: KeyInteraction.keyDown,
-  key: &quot;k&quot;,
-  ctrlKey: !mac,
-  metaKey: mac,
-  preventDefault: true,
-  callback: openSearch,
-})
+<span class="kr">const</span> <span class="nx">mac</span> <span class="o">=</span> <span class="s2">&#34;MacOS&#34;</span> <span class="o">==</span> <span class="nx">getOs</span><span class="p">()</span>
+<span class="nx">Shortcuts</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">interaction</span>: <span class="kt">KeyInteraction.keyDown</span><span class="p">,</span>
+  <span class="nx">key</span><span class="o">:</span> <span class="s2">&#34;k&#34;</span><span class="p">,</span>
+  <span class="nx">ctrlKey</span><span class="o">:</span> <span class="o">!</span><span class="nx">mac</span><span class="p">,</span>
+  <span class="nx">metaKey</span>: <span class="kt">mac</span><span class="p">,</span>
+  <span class="nx">preventDefault</span>: <span class="kt">true</span><span class="p">,</span>
+  <span class="nx">callback</span>: <span class="kt">openSearch</span><span class="p">,</span>
+<span class="p">})</span>
 </code></pre>
 
 <h2 id="showing-shortcuts-to-people">Showing shortcuts to people</h2>
 
 <p>Shortcuts nobody knows about are not used. Show them next to the action:</p>
-
-<pre><code class="language-ts">const hint = uiComponent({ type: &quot;kbd&quot;, text: mac ? &quot;⌘ K&quot; : &quot;Ctrl K&quot; })
-searchButton.append(hint)
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">hint</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;kbd&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">mac</span> <span class="o">?</span> <span class="s2">&#34;⌘ K&#34;</span> <span class="o">:</span> <span class="s2">&#34;Ctrl K&#34;</span> <span class="p">})</span>
+<span class="nx">searchButton</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">hint</span><span class="p">)</span>
 </code></pre>
 
 <hr>

@@ -8,27 +8,23 @@ its texts in the user&rsquo;s language, keeping every text in JSON files instead
 <h2 id="in-30-seconds">In 30 seconds</h2>
 
 <p>Create <strong><code>resources/i18n/en/home.json</code></strong>:</p>
-
-<pre><code class="language-json">{ &quot;welcome&quot;: &quot;Welcome!&quot; }
+<pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;welcome&#34;</span><span class="p">:</span> <span class="s2">&#34;Welcome!&#34;</span> <span class="p">}</span>
 </code></pre>
 
 <p>…and <strong><code>resources/i18n/es/home.json</code></strong>:</p>
-
-<pre><code class="language-json">{ &quot;welcome&quot;: &quot;¡Bienvenido!&quot; }
+<pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;welcome&#34;</span><span class="p">:</span> <span class="s2">&#34;¡Bienvenido!&#34;</span> <span class="p">}</span>
 </code></pre>
 
 <p>Then:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setCurrentLanguage</span><span class="p">,</span> <span class="nx">loadTextBundle</span><span class="p">,</span> <span class="nx">getText</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/i18n.js&#34;</span>
 
-<pre><code class="language-ts">import { setCurrentLanguage, loadTextBundle, getText } from &quot;./gtd/i18n.js&quot;
+<span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">language</span><span class="p">)</span> <span class="c1">// the browser&#39;s language, like &#34;es-ES&#34;
+</span><span class="k">await</span> <span class="nx">loadTextBundle</span><span class="p">(</span><span class="s2">&#34;home&#34;</span><span class="p">)</span>
 
-await setCurrentLanguage(navigator.language) // the browser's language, like &quot;es-ES&quot;
-await loadTextBundle(&quot;home&quot;)
-
-uiComponent({ type: &quot;h1&quot;, text: getText(&quot;home&quot;, &quot;welcome&quot;) }) // &quot;¡Bienvenido!&quot; in Spanish browsers
-</code></pre>
+<span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">getText</span><span class="p">(</span><span class="s2">&#34;home&#34;</span><span class="p">,</span> <span class="s2">&#34;welcome&#34;</span><span class="p">)</span> <span class="p">})</span> <span class="c1">// &#34;¡Bienvenido!&#34; in Spanish browsers
+</span></code></pre>
 
 <h2 id="where-the-files-go">Where the files go</h2>
-
 <pre><code>my-app/
 ├── index.html
 └── resources/
@@ -79,24 +75,21 @@ folder, change <code>I18N_PATH</code> at the top of <code>i18n.ts</code>.</li>
 </tbody>
 </table>
 <p>Load bundles <strong>before</strong> drawing the views that use them, for example at the start of the view:</p>
-
-<pre><code class="language-ts">setRoute(&quot;/settings&quot;, async (_, container) =&gt; {
-  await loadTextBundle(&quot;settings&quot;) // does nothing if it is already loaded
-  container.append(uiComponent({ type: &quot;h1&quot;, text: getText(&quot;settings&quot;, &quot;title&quot;) }))
-})
+<pre><code class="language-ts"><span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/settings&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="k">await</span> <span class="nx">loadTextBundle</span><span class="p">(</span><span class="s2">&#34;settings&#34;</span><span class="p">)</span> <span class="c1">// does nothing if it is already loaded
+</span>  <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">getText</span><span class="p">(</span><span class="s2">&#34;settings&#34;</span><span class="p">,</span> <span class="s2">&#34;title&#34;</span><span class="p">)</span> <span class="p">}))</span>
+<span class="p">})</span>
 </code></pre>
 
 <h2 id="letting-the-user-change-language">Letting the user change language</h2>
-
-<pre><code class="language-ts">await setCurrentLanguage(&quot;es&quot;, true) // true = download the loaded bundles again, in Spanish
-navigate()                            // draw the current page again with the new texts
-</code></pre>
+<pre><code class="language-ts"><span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="s2">&#34;es&#34;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="c1">// true = download the loaded bundles again, in Spanish
+</span><span class="nx">navigate</span><span class="p">()</span>                            <span class="c1">// draw the current page again with the new texts
+</span></code></pre>
 
 <p>Remember the choice with <a href="./guides/configuration">Configuration</a>, and use it at start:</p>
-
-<pre><code class="language-ts">setConfiguration(&quot;lang&quot;, &quot;es&quot;)
-// next time the app opens:
-await setCurrentLanguage(getConfiguration(&quot;lang&quot;) ?? navigator.language)
+<pre><code class="language-ts"><span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">,</span> <span class="s2">&#34;es&#34;</span><span class="p">)</span>
+<span class="c1">// next time the app opens:
+</span><span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">)</span> <span class="o">??</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">language</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="which-languages-are-available">Which languages are available</h2>
@@ -105,22 +98,21 @@ await setCurrentLanguage(getConfiguration(&quot;lang&quot;) ?? navigator.languag
 falls back to English, with a warning in the console.</p>
 
 <p>To add a language, open <code>src/gtd/i18n.ts</code> and edit two places at the top:</p>
+<pre><code class="language-ts"><span class="kr">export</span> <span class="kr">const</span> <span class="nx">Languages</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">English</span><span class="o">:</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;english&#34;</span><span class="p">,</span> <span class="nx">main</span><span class="o">:</span> <span class="s2">&#34;en&#34;</span><span class="p">,</span> <span class="nx">locales</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;en&#34;</span><span class="p">,</span> <span class="s2">&#34;en-US&#34;</span><span class="p">,</span> <span class="s2">&#34;en-GB&#34;</span><span class="p">]</span> <span class="p">},</span>
+  <span class="nx">Spanish</span><span class="o">:</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;spanish&#34;</span><span class="p">,</span> <span class="nx">main</span><span class="o">:</span> <span class="s2">&#34;es&#34;</span><span class="p">,</span> <span class="nx">locales</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;es&#34;</span><span class="p">,</span> <span class="s2">&#34;es-ES&#34;</span><span class="p">]</span> <span class="p">},</span>
+  <span class="nx">Galician</span><span class="o">:</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;galician&#34;</span><span class="p">,</span> <span class="nx">main</span><span class="o">:</span> <span class="s2">&#34;gl&#34;</span><span class="p">,</span> <span class="nx">locales</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;gl&#34;</span><span class="p">,</span> <span class="s2">&#34;gl-ES&#34;</span><span class="p">]</span> <span class="p">},</span>
+  <span class="nx">Catala</span><span class="o">:</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;catala&#34;</span><span class="p">,</span> <span class="nx">main</span><span class="o">:</span> <span class="s2">&#34;ca&#34;</span><span class="p">,</span> <span class="nx">locales</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;ca&#34;</span><span class="p">,</span> <span class="s2">&#34;ca-ES&#34;</span><span class="p">]</span> <span class="p">},</span>
+  <span class="nx">French</span><span class="o">:</span> <span class="p">{</span> <span class="nx">name</span><span class="o">:</span> <span class="s2">&#34;french&#34;</span><span class="p">,</span> <span class="nx">main</span><span class="o">:</span> <span class="s2">&#34;fr&#34;</span><span class="p">,</span> <span class="nx">locales</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;fr&#34;</span><span class="p">,</span> <span class="s2">&#34;fr-FR&#34;</span><span class="p">,</span> <span class="s2">&#34;fr-CA&#34;</span><span class="p">]</span> <span class="p">},</span> <span class="c1">// ← new
+</span><span class="p">}</span>
 
-<pre><code class="language-ts">export const Languages = {
-  English: { name: &quot;english&quot;, main: &quot;en&quot;, locales: [&quot;en&quot;, &quot;en-US&quot;, &quot;en-GB&quot;] },
-  Spanish: { name: &quot;spanish&quot;, main: &quot;es&quot;, locales: [&quot;es&quot;, &quot;es-ES&quot;] },
-  Galician: { name: &quot;galician&quot;, main: &quot;gl&quot;, locales: [&quot;gl&quot;, &quot;gl-ES&quot;] },
-  Catala: { name: &quot;catala&quot;, main: &quot;ca&quot;, locales: [&quot;ca&quot;, &quot;ca-ES&quot;] },
-  French: { name: &quot;french&quot;, main: &quot;fr&quot;, locales: [&quot;fr&quot;, &quot;fr-FR&quot;, &quot;fr-CA&quot;] }, // ← new
-}
-
-const AVAILABLE_LANGUAGES = [
-  Languages.Spanish,
-  Languages.English,
-  Languages.Galician,
-  Languages.Catala,
-  Languages.French, // ← and enable it
-]
+<span class="kr">const</span> <span class="nx">AVAILABLE_LANGUAGES</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="nx">Languages</span><span class="p">.</span><span class="nx">Spanish</span><span class="p">,</span>
+  <span class="nx">Languages</span><span class="p">.</span><span class="nx">English</span><span class="p">,</span>
+  <span class="nx">Languages</span><span class="p">.</span><span class="nx">Galician</span><span class="p">,</span>
+  <span class="nx">Languages</span><span class="p">.</span><span class="nx">Catala</span><span class="p">,</span>
+  <span class="nx">Languages</span><span class="p">.</span><span class="nx">French</span><span class="p">,</span> <span class="c1">// ← and enable it
+</span><span class="p">]</span>
 </code></pre>
 
 <table>
@@ -149,11 +141,9 @@ locale is unknown, change <code>DEFAULT_LANGUAGE</code>.</p>
 <h2 id="texts-with-values-inside">Texts with values inside</h2>
 
 <p><code>getText</code> returns plain strings, so use placeholders and <code>replace</code>:</p>
-
-<pre><code class="language-json">{ &quot;greeting&quot;: &quot;Hello, {name}!&quot; }
+<pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;greeting&#34;</span><span class="p">:</span> <span class="s2">&#34;Hello, {name}!&#34;</span> <span class="p">}</span>
 </code></pre>
-
-<pre><code class="language-ts">getText(&quot;home&quot;, &quot;greeting&quot;).replace(&quot;{name}&quot;, user.name)
+<pre><code class="language-ts"><span class="nx">getText</span><span class="p">(</span><span class="s2">&#34;home&#34;</span><span class="p">,</span> <span class="s2">&#34;greeting&#34;</span><span class="p">).</span><span class="nx">replace</span><span class="p">(</span><span class="s2">&#34;{name}&#34;</span><span class="p">,</span> <span class="nx">user</span><span class="p">.</span><span class="nx">name</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="when-something-is-missing">When something is missing</h2>

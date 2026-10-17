@@ -6,16 +6,15 @@
 requests for you, with sensible defaults, using the browser&rsquo;s own <code>fetch</code>.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">httpGet</span><span class="p">,</span> <span class="nx">httpPost</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/http.js&#34;</span>
 
-<pre><code class="language-ts">import { httpGet, httpPost } from &quot;./gtd/http.js&quot;
+<span class="c1">// read
+</span><span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;https://jsonplaceholder.typicode.com/todos/1&#34;</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{}</span> <span class="p">})</span>
+<span class="kr">const</span> <span class="nx">todo</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">todo</span><span class="p">.</span><span class="nx">title</span><span class="p">)</span>
 
-// read
-const response = await httpGet({ url: &quot;https://jsonplaceholder.typicode.com/todos/1&quot;, parameters: {} })
-const todo = await response.json()
-console.log(todo.title)
-
-// write
-await httpPost({ url: &quot;/api/notes&quot;, parameters: { text: &quot;Buy milk&quot; } })
+<span class="c1">// write
+</span><span class="k">await</span> <span class="nx">httpPost</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/api/notes&#34;</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Buy milk&#34;</span> <span class="p">}</span> <span class="p">})</span>
 </code></pre>
 
 <blockquote>
@@ -134,22 +133,20 @@ await httpPost({ url: &quot;/api/notes&quot;, parameters: { text: &quot;Buy milk
 <h3 id="sending-values-with-get">Sending values with GET</h3>
 
 <p><code>GET</code> has no body, so values go in the address:</p>
-
-<pre><code class="language-ts">const search = encodeURIComponent(&quot;blue shoes&quot;)
-await httpGet({ url: `/api/products?search=${search}&amp;page=2`, parameters: {} })
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">search</span> <span class="o">=</span> <span class="nb">encodeURIComponent</span><span class="p">(</span><span class="s2">&#34;blue shoes&#34;</span><span class="p">)</span>
+<span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="sb">`/api/products?search=</span><span class="si">${</span><span class="nx">search</span><span class="si">}</span><span class="sb">&amp;page=2`</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{}</span> <span class="p">})</span>
 </code></pre>
 
 <h2 id="reading-the-answer">Reading the answer</h2>
 
 <p>You get back a standard <a href="https://developer.mozilla.org/docs/Web/API/Response" target="_blank"><code>Response</code></a>:</p>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/api/me&#34;</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{}</span> <span class="p">})</span>
 
-<pre><code class="language-ts">const response = await httpGet({ url: &quot;/api/me&quot;, parameters: {} })
-
-response.ok        // true for 200–299
-response.status    // 200, 404, 500…
-await response.json()  // the body, parsed as JSON
-await response.text()  // or as plain text
-</code></pre>
+<span class="nx">response</span><span class="p">.</span><span class="nx">ok</span>        <span class="c1">// true for 200–299
+</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span>    <span class="c1">// 200, 404, 500…
+</span><span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()</span>  <span class="c1">// the body, parsed as JSON
+</span><span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">text</span><span class="p">()</span>  <span class="c1">// or as plain text
+</span></code></pre>
 
 <blockquote>
 <p>⚠️ A <code>404</code> or <code>500</code> is <strong>not</strong> an error for <code>fetch</code>: you still get a <code>Response</code>. Always check
@@ -161,100 +158,95 @@ internet, wrong domain, blocked by CORS.</p>
 
 <p><code>handleResponseStatus</code> picks a function by status code, so your happy path and your error paths
 stay tidy:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">handleResponseStatus</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/http.js&#34;</span>
 
-<pre><code class="language-ts">import { handleResponseStatus } from &quot;./gtd/http.js&quot;
+<span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/api/me&#34;</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{}</span> <span class="p">})</span>
 
-const response = await httpGet({ url: &quot;/api/me&quot;, parameters: {} })
-
-await handleResponseStatus(
-  response,
-  new Map([
-    [200, async res =&gt; showProfile(await res.json())],
-    [401, async () =&gt; location.hash = &quot;/login&quot;],
-    [404, async () =&gt; showMessage(&quot;User not found&quot;)],
-  ]),
-  async res =&gt; showMessage(`Something went wrong (${res.status})`), // everything else
-)
+<span class="k">await</span> <span class="nx">handleResponseStatus</span><span class="p">(</span>
+  <span class="nx">response</span><span class="p">,</span>
+  <span class="k">new</span> <span class="nx">Map</span><span class="p">([</span>
+    <span class="p">[</span><span class="mi">200</span><span class="p">,</span> <span class="kr">async</span> <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">showProfile</span><span class="p">(</span><span class="k">await</span> <span class="nx">res</span><span class="p">.</span><span class="nx">json</span><span class="p">())],</span>
+    <span class="p">[</span><span class="mi">401</span><span class="p">,</span> <span class="kr">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s2">&#34;/login&#34;</span><span class="p">],</span>
+    <span class="p">[</span><span class="mi">404</span><span class="p">,</span> <span class="kr">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">showMessage</span><span class="p">(</span><span class="s2">&#34;User not found&#34;</span><span class="p">)],</span>
+  <span class="p">]),</span>
+  <span class="kr">async</span> <span class="nx">res</span> <span class="o">=&gt;</span> <span class="nx">showMessage</span><span class="p">(</span><span class="sb">`Something went wrong (</span><span class="si">${</span><span class="nx">res</span><span class="p">.</span><span class="nx">status</span><span class="si">}</span><span class="sb">)`</span><span class="p">),</span> <span class="c1">// everything else
+</span><span class="p">)</span>
 </code></pre>
 
 <p>Without that last function, unknown statuses are written to the console.</p>
 
 <h2 id="logging-in-adding-headers">Logging in: adding headers</h2>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;token&#34;</span><span class="p">)</span>
 
-<pre><code class="language-ts">const token = getConfiguration(&quot;token&quot;)
-
-await httpGet({
-  url: &quot;/api/me&quot;,
-  parameters: {},
-  headers: { Authorization: `Bearer ${token}` },
-})
+<span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span>
+  <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/api/me&#34;</span><span class="p">,</span>
+  <span class="nx">parameters</span><span class="o">:</span> <span class="p">{},</span>
+  <span class="nx">headers</span><span class="o">:</span> <span class="p">{</span> <span class="nx">Authorization</span><span class="o">:</span> <span class="sb">`Bearer </span><span class="si">${</span><span class="nx">token</span><span class="si">}</span><span class="sb">`</span> <span class="p">},</span>
+<span class="p">})</span>
 </code></pre>
 
 <h2 id="uploading-files">Uploading files</h2>
 
 <p>Put the files in a <code>FormData</code> and send it as <code>parameters</code>. GTD sends it as <code>multipart/form-data</code>
 automatically.</p>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;input&#34;</span><span class="p">,</span> <span class="nx">attributes</span><span class="o">:</span> <span class="p">{</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;file&#34;</span> <span class="p">}</span> <span class="p">})</span> <span class="kr">as</span> <span class="nx">HTMLInputElement</span>
 
-<pre><code class="language-ts">const input = uiComponent({ type: &quot;input&quot;, attributes: { type: &quot;file&quot; } }) as HTMLInputElement
-
-setDomEvents(input, {
-  change: async () =&gt; {
-    const form = new FormData()
-    form.append(&quot;picture&quot;, input.files[0])
-    form.append(&quot;title&quot;, &quot;My cat&quot;)
-    await httpPost({ url: &quot;/api/upload&quot;, parameters: form })
-  },
-})
+<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">input</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">change</span>: <span class="kt">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">form</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormData</span><span class="p">()</span>
+    <span class="nx">form</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&#34;picture&#34;</span><span class="p">,</span> <span class="nx">input</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="nx">form</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="s2">&#34;title&#34;</span><span class="p">,</span> <span class="s2">&#34;My cat&#34;</span><span class="p">)</span>
+    <span class="k">await</span> <span class="nx">httpPost</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/api/upload&#34;</span><span class="p">,</span> <span class="nx">parameters</span>: <span class="kt">form</span> <span class="p">})</span>
+  <span class="p">},</span>
+<span class="p">})</span>
 </code></pre>
 
 <h2 id="other-formats">Other formats</h2>
 
 <p>The <code>MimeType</code> and <code>TextEncoding</code> enums list common values, so you don&rsquo;t have to remember them:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">httpPost</span><span class="p">,</span> <span class="nx">MimeType</span><span class="p">,</span> <span class="nx">TextEncoding</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/http.js&#34;</span>
 
-<pre><code class="language-ts">import { httpPost, MimeType, TextEncoding } from &quot;./gtd/http.js&quot;
-
-await httpPost({
-  url: &quot;/api/import&quot;,
-  parameters: &quot;name,age\nAda,36&quot;,
-  contentType: MimeType.Csv,
-  charset: TextEncoding.Utf8,
-})
+<span class="k">await</span> <span class="nx">httpPost</span><span class="p">({</span>
+  <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/api/import&#34;</span><span class="p">,</span>
+  <span class="nx">parameters</span><span class="o">:</span> <span class="s2">&#34;name,age\nAda,36&#34;</span><span class="p">,</span>
+  <span class="nx">contentType</span>: <span class="kt">MimeType.Csv</span><span class="p">,</span>
+  <span class="nx">charset</span>: <span class="kt">TextEncoding.Utf8</span><span class="p">,</span>
+<span class="p">})</span>
 </code></pre>
 
 <h2 id="full-example-load-and-show-a-list-with-errors-handled">Full example: load and show a list, with errors handled</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">httpGet</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/http.js&#34;</span>
 
-<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
-import { httpGet } from &quot;./gtd/http.js&quot;
+<span class="kr">type</span> <span class="nx">Todo</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">id</span>: <span class="kt">number</span><span class="p">,</span> <span class="nx">title</span>: <span class="kt">string</span><span class="p">,</span> <span class="nx">completed</span>: <span class="kt">boolean</span> <span class="p">}</span>
 
-type Todo = { id: number, title: string, completed: boolean }
+<span class="kr">async</span> <span class="kd">function</span> <span class="nx">showTodos</span><span class="p">(</span><span class="nx">container</span>: <span class="kt">HTMLElement</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kr">const</span> <span class="nx">status</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Loading…&#34;</span> <span class="p">})</span>
+  <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">status</span><span class="p">)</span>
 
-async function showTodos(container: HTMLElement) {
-  const status = uiComponent({ type: &quot;p&quot;, text: &quot;Loading…&quot; })
-  container.append(status)
+  <span class="k">try</span> <span class="p">{</span>
+    <span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;https://jsonplaceholder.typicode.com/todos?_limit=5&#34;</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{}</span> <span class="p">})</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">response</span><span class="p">.</span><span class="nx">ok</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">status</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="sb">`The server answered </span><span class="si">${</span><span class="nx">response</span><span class="p">.</span><span class="nx">status</span><span class="si">}</span><span class="sb">`</span>
+      <span class="k">return</span>
+    <span class="p">}</span>
 
-  try {
-    const response = await httpGet({ url: &quot;https://jsonplaceholder.typicode.com/todos?_limit=5&quot;, parameters: {} })
-    if (!response.ok) {
-      status.textContent = `The server answered ${response.status}`
-      return
-    }
+    <span class="kr">const</span> <span class="nx">todos</span>: <span class="kt">Todo</span><span class="p">[]</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()</span>
+    <span class="nx">status</span><span class="p">.</span><span class="nx">remove</span><span class="p">()</span>
 
-    const todos: Todo[] = await response.json()
-    status.remove()
+    <span class="kr">const</span> <span class="nx">list</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;ul&#34;</span> <span class="p">})</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kr">const</span> <span class="nx">todo</span> <span class="k">of</span> <span class="nx">todos</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kr">const</span> <span class="nx">item</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;li&#34;</span> <span class="p">})</span>
+      <span class="nx">item</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="nx">todo</span><span class="p">.</span><span class="nx">completed</span> <span class="o">?</span> <span class="s2">&#34;✅&#34;</span> <span class="o">:</span> <span class="s2">&#34;⬜&#34;</span><span class="si">}</span><span class="sb"> </span><span class="si">${</span><span class="nx">todo</span><span class="p">.</span><span class="nx">title</span><span class="si">}</span><span class="sb">`</span>
+      <span class="nx">list</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">item</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">list</span><span class="p">)</span>
+  <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+    <span class="nx">status</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s2">&#34;Could not reach the server. Are you online?&#34;</span>
+  <span class="p">}</span>
+<span class="p">}</span>
 
-    const list = uiComponent({ type: &quot;ul&quot; })
-    for (const todo of todos) {
-      const item = uiComponent({ type: &quot;li&quot; })
-      item.textContent = `${todo.completed ? &quot;✅&quot; : &quot;⬜&quot;} ${todo.title}`
-      list.append(item)
-    }
-    container.append(list)
-  } catch {
-    status.textContent = &quot;Could not reach the server. Are you online?&quot;
-  }
-}
-
-showTodos(document.body)
+<span class="nx">showTodos</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="common-mistakes">Common mistakes</h2>

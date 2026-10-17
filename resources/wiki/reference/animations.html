@@ -5,15 +5,14 @@
 <p>Two small effects: text that <strong>types itself</strong> letter by letter, and elements that <strong>appear</strong>.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="nx">Animations</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/animations.js&#34;</span>
 
-<pre><code class="language-ts">import Animations from &quot;./gtd/animations.js&quot;
-
-Animations.enabled = true                      // off by default
-
-const title = uiComponent({ type: &quot;h1&quot;, text: &quot;Hello, I'm GTD&quot; })
-document.body.append(title)
-await Animations.typing(title)                 // H… He… Hel… Hello, I'm GTD
-</code></pre>
+<span class="nx">Animations</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="kc">true</span>                      <span class="c1">// off by default
+</span>
+<span class="kr">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Hello, I&#39;m GTD&#34;</span> <span class="p">})</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span>
+<span class="k">await</span> <span class="nx">Animations</span><span class="p">.</span><span class="nx">typing</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span>                 <span class="c1">// H… He… Hel… Hello, I&#39;m GTD
+</span></code></pre>
 
 <p><img src="./images/typing.gif" alt="A title being typed letter by letter" /></p>
 
@@ -22,10 +21,9 @@ await Animations.typing(title)                 // H… He… Hel… Hello, I'm G
 <p><code>Animations.enabled</code> is <code>false</code> until you set it. While it is <code>false</code>, every animation finishes at
 once, so the page simply shows its final state. Respect people who asked their system for less
 motion:</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">prefersReducedMotion</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/browser.js&#34;</span>
 
-<pre><code class="language-ts">import { prefersReducedMotion } from &quot;./gtd/browser.js&quot;
-
-Animations.enabled = !prefersReducedMotion()
+<span class="nx">Animations</span><span class="p">.</span><span class="nx">enabled</span> <span class="o">=</span> <span class="o">!</span><span class="nx">prefersReducedMotion</span><span class="p">()</span>
 </code></pre>
 
 <h2 id="animations-typing-element"><code>Animations.typing(element)</code></h2>
@@ -35,24 +33,21 @@ has children, they are typed one after the other. It works on text elements: <co
 <code>div</code>, <code>pre</code>, <code>code</code> and <code>h1</code>–<code>h6</code>.</p>
 
 <p>Put the element <strong>on the page first</strong>, then <code>await</code> the animation:</p>
-
-<pre><code class="language-ts">container.append(title, subtitle)
-await Animations.typing(title)
-await Animations.typing(subtitle) // starts when the title is done
-</code></pre>
+<pre><code class="language-ts"><span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">title</span><span class="p">,</span> <span class="nx">subtitle</span><span class="p">)</span>
+<span class="k">await</span> <span class="nx">Animations</span><span class="p">.</span><span class="nx">typing</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span>
+<span class="k">await</span> <span class="nx">Animations</span><span class="p">.</span><span class="nx">typing</span><span class="p">(</span><span class="nx">subtitle</span><span class="p">)</span> <span class="c1">// starts when the title is done
+</span></code></pre>
 
 <h2 id="animations-show-element"><code>Animations.show(element)</code></h2>
 
 <p>Adds the class <code>show</code> to the element, after letting the browser draw it once without it. Your CSS
 decides what &ldquo;appearing&rdquo; looks like:</p>
-
-<pre><code class="language-css">.card { opacity: 0; transform: translateY(8px); transition: all .3s; }
-.card.show { opacity: 1; transform: none; }
+<pre><code class="language-css"><span class="p">.</span><span class="nc">card</span> <span class="p">{</span> <span class="k">opacity</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span> <span class="k">transform</span><span class="p">:</span> <span class="nb">translateY</span><span class="p">(</span><span class="mi">8</span><span class="kt">px</span><span class="p">);</span> <span class="k">transition</span><span class="p">:</span> <span class="kc">all</span> <span class="mf">.3</span><span class="kt">s</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">.</span><span class="nc">card</span><span class="p">.</span><span class="nc">show</span> <span class="p">{</span> <span class="k">opacity</span><span class="p">:</span> <span class="mi">1</span><span class="p">;</span> <span class="k">transform</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span> <span class="p">}</span>
 </code></pre>
-
-<pre><code class="language-ts">const card = uiComponent({ classes: [&quot;card&quot;], text: &quot;New message&quot; })
-container.append(card)
-await Animations.show(card)
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">card</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;card&#34;</span><span class="p">],</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;New message&#34;</span> <span class="p">})</span>
+<span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">card</span><span class="p">)</span>
+<span class="k">await</span> <span class="nx">Animations</span><span class="p">.</span><span class="nx">show</span><span class="p">(</span><span class="nx">card</span><span class="p">)</span>
 </code></pre>
 
 <blockquote>

@@ -14,12 +14,11 @@ guess how most of the library works before reading about it.</p>
 </ul>
 
 <p>So anything you find on <a href="https://developer.mozilla.org" target="_blank">MDN</a> or Stack Overflow still works:</p>
-
-<pre><code class="language-ts">const button = uiComponent({ type: &quot;button&quot;, text: &quot;Save&quot; })
-button.disabled = true       // plain DOM
-button.focus()               // plain DOM
-button.textContent = &quot;Saved&quot; // plain DOM
-</code></pre>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Save&#34;</span> <span class="p">})</span>
+<span class="nx">button</span><span class="p">.</span><span class="nx">disabled</span> <span class="o">=</span> <span class="kc">true</span>       <span class="c1">// plain DOM
+</span><span class="nx">button</span><span class="p">.</span><span class="nx">focus</span><span class="p">()</span>               <span class="c1">// plain DOM
+</span><span class="nx">button</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s2">&#34;Saved&#34;</span> <span class="c1">// plain DOM
+</span></code></pre>
 
 <h2 id="2-nothing-to-install">2. Nothing to install</h2>
 
@@ -31,9 +30,8 @@ file. Your project has no dependencies that can break, go out of date or need up
 
 <p>Each module lives in its own file and does one thing: <code>dom.ts</code> builds elements, <code>router.ts</code> picks
 pages, <code>http.ts</code> talks to servers. Import only what you use:</p>
-
-<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
-import { httpGet } from &quot;./gtd/http.js&quot;
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">httpGet</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/http.js&#34;</span>
 </code></pre>
 
 <p>You can even delete the modules you don&rsquo;t need from your copy.</p>
@@ -43,27 +41,25 @@ import { httpGet } from &quot;./gtd/http.js&quot;
 <p>There are no classes to extend and no lifecycle to learn. You call functions and pass plain
 objects (the few helpers grouped in a class, like <code>Shortcuts</code>, are used the same way, with no
 <code>new</code>):</p>
-
-<pre><code class="language-ts">uiComponent({ type: &quot;h1&quot;, text: &quot;Hi&quot; })
-httpPost({ url: &quot;/api/notes&quot;, parameters: { text: &quot;Buy milk&quot; } })
-setRoute(&quot;/notes&quot;, showNotes)
+<pre><code class="language-ts"><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Hi&#34;</span> <span class="p">})</span>
+<span class="nx">httpPost</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="s2">&#34;/api/notes&#34;</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Buy milk&#34;</span> <span class="p">}</span> <span class="p">})</span>
+<span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/notes&#34;</span><span class="p">,</span> <span class="nx">showNotes</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="5-you-draw-gtd-doesn-t-re-draw">5. You draw, GTD doesn&rsquo;t re-draw</h2>
 
 <p>GTD does <strong>not</strong> watch your data. When something changes, you update the element yourself, or draw
 the page again:</p>
+<pre><code class="language-ts"><span class="kd">let</span> <span class="nx">count</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kr">const</span> <span class="nx">counter</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;p&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;0&#34;</span> <span class="p">})</span>
+<span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;+1&#34;</span> <span class="p">})</span>
 
-<pre><code class="language-ts">let count = 0
-const counter = uiComponent({ type: &quot;p&quot;, text: &quot;0&quot; })
-const button = uiComponent({ type: &quot;button&quot;, text: &quot;+1&quot; })
-
-setDomEvents(button, {
-  click: () =&gt; {
-    count++
-    counter.textContent = `${count}` // you decide what changes
-  },
-})
+<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">button</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">click</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">count</span><span class="o">++</span>
+    <span class="nx">counter</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="sb">`</span><span class="si">${</span><span class="nx">count</span><span class="si">}</span><span class="sb">`</span> <span class="c1">// you decide what changes
+</span>  <span class="p">},</span>
+<span class="p">})</span>
 </code></pre>
 
 <p>This is a bit more typing than in big frameworks, but there is no magic: what you see in your code

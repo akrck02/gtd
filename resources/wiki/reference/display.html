@@ -6,13 +6,12 @@
 page, so CSS and code can adapt.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="nx">isMobileDisplay</span><span class="p">,</span> <span class="p">{</span> <span class="nx">checkDisplayType</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/display.js&#34;</span>
 
-<pre><code class="language-ts">import isMobileDisplay, { checkDisplayType } from &quot;./gtd/display.js&quot;
+<span class="nx">checkDisplayType</span><span class="p">()</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;resize&#34;</span><span class="p">,</span> <span class="nx">checkDisplayType</span><span class="p">)</span>
 
-checkDisplayType()
-window.addEventListener(&quot;resize&quot;, checkDisplayType)
-
-if (isMobileDisplay()) showBottomMenu()
+<span class="k">if</span> <span class="p">(</span><span class="nx">isMobileDisplay</span><span class="p">())</span> <span class="nx">showBottomMenu</span><span class="p">()</span>
 </code></pre>
 
 <h2 id="what-checkdisplaytype-does">What <code>checkDisplayType</code> does</h2>
@@ -27,14 +26,13 @@ reads.</li>
 </ol>
 
 <h2 id="styling-with-it">Styling with it</h2>
+<pre><code class="language-css"><span class="nt">nav</span> <span class="p">{</span> <span class="k">display</span><span class="p">:</span> <span class="kc">flex</span><span class="p">;</span> <span class="k">gap</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span><span class="p">;</span> <span class="p">}</span>
 
-<pre><code class="language-css">nav { display: flex; gap: 1rem; }
-
-[data-display=&quot;mobile&quot;] nav {
-  position: fixed;
-  bottom: 0;
-  justify-content: space-around;
-}
+<span class="o">[</span><span class="nt">data-display</span><span class="o">=</span><span class="s2">&#34;mobile&#34;</span><span class="o">]</span> <span class="nt">nav</span> <span class="p">{</span>
+  <span class="k">position</span><span class="p">:</span> <span class="kc">fixed</span><span class="p">;</span>
+  <span class="k">bottom</span><span class="p">:</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="k">justify-content</span><span class="p">:</span> <span class="kc">space-around</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre>
 
 <table>

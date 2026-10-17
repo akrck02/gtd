@@ -5,22 +5,20 @@
 <p>Load a collection of SVG icons once, then draw any of them, at any size and colour, with one call.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">loadIcons</span><span class="p">,</span> <span class="nx">getIcon</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/icons.js&#34;</span>
 
-<pre><code class="language-ts">import { loadIcons, getIcon } from &quot;./gtd/icons.js&quot;
-
-await loadIcons(&quot;ui&quot;, &quot;./icons.json&quot;)
-document.body.append(getIcon(&quot;ui&quot;, &quot;home&quot;))
+<span class="k">await</span> <span class="nx">loadIcons</span><span class="p">(</span><span class="s2">&#34;ui&#34;</span><span class="p">,</span> <span class="s2">&#34;./icons.json&#34;</span><span class="p">)</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">getIcon</span><span class="p">(</span><span class="s2">&#34;ui&#34;</span><span class="p">,</span> <span class="s2">&#34;home&#34;</span><span class="p">))</span>
 </code></pre>
 
 <h2 id="the-collection-file">The collection file</h2>
 
 <p>A JSON file where each key is an icon name, and each value is what goes <strong>inside</strong> an <code>&lt;svg&gt;</code> tag,
 drawn on a 24 × 24 grid:</p>
-
-<pre><code class="language-json">{
-  &quot;home&quot;: &quot;&lt;path d=\&quot;M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z\&quot;/&gt;&quot;,
-  &quot;close&quot;: &quot;&lt;path d=\&quot;M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z\&quot;/&gt;&quot;
-}
+<pre><code class="language-json"><span class="p">{</span>
+  <span class="nt">&#34;home&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;path d=\&#34;M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z\&#34;/&gt;&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;close&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;path d=\&#34;M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z\&#34;/&gt;&#34;</span>
+<span class="p">}</span>
 </code></pre>
 
 <blockquote>
@@ -31,8 +29,7 @@ inside the JSON.</p>
 </blockquote>
 
 <h2 id="drawing-icons">Drawing icons</h2>
-
-<pre><code class="language-ts">getIcon(collection, name, size?, fill?)
+<pre><code class="language-ts"><span class="nx">getIcon</span><span class="p">(</span><span class="nx">collection</span><span class="p">,</span> <span class="nx">name</span><span class="p">,</span> <span class="nx">size</span><span class="o">?</span><span class="p">,</span> <span class="nx">fill</span><span class="o">?</span><span class="p">)</span>
 </code></pre>
 
 <table>
@@ -72,9 +69,8 @@ inside the JSON.</p>
 </table>
 <p>It returns a <code>&lt;div&gt;</code> (a flex box that centres the icon) with the <code>&lt;svg&gt;</code> inside, or <code>undefined</code> if the collection or the icon doesn&rsquo;t
 exist.</p>
-
-<pre><code class="language-ts">getIcon(&quot;ui&quot;, &quot;close&quot;, &quot;16px&quot;, &quot;crimson&quot;)
-getIcon(&quot;ui&quot;, &quot;home&quot;, &quot;2rem&quot;, &quot;currentColor&quot;)
+<pre><code class="language-ts"><span class="nx">getIcon</span><span class="p">(</span><span class="s2">&#34;ui&#34;</span><span class="p">,</span> <span class="s2">&#34;close&#34;</span><span class="p">,</span> <span class="s2">&#34;16px&#34;</span><span class="p">,</span> <span class="s2">&#34;crimson&#34;</span><span class="p">)</span>
+<span class="nx">getIcon</span><span class="p">(</span><span class="s2">&#34;ui&#34;</span><span class="p">,</span> <span class="s2">&#34;home&#34;</span><span class="p">,</span> <span class="s2">&#34;2rem&#34;</span><span class="p">,</span> <span class="s2">&#34;currentColor&#34;</span><span class="p">)</span>
 </code></pre>
 
 <blockquote>
@@ -83,22 +79,19 @@ follows your CSS, hover states and dark mode for free.</p>
 </blockquote>
 
 <h2 id="an-icon-inside-a-button">An icon inside a button</h2>
-
-<pre><code class="language-ts">const button = uiComponent({ type: &quot;button&quot;, text: &quot; Home&quot;, classes: [&quot;with-icon&quot;] })
-button.prepend(getIcon(&quot;ui&quot;, &quot;home&quot;, &quot;18px&quot;, &quot;currentColor&quot;))
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34; Home&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="s2">&#34;with-icon&#34;</span><span class="p">]</span> <span class="p">})</span>
+<span class="nx">button</span><span class="p">.</span><span class="nx">prepend</span><span class="p">(</span><span class="nx">getIcon</span><span class="p">(</span><span class="s2">&#34;ui&#34;</span><span class="p">,</span> <span class="s2">&#34;home&#34;</span><span class="p">,</span> <span class="s2">&#34;18px&#34;</span><span class="p">,</span> <span class="s2">&#34;currentColor&#34;</span><span class="p">))</span>
 </code></pre>
-
-<pre><code class="language-css">.with-icon { display: inline-flex; align-items: center; gap: 4px; }
+<pre><code class="language-css"><span class="p">.</span><span class="nc">with-icon</span> <span class="p">{</span> <span class="k">display</span><span class="p">:</span> <span class="kc">inline-flex</span><span class="p">;</span> <span class="k">align-items</span><span class="p">:</span> <span class="kc">center</span><span class="p">;</span> <span class="k">gap</span><span class="p">:</span> <span class="mi">4</span><span class="kt">px</span><span class="p">;</span> <span class="p">}</span>
 </code></pre>
 
 <h2 id="several-collections">Several collections</h2>
 
 <p>Give each collection its own id:</p>
+<pre><code class="language-ts"><span class="k">await</span> <span class="nx">loadIcons</span><span class="p">(</span><span class="s2">&#34;ui&#34;</span><span class="p">,</span> <span class="s2">&#34;./icons/ui.json&#34;</span><span class="p">)</span>
+<span class="k">await</span> <span class="nx">loadIcons</span><span class="p">(</span><span class="s2">&#34;brands&#34;</span><span class="p">,</span> <span class="s2">&#34;./icons/brands.json&#34;</span><span class="p">)</span>
 
-<pre><code class="language-ts">await loadIcons(&quot;ui&quot;, &quot;./icons/ui.json&quot;)
-await loadIcons(&quot;brands&quot;, &quot;./icons/brands.json&quot;)
-
-getIcon(&quot;brands&quot;, &quot;github&quot;)
+<span class="nx">getIcon</span><span class="p">(</span><span class="s2">&#34;brands&#34;</span><span class="p">,</span> <span class="s2">&#34;github&#34;</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="common-mistakes">Common mistakes</h2>

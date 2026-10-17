@@ -6,18 +6,16 @@
 kept in the browser, on the user&rsquo;s device, as one JSON object.</p>
 
 <h2 id="in-30-seconds">In 30 seconds</h2>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setConfiguration</span><span class="p">,</span> <span class="nx">getConfiguration</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/configuration.js&#34;</span>
 
-<pre><code class="language-ts">import { setConfiguration, getConfiguration } from &quot;./gtd/configuration.js&quot;
-
-setConfiguration(&quot;theme&quot;, &quot;dark&quot;)
-getConfiguration(&quot;theme&quot;) // &quot;dark&quot;, even after closing the browser
-</code></pre>
+<span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;theme&#34;</span><span class="p">,</span> <span class="s2">&#34;dark&#34;</span><span class="p">)</span>
+<span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;theme&#34;</span><span class="p">)</span> <span class="c1">// &#34;dark&#34;, even after closing the browser
+</span></code></pre>
 
 <h2 id="first-step-name-your-configuration">First step: name your configuration</h2>
 
 <p>Open <code>src/gtd/configuration.ts</code> and change the id to your app&rsquo;s name:</p>
-
-<pre><code class="language-ts">const configurationId: string = &quot;my-notes-app&quot;
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">configurationId</span>: <span class="kt">string</span> <span class="o">=</span> <span class="s2">&#34;my-notes-app&#34;</span>
 </code></pre>
 
 <p>All your settings are saved together under that name. Two apps on the same address (for example
@@ -62,65 +60,60 @@ both on <code>localhost:8000</code>) with the same id would share — and overwr
 </table>
 <p>Values can be <strong>anything JSON can hold</strong>: text, numbers, booleans, lists and objects. They come
 back with the same type:</p>
+<pre><code class="language-ts"><span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;fontSize&#34;</span><span class="p">,</span> <span class="mi">18</span><span class="p">)</span>
+<span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;favourites&#34;</span><span class="p">,</span> <span class="p">[</span><span class="s2">&#34;1&#34;</span><span class="p">,</span> <span class="s2">&#34;4&#34;</span><span class="p">])</span>
+<span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;animations&#34;</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span>
 
-<pre><code class="language-ts">setConfiguration(&quot;fontSize&quot;, 18)
-setConfiguration(&quot;favourites&quot;, [&quot;1&quot;, &quot;4&quot;])
-setConfiguration(&quot;animations&quot;, true)
-
-getConfiguration(&quot;fontSize&quot;) + 2         // 20
-getConfiguration(&quot;favourites&quot;).length    // 2
-isConfigurationActive(&quot;animations&quot;)      // true
-</code></pre>
+<span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;fontSize&#34;</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>         <span class="c1">// 20
+</span><span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;favourites&#34;</span><span class="p">).</span><span class="nx">length</span>    <span class="c1">// 2
+</span><span class="nx">isConfigurationActive</span><span class="p">(</span><span class="s2">&#34;animations&#34;</span><span class="p">)</span>      <span class="c1">// true
+</span></code></pre>
 
 <h2 id="defaults-from-a-file">Defaults from a file</h2>
 
 <p>Put the defaults in <strong><code>config.json</code></strong>, next to <code>index.html</code>:</p>
-
-<pre><code class="language-json">{
-  &quot;api&quot;: &quot;https://example.org/api&quot;,
-  &quot;theme&quot;: &quot;light&quot;,
-  &quot;animations&quot;: true
-}
+<pre><code class="language-json"><span class="p">{</span>
+  <span class="nt">&#34;api&#34;</span><span class="p">:</span> <span class="s2">&#34;https://example.org/api&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;theme&#34;</span><span class="p">:</span> <span class="s2">&#34;light&#34;</span><span class="p">,</span>
+  <span class="nt">&#34;animations&#34;</span><span class="p">:</span> <span class="kc">true</span>
+<span class="p">}</span>
 </code></pre>
 
 <p>and load it when the app starts:</p>
-
-<pre><code class="language-ts">await loadConfiguration(&quot;./config.json&quot;)
+<pre><code class="language-ts"><span class="k">await</span> <span class="nx">loadConfiguration</span><span class="p">(</span><span class="s2">&#34;./config.json&#34;</span><span class="p">)</span>
 </code></pre>
 
 <p>Each key of the file is saved; keys that are only in the browser are kept. If a key is in both,
 <strong>the file wins</strong>. To keep what the user chose, load the file only the first time:</p>
-
-<pre><code class="language-ts">if (!isConfigurationSet(&quot;api&quot;))
-  await loadConfiguration(&quot;./config.json&quot;)
+<pre><code class="language-ts"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isConfigurationSet</span><span class="p">(</span><span class="s2">&#34;api&#34;</span><span class="p">))</span>
+  <span class="k">await</span> <span class="nx">loadConfiguration</span><span class="p">(</span><span class="s2">&#34;./config.json&#34;</span><span class="p">)</span>
 </code></pre>
 
 <h2 id="full-example-a-theme-switch-that-remembers">Full example: a theme switch that remembers</h2>
 
 <p>Bubble UI has a dark theme built in: it turns on with <code>data-theme=&quot;dark&quot;</code> on <code>&lt;html&gt;</code>.</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span><span class="p">,</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">getConfiguration</span><span class="p">,</span> <span class="nx">setConfiguration</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/configuration.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">prefersDarkMode</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/browser.js&#34;</span>
+<span class="kr">import</span> <span class="p">{</span> <span class="nx">BubbleUI</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/bubble.js&#34;</span>
 
-<pre><code class="language-ts">import { uiComponent, setDomEvents } from &quot;./gtd/dom.js&quot;
-import { getConfiguration, setConfiguration } from &quot;./gtd/configuration.js&quot;
-import { prefersDarkMode } from &quot;./gtd/browser.js&quot;
-import { BubbleUI } from &quot;./gtd/bubble.js&quot;
+<span class="kd">function</span> <span class="nx">applyTheme</span><span class="p">(</span><span class="nx">theme</span>: <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">documentElement</span><span class="p">.</span><span class="nx">dataset</span><span class="p">.</span><span class="nx">theme</span> <span class="o">=</span> <span class="nx">theme</span> <span class="c1">// Bubble UI: &#34;light&#34; or &#34;dark&#34;
+</span><span class="p">}</span>
 
-function applyTheme(theme: string) {
-  document.documentElement.dataset.theme = theme // Bubble UI: &quot;light&quot; or &quot;dark&quot;
-}
+<span class="c1">// use the saved theme, or the system preference the first time
+</span><span class="kd">let</span> <span class="nx">theme</span> <span class="o">=</span> <span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;theme&#34;</span><span class="p">)</span> <span class="o">??</span> <span class="p">(</span><span class="nx">prefersDarkMode</span><span class="p">()</span> <span class="o">?</span> <span class="s2">&#34;dark&#34;</span> <span class="o">:</span> <span class="s2">&#34;light&#34;</span><span class="p">)</span>
+<span class="nx">applyTheme</span><span class="p">(</span><span class="nx">theme</span><span class="p">)</span>
 
-// use the saved theme, or the system preference the first time
-let theme = getConfiguration(&quot;theme&quot;) ?? (prefersDarkMode() ? &quot;dark&quot; : &quot;light&quot;)
-applyTheme(theme)
-
-const toggle = uiComponent({ type: &quot;button&quot;, text: &quot;Toggle theme&quot;, classes: [BubbleUI.Primary] })
-setDomEvents(toggle, {
-  click: () =&gt; {
-    theme = &quot;dark&quot; == theme ? &quot;light&quot; : &quot;dark&quot;
-    setConfiguration(&quot;theme&quot;, theme)
-    applyTheme(theme)
-  },
-})
-document.body.append(toggle)
+<span class="kr">const</span> <span class="nx">toggle</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Toggle theme&#34;</span><span class="p">,</span> <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">Primary</span><span class="p">]</span> <span class="p">})</span>
+<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">toggle</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">click</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nx">theme</span> <span class="o">=</span> <span class="s2">&#34;dark&#34;</span> <span class="o">==</span> <span class="nx">theme</span> <span class="o">?</span> <span class="s2">&#34;light&#34;</span> <span class="o">:</span> <span class="s2">&#34;dark&#34;</span>
+    <span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;theme&#34;</span><span class="p">,</span> <span class="nx">theme</span><span class="p">)</span>
+    <span class="nx">applyTheme</span><span class="p">(</span><span class="nx">theme</span><span class="p">)</span>
+  <span class="p">},</span>
+<span class="p">})</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">toggle</span><span class="p">)</span>
 </code></pre>
 
 <table>

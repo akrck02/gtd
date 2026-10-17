@@ -2,6 +2,7 @@
 # and serves the wiki on port 8000, indexing again when they change.
 
 FROM golang:1.24-alpine AS build
+RUN apk add --no-cache git
 RUN go install github.com/evanw/esbuild/cmd/esbuild@v0.25.8 \
 	&& GOPROXY=direct go install github.com/akrck02/papiro-indexer@main
 WORKDIR /papiro

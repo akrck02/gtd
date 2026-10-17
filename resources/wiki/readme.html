@@ -6,11 +6,10 @@
 write.</strong> There is no virtual DOM, no special syntax, no compiler plugin and nothing to &ldquo;learn
 instead of&rdquo; JavaScript. A button made with GTD is a normal <code>&lt;button&gt;</code>. A request made with GTD is a
 normal <code>fetch</code>. If you know a little HTML and TypeScript, you already know most of GTD.</p>
+<pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
 
-<pre><code class="language-ts">import { uiComponent } from &quot;./gtd/dom.js&quot;
-
-const title = uiComponent({ type: &quot;h1&quot;, text: &quot;Hello, world!&quot; })
-document.body.appendChild(title)
+<span class="kr">const</span> <span class="nx">title</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Hello, world!&#34;</span> <span class="p">})</span>
+<span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">title</span><span class="p">)</span>
 </code></pre>
 
 <p>That is a complete GTD program. 🎉</p>
