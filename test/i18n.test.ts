@@ -1,53 +1,45 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import { describe, expect, it, fakeFetch, quiet } from "./lib/test.js"
+import { setCurrentLanguage, loadTextBundle, getText } from "../src/i18n.js"
 
-let i18n: typeof import("../src/i18n")
-const bundles: Record<string, object> = {
-  "./i18n/en/home.json": { title: "Hello" },
-  "./i18n/es/home.json": { title: "Hola" },
+const files = {
+  "./resources/i18n/en/home.json": `{"title": "Hello"}`,
+  "./resources/i18n/es/home.json": `{"title": "Hola"}`,
 }
-let fetch: ReturnType<typeof vi.fn>
 
-beforeEach(async () => {
-  vi.resetModules()
-  fetch = vi.fn(async (path: string) => path in bundles
-    ? new Response(JSON.stringify(bundles[path]))
-    : new Response("not found", { status: 404 }))
-  vi.stubGlobal("fetch", fetch)
-  vi.spyOn(console, "warn").mockImplementation(() => {})
-  i18n = await import("../src/i18n")
-})
-
-afterEach(() => vi.unstubAllGlobals())
-
+// i18n keeps its bundles for the whole page, so these tests run in order
 describe("i18n", () => {
   it("returns empty text for unknown bundles and keys", async () => {
-    expect(i18n.getText("home", "title")).toBe("")
-    await i18n.loadTextBundle("home")
-    expect(i18n.getText("home", "missing")).toBe("")
+    fakeFetch(files)
+    expect(getText("home", "title")).toBe("")
+    await loadTextBundle("home")
+    expect(getText("home", "missing")).toBe("")
   })
 
   it("loads a bundle once for the current language", async () => {
-    await i18n.loadTextBundle("home")
-    await i18n.loadTextBundle("home")
-    expect(i18n.getText("home", "title")).toBe("Hello")
-    expect(fetch).toHaveBeenCalledOnce()
+    const fetch = fakeFetch(files)
+    await loadTextBundle("home")
+    expect(getText("home", "title")).toBe("Hello")
+    expect(fetch).toHaveBeenCalledTimes(0)
   })
 
   it("switches language and reloads bundles", async () => {
-    await i18n.loadTextBundle("home")
-    await i18n.setCurrentLanguage("es-ES", true)
-    expect(i18n.getText("home", "title")).toBe("Hola")
+    fakeFetch(files)
+    await setCurrentLanguage("es-ES", true)
+    expect(getText("home", "title")).toBe("Hola")
   })
 
   it("falls back to English for unknown locales", async () => {
-    await i18n.setCurrentLanguage("fr")
-    await i18n.loadTextBundle("home")
-    expect(i18n.getText("home", "title")).toBe("Hello")
+    fakeFetch(files)
+    const warn = quiet("warn")
+    await setCurrentLanguage("fr", true)
+    expect(getText("home", "title")).toBe("Hello")
+    expect(warn).toHaveBeenCalledTimes(1)
   })
 
   it("retries and gives up quietly on missing bundles", async () => {
-    await i18n.loadTextBundle("absent", false, 3)
+    const fetch = fakeFetch(files)
+    await loadTextBundle("absent", false, 3)
     expect(fetch).toHaveBeenCalledTimes(3)
-    expect(i18n.getText("absent", "x")).toBe("")
+    expect(getText("absent", "x")).toBe("")
   })
 })

@@ -1,58 +1,66 @@
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import { describe, expect, it, mock } from "./lib/test.js"
+import { setRoute, setHomeRoute, setNotFoundRoute, showRoute } from "../src/router.js"
 
-let router: typeof import("../src/router")
-let container: HTMLElement
+const container = () => document.createElement("main")
 
-beforeEach(async () => {
-  vi.resetModules()
-  vi.spyOn(console, "debug").mockImplementation(() => {})
-  router = await import("../src/router")
-  container = document.createElement("main")
-})
-
+// the router keeps its routes for the whole page, so these tests run in order
 describe("router", () => {
   it("shows default home and not found views", () => {
-    router.showRoute("/", container)
-    expect(container.innerHTML).toBe("Home page.")
-    router.showRoute("/nowhere", container)
-    expect(container.innerHTML).toBe("Page not found.")
+    const box = container()
+    showRoute("/", box)
+    expect(box.innerHTML).toBe("Home page.")
+    showRoute("/nowhere", box)
+    expect(box.innerHTML).toBe("Page not found.")
   })
 
   it("registers home for empty and slash paths", () => {
-    const home = vi.fn(async () => {})
-    router.setRoute(" / ", home)
-    router.showRoute("", container)
-    expect(home).toHaveBeenCalledWith([], container)
+    const home = mock(async () => {})
+    setRoute(" / ", home)
+    const box = container()
+    showRoute("", box)
+    expect(home).toHaveBeenCalledWith([], box)
+  })
+
+  it("registers home with setHomeRoute", () => {
+    const home = mock(async () => {})
+    setHomeRoute(home)
+    showRoute("/", container())
+    expect(home).toHaveBeenCalledTimes(1)
   })
 
   it("captures $ parameters", () => {
-    const user = vi.fn(async () => {})
-    router.setRoute("/user/$/post/$", user)
-    router.showRoute("/user/7/post/42", container)
-    expect(user).toHaveBeenCalledWith(["7", "42"], container)
+    const user = mock(async () => {})
+    setRoute("/user/$/post/$", user)
+    const box = container()
+    showRoute("/user/7/post/42", box)
+    expect(user).toHaveBeenCalledWith(["7", "42"], box)
   })
 
   it("prefers the longest route", () => {
-    const short = vi.fn(async () => {}), long = vi.fn(async () => {})
-    router.setRoute("/docs/", short)
-    router.setRoute("/docs/$", long)
-    router.showRoute("/docs/intro", container)
-    expect(long).toHaveBeenCalledWith(["intro"], container)
-    expect(short).not.toHaveBeenCalled()
+    const short = mock(async () => {}), long = mock(async () => {})
+    setRoute("/docs/", short)
+    setRoute("/docs/$", long)
+    const box = container()
+    showRoute("/docs/intro", box)
+    expect(long).toHaveBeenCalledWith(["intro"], box)
+    expect(short).toHaveBeenCalledTimes(0)
   })
 
-  it("uses the custom not found view and clears the container", () => {
-    container.innerHTML = "old"
-    const notFound = vi.fn(async () => {})
-    router.setNotFoundRoute(notFound)
-    router.showRoute("/missing", container)
-    expect(container.innerHTML).toBe("")
-    expect(notFound).toHaveBeenCalledWith([], container)
+  it("clears the container unless told not to", () => {
+    setRoute("/append", async (_, box) => { box.append("new") })
+    const box = container()
+    box.innerHTML = "old"
+    showRoute("/append", box, false)
+    expect(box.innerHTML).toBe("oldnew")
+    showRoute("/append", box)
+    expect(box.innerHTML).toBe("new")
   })
 
-  it("ignores undefined paths", () => {
-    router.setRoute(undefined, vi.fn())
-    router.showRoute("/x", container)
-    expect(container.innerHTML).toBe("Page not found.")
+  it("uses the custom not found view", () => {
+    const notFound = mock(async () => {})
+    setNotFoundRoute(notFound)
+    const box = container()
+    showRoute("/missing", box)
+    expect(notFound).toHaveBeenCalledWith([], box)
   })
 })

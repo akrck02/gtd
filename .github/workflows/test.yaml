@@ -7,9 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npm ci
-      - run: npm run build
-      - run: npm test
+      - name: Install the native TypeScript compiler
+        run: ./bin/install-ts.sh
+      - name: Check types
+        run: ./bin/tsgo -p .
+      - name: Run the tests in Chrome
+        run: ./bin/test.sh

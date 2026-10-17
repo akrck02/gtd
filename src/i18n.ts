@@ -15,9 +15,10 @@ export interface ILanguage {
  * INFO: Add languages here as needed 
  */
 export const Languages = {
-  English: { name: "english", main: "en", locales: ["en", "en-US", "en-GB"] },
   Spanish: { name: "spanish", main: "es", locales: ["es", "es-ES"] },
+  English: { name: "english", main: "en", locales: ["en", "en-US", "en-GB"] },
   Galician: { name: "galician", main : "gl", locales: ["gl", "gl-ES"] },
+  Catala: { name: "catala", main:"ca", locales: ["ca","ca-ES"] }
 }
 
 /** This language will be used if no other language is set */
@@ -25,12 +26,14 @@ const DEFAULT_LANGUAGE : ILanguage = Languages.English
 
 /** Set here the available languages for the app **/
 const AVAILABLE_LANGUAGES = [
+  Languages.Spanish,
   Languages.English,
-  Languages.Spanish
+  Languages.Galician,
+  Languages.Catala
 ]
 
 /** This is the path of the i18n file structure **/
-const I18N_PATH = "./i18n" 
+const I18N_PATH = "./resources/i18n" 
 
 /** This is the buffer **/ 
 const buffer : Map<string, Object> = new Map()
@@ -69,7 +72,6 @@ export async function setCurrentLanguage(locale : string, reloadBundles = false)
 /**
  * Load a text bundle if needed 
  * @param id The bundle id 
- * @param reload (Optional) Fetch the bundle again even if it is loaded
  * @param maxAttemps (Optional) The max number of attemps, one by default
  * @author akrck02
  */

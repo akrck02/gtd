@@ -1,32 +1,34 @@
-const DEFAULT_CONFIGURATION_ID = "gtd"
-
-/** 
-* The id of the configuration used in the LocalStorage API 
-* NOTE: Change this value with your app name.
-*/
-const configurationId: string = DEFAULT_CONFIGURATION_ID
+/**
+ * The id of the configuration used in the LocalStorage API
+ * NOTE: Change this value with your app name.
+ */
+const configurationId: string = "gtd";
 
 /**
  * Load a JSON file as the configuration of the app
  * @param path The file path
  */
-export async function loadConfiguration(path : string) {
-  assertIdHasBeenChanged()
-  
-  const loadedConfiguration = await fetch(path).then(res => res.json())
-  for (const id in loadedConfiguration) {  
-    setConfiguration(id, loadedConfiguration[id])
-  }
+export async function loadConfiguration(path: string) {
+	const loadedConfiguration = await fetch(path).then((res) => res.json());
+
+	if (null != localStorage[configurationId]) {
+		for (const key in loadedConfiguration) {
+			setConfiguration(key, loadedConfiguration[key]);
+		}
+	} else {
+		localStorage[configurationId] = JSON.stringify(loadedConfiguration);
+	}
 }
 
 /**
  * Set a configuration parameter
- * @param id The configuration parameter id 
- * @param value The value to set 
+ * @param id The configuration parameter id
+ * @param value The value to set
  */
-export function setConfiguration(id : string, value: string) {
-  assertIdHasBeenChanged()
-  localStorage[id] = value
+export function setConfiguration(id: string, value: any) {
+	const configuration = JSON.parse(localStorage[configurationId] || "{}");
+	configuration[id] = value;
+	localStorage.setItem(configurationId, JSON.stringify(configuration));
 }
 
 /**
@@ -34,16 +36,24 @@ export function setConfiguration(id : string, value: string) {
  * @param id The parameter id
  * @returns The parameter value
  */
-export function getConfiguration(id : string) : string {
-  assertIdHasBeenChanged()
-  return localStorage[id]
+export function getConfiguration(id: string) {
+	return JSON.parse(localStorage[configurationId] || "{}")[id];
 }
 
 /**
- * Assert that the id has been changed 
+ * Get if a configuration is already set
+ * @param id The id of the configuration
+ * @returns If the configuration is already set
  */
-function assertIdHasBeenChanged() {
-  if(DEFAULT_CONFIGURATION_ID == configurationId){
-    console.warn(`The configuration id need to be changed, please go to configuration.ts file and change the configurationId variable.`)
-  }
+export function isConfigurationSet(id: string) {
+	return undefined !== getConfiguration(id);
+}
+
+/**
+* Get if a configuration is active
+* @param id The id of the configuration
+* @returns If the configuration is active
+*/
+export function isConfigurationActive(id: string) {
+	return true == getConfiguration(id);
 }

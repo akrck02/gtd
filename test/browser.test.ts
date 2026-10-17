@@ -1,17 +1,19 @@
-import { afterEach, describe, expect, it, vi } from "vitest"
-import * as browser from "../src/browser"
+import { describe, expect, it, replace } from "./lib/test.js"
+import * as browser from "../src/browser.js"
 
-function matching(...queries: string[]) {
-  vi.spyOn(window, "matchMedia").mockImplementation(q => ({ matches: queries.includes(q) }) as MediaQueryList)
+export function matching(...queries: string[]) {
+  replace(window, "matchMedia", ((query: string) => ({ matches: queries.includes(query) })) as any)
 }
 
-function userAgent(value: string) {
-  vi.spyOn(navigator, "userAgent", "get").mockReturnValue(value)
+export function userAgent(value: string) {
+  Object.defineProperty(navigator, "userAgent", { get: () => value, configurable: true })
 }
 
-afterEach(() => vi.restoreAllMocks())
+function restoreUserAgent() {
+  delete (navigator as any).userAgent
+}
 
-describe("media queries", () => {
+describe("browser", () => {
   it("knows the device size", () => {
     matching("only screen and (max-width: 760px)")
     expect(browser.isSmallDevice()).toBe(true)
@@ -26,14 +28,13 @@ describe("media queries", () => {
     expect(browser.prefersReducedMotion()).toBe(true)
     expect(browser.mediaQuery("(hover: none)")).toBe(false)
   })
-})
 
-describe("user agent", () => {
   it("detects mobiles", () => {
     userAgent("Mozilla/5.0 (Linux; Android 14)")
     expect(browser.isMobile()).toBeTruthy()
     userAgent("Mozilla/5.0 (X11; Linux x86_64)")
     expect(browser.isMobile()).toBeFalsy()
+    restoreUserAgent()
   })
 
   it("detects the operating system", () => {
@@ -42,5 +43,6 @@ describe("user agent", () => {
       userAgent(agent)
       expect(browser.getOs()).toBe(os)
     }
+    restoreUserAgent()
   })
 })
