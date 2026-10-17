@@ -4,7 +4,7 @@ const DEFAULT_CONFIGURATION_ID = "gtd"
 * The id of the configuration used in the LocalStorage API 
 * NOTE: Change this value with your app name.
 */
-const configurationId = DEFAULT_CONFIGURATION_ID
+const configurationId: string = DEFAULT_CONFIGURATION_ID
 
 /**
  * Load a JSON file as the configuration of the app

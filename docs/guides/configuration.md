@@ -1,42 +1,101 @@
-# Configuration
+# Configuration ⚙️
 
-`configuration.ts` keeps settings in `localStorage`, so they survive reloads, and can fill them from
-a JSON file.
+**Module:** `configuration.ts` · **Depends on:** nothing
 
-```ts
-import { loadConfiguration, setConfiguration, getConfiguration } from "./gtd/configuration.js"
-```
+Store settings — the API address, the theme, the language — so they **survive reloads**. Values are
+kept in the browser's `localStorage`, on the user's device.
 
-## Using it
+## In 30 seconds
 
 ```ts
-await loadConfiguration("./config.json") // every key of the file is stored
+import { setConfiguration, getConfiguration } from "./gtd/configuration.js"
 
 setConfiguration("theme", "dark")
-getConfiguration("theme")   // "dark"
-getConfiguration("missing") // undefined
+getConfiguration("theme") // "dark", even after closing the browser
 ```
 
-`config.json`:
+## First step: name your configuration
 
-```json
-{ "api": "https://example.org/api", "theme": "light" }
-```
-
-Values are stored as strings. Store objects with `JSON.stringify` and read them with `JSON.parse`.
-
-> `loadConfiguration` overwrites what the user changed with the values of the file. Load it only
-> the first time, for example when `getConfiguration("api")` is `undefined`.
-
-## Naming your configuration
-
-The module warns in the console until you change `configurationId` at the top of
-`configuration.ts` to your application's name:
+Open `src/gtd/configuration.ts` and change the id to your app's name:
 
 ```ts
 const configurationId = "my-notes-app"
 ```
 
+Until you do, GTD prints a reminder in the console.
+
+## Reading and writing
+
+| Function | What it does |
+|---|---|
+| `setConfiguration(key, value)` | Saves `value` under `key` |
+| `getConfiguration(key)` | Returns the value, or `undefined` if it was never saved |
+| `await loadConfiguration(path)` | Saves every key of a JSON file |
+
+Values are **strings**. To store numbers, booleans or objects, convert them:
+
+```ts
+setConfiguration("fontSize", String(18))
+Number(getConfiguration("fontSize")) // 18
+
+setConfiguration("favourites", JSON.stringify(["1", "4"]))
+JSON.parse(getConfiguration("favourites") ?? "[]") // ["1", "4"]
+```
+
+## Defaults from a file
+
+Put the defaults in **`config.json`**, next to `index.html`:
+
+```json
+{
+  "api": "https://example.org/api",
+  "theme": "light",
+  "lang": "en"
+}
+```
+
+and load it when the app starts — **only the first time**, so you don't overwrite what the user
+changed:
+
+```ts
+if (undefined == getConfiguration("api"))
+  await loadConfiguration("./config.json")
+```
+
+## Full example: a theme switch that remembers
+
+```ts
+import { uiComponent, setDomEvents } from "./gtd/dom.js"
+import { getConfiguration, setConfiguration } from "./gtd/configuration.js"
+import { prefersDarkMode } from "./gtd/browser.js"
+
+function applyTheme(theme: string) {
+  document.body.style.background = "dark" == theme ? "#222" : "#fafafa"
+  document.body.style.color = "dark" == theme ? "#fafafa" : "#222"
+}
+
+// use the saved theme, or the system preference the first time
+let theme = getConfiguration("theme") ?? (prefersDarkMode() ? "dark" : "light")
+applyTheme(theme)
+
+const toggle = uiComponent({ type: "button", text: "Toggle theme" })
+setDomEvents(toggle, {
+  click: () => {
+    theme = "dark" == theme ? "light" : "dark"
+    setConfiguration("theme", theme)
+    applyTheme(theme)
+  },
+})
+document.body.append(toggle)
+```
+
+## Good to know
+
+- `localStorage` is per site and per browser: settings don't travel between devices.
+- Users can clear it at any time, so always have a default.
+- Don't store passwords or other secrets there: any script on the page can read it.
+- To see what's stored: developer tools → *Application* (*Storage* in Firefox) → *Local Storage*.
+
 ---
 
-[← All the documentation](../README.md)
+[← All the documentation](../README.md) · Next: [Icons →](icons.md)

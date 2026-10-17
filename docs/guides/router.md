@@ -1,59 +1,127 @@
-# Views and routing
+# Views and routing 🧭
 
-`router.ts` decides which **view** to draw for a path. A view is any async function with the
-`viewHandler` shape from `view.ts`:
+**Modules:** `router.ts`, `view.ts` · **Depend on:** nothing
+
+Most apps have more than one page: a home, a profile, settings… The **router** decides which page
+to draw for the current address.
+
+## In 30 seconds
 
 ```ts
-type viewHandler = (params: string[], container: HTMLElement) => Promise<void>
+import { setRoute, showRoute } from "./gtd/router.js"
+
+setRoute("/", async (_params, container) => { container.textContent = "Home" })
+setRoute("/about", async (_params, container) => { container.textContent = "About us" })
+
+const app = document.getElementById("app")
+const navigate = () => showRoute(location.hash.slice(1) || "/", app)
+window.addEventListener("hashchange", navigate)
+navigate()
 ```
 
-It receives the values captured from the path and the element to draw into.
+Now `#/` shows **Home** and `#/about` shows **About us**.
 
-## Registering routes
+## Two words: view and route
 
-```ts
-import { setRoute, setNotFoundRoute, showRoute } from "./gtd/router.js"
+A **view** is a function that draws one page. It receives two things:
 
-setRoute("/", homeView)                   // "/" and "" are the home page
-setRoute("/settings", settingsView)
-setRoute("/user/$", userView)             // $ captures one segment
-setRoute("/user/$/post/$", postView)      // several captures, in order
-setNotFoundRoute(notFoundView)
-```
+1. `params` — values taken from the address (more on that below).
+2. `container` — the element to draw into.
 
 ```ts
-async function postView([user, post]: string[], container: HTMLElement) {
-  container.textContent = `Post ${post} by ${user}`
+async function aboutView(params: string[], container: HTMLElement) {
+  container.append(uiComponent({ type: "h1", text: "About us" }))
 }
 ```
 
-Rules:
+Its type is `viewHandler`, from `view.ts`, if you want to write it down:
 
-- A trailing slash is ignored: `"/settings/"` is `"/settings"`.
-- `$` stands for one segment: anything but `/`.
-- Routes with more segments are tried first, so `/docs/$` wins over `/docs` for `/docs/intro`.
-- Routes are not anchored at the end: `/user/$` also matches `/user/7/anything`. Register the longer
-  route when you need to tell them apart.
-- Without your own home or not found views, GTD writes `Home page.` and `Page not found.`.
+```ts
+import { viewHandler } from "./gtd/view.js"
 
-## Showing a route
+const aboutView: viewHandler = async (params, container) => { /* … */ }
+```
 
-`showRoute(path, container)` empties the container and calls the matching view. GTD does not
-listen to the address bar itself, so you choose how navigation works.
+A **route** links an address to a view:
 
-### With the hash (works on any static host)
+```ts
+setRoute("/about", aboutView)
+```
+
+## Addresses with values in them
+
+Put a **`$`** where the address has a value that changes. The view receives the values, in order,
+in `params`:
+
+```ts
+setRoute("/user/$", async ([userId], container) => {
+  container.textContent = `Profile of user ${userId}`
+})
+
+setRoute("/user/$/post/$", async ([userId, postId], container) => {
+  container.textContent = `Post ${postId} by user ${userId}`
+})
+```
+
+| Address | View | `params` |
+|---|---|---|
+| `/user/7` | `/user/$` | `["7"]` |
+| `/user/7/post/42` | `/user/$/post/$` | `["7", "42"]` |
+
+Values always arrive as **strings**. Convert them if you need numbers: `Number(userId)`.
+
+## Home and "not found"
+
+- `"/"` (or `""`) is the home page.
+- When no route matches, the **not found** view is shown. Set your own:
+
+```ts
+import { setNotFoundRoute } from "./gtd/router.js"
+
+setNotFoundRoute(async (_params, container) => {
+  container.append(
+    uiComponent({ type: "h1", text: "Oops, this page does not exist" }),
+    uiComponent({ type: "a", text: "Go home", attributes: { href: "#/" } }),
+  )
+})
+```
+
+Until you set them, GTD shows the words `Home page.` and `Page not found.`.
+
+## Showing a page
+
+`showRoute(path, container)`:
+
+1. Empties `container`.
+2. Finds the route that matches `path`.
+3. Calls its view with the values and the container.
+
+GTD does **not** listen to the address bar by itself — you choose how. There are two common ways.
+
+### Option A — hash addresses (recommended to start)
+
+Addresses look like `example.org/#/user/7`. They work on **any** host, GitHub Pages included,
+without configuring a server.
 
 ```ts
 const app = document.getElementById("app")
 const navigate = () => showRoute(location.hash.slice(1) || "/", app)
 
-window.addEventListener("hashchange", navigate)
-navigate()
-
-// anywhere: location.hash = "/user/7"
+window.addEventListener("hashchange", navigate) // when the address changes
+navigate()                                     // and once at start
 ```
 
-### With the History API
+Move to another page with a normal link, or from code:
+
+```ts
+uiComponent({ type: "a", text: "Profile", attributes: { href: "#/user/7" } })
+location.hash = "/user/7"
+```
+
+### Option B — clean addresses (`/user/7`)
+
+Uses the History API. Looks nicer, but the **server must answer every address with `index.html`**,
+or reloading a page gives a 404.
 
 ```ts
 function go(path: string) {
@@ -61,15 +129,74 @@ function go(path: string) {
   showRoute(path, app)
 }
 
-window.addEventListener("popstate", () => showRoute(location.pathname, app))
+window.addEventListener("popstate", () => showRoute(location.pathname, app)) // back / forward
 showRoute(location.pathname, app)
+
+// to navigate: go("/user/7")
 ```
 
-The server must answer every path with `index.html` for this to survive a reload.
+## How a route is chosen
 
-> On GitHub Pages, served under `/<repository>/`, remove that prefix before calling `showRoute`, or
-> use the hash.
+You rarely need to think about this, but if two routes compete:
+
+- Routes with **more segments are tried first**: for `/docs/intro`, `/docs/$` wins over `/docs`.
+- A trailing slash is ignored: `"/settings/"` is the same as `"/settings"`.
+- `$` matches one segment: anything except `/`.
+- A route also matches longer addresses: `/user/$` matches `/user/7/anything`. If you need both,
+  register the longer one too.
+
+## Full example: a small site
+
+```ts
+import { uiComponent } from "./gtd/dom.js"
+import { setRoute, setNotFoundRoute, showRoute } from "./gtd/router.js"
+
+const app = document.getElementById("app")
+
+function menu(): HTMLElement {
+  const nav = uiComponent({ type: "nav" })
+  nav.append(
+    uiComponent({ type: "a", text: "Home", attributes: { href: "#/" } }),
+    uiComponent({ type: "a", text: " · Products", attributes: { href: "#/products" } }),
+  )
+  return nav
+}
+
+const products = ["Pencil", "Notebook", "Eraser"]
+
+setRoute("/", async (_, container) => {
+  container.append(menu(), uiComponent({ type: "h1", text: "Welcome to the shop" }))
+})
+
+setRoute("/products", async (_, container) => {
+  container.append(menu(), uiComponent({ type: "h1", text: "Products" }))
+  products.forEach((name, index) =>
+    container.append(uiComponent({ type: "p" }),
+      uiComponent({ type: "a", text: name, attributes: { href: `#/products/${index}` } })))
+})
+
+setRoute("/products/$", async ([index], container) => {
+  container.append(menu(), uiComponent({ type: "h1", text: products[Number(index)] ?? "Unknown product" }))
+})
+
+setNotFoundRoute(async (_, container) => {
+  container.append(menu(), uiComponent({ type: "h1", text: "Not found" }))
+})
+
+const navigate = () => showRoute(location.hash.slice(1) || "/", app)
+window.addEventListener("hashchange", navigate)
+navigate()
+```
+
+## Common mistakes
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Always "Page not found." | Passing `#/about` instead of `/about` | `location.hash.slice(1)` |
+| Clicking links does nothing | No `hashchange` listener | Add it, as above |
+| Pages pile up | Drawing into `document.body` | Draw into `container` |
+| Reload gives 404 with clean addresses | Server doesn't serve `index.html` for every path | Use hash addresses, or configure the server |
 
 ---
 
-[← All the documentation](../README.md)
+[← All the documentation](../README.md) · Next: [Talking to a server →](http.md)

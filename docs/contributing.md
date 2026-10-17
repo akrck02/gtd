@@ -51,6 +51,17 @@ Some habits that keep the suite reliable:
 
 ## Documentation
 
+GTD is simple, and its docs should feel the same. Someone who has never used it should have
+something on screen in minutes. When you write a page:
+
+- **Start with "In 30 seconds"**: the smallest example that works, then explain.
+- **Show, then tell**: code first, then a table or a sentence about it.
+- **Write for a junior**: short sentences, plain words, explain any term the first time
+  (or link [How GTD thinks](concepts.md)).
+- **Every example must run** as written: imports with `.js`, `await` where needed.
+- **End with a full example and "Common mistakes"** when the module has pitfalls.
+- **Link both ways**: from `docs/README.md` to the page, and back with `[← All the documentation]`.
+
 The `docs/` folder is published with [papiro](https://github.com/akrck02/papiro) by
 `.github/workflows/publish-docs.yaml` on every push to `main`. Link pages with relative `.md` links:
 they work on GitHub and papiro turns them into site links.

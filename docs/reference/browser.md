@@ -1,45 +1,69 @@
-# Browser
+# Browser 🖥️
 
-`browser.ts` answers questions about the device and the user's preferences.
+**Module:** `browser.ts` · **Depends on:** nothing
+
+Small questions about the device and the user's preferences, each answered by one function that
+returns `true` or `false`.
+
+## In 30 seconds
 
 ```ts
-import { isSmallDevice, prefersDarkMode, isMobile, getOs } from "./gtd/browser.js"
+import { isSmallDevice, prefersDarkMode } from "./gtd/browser.js"
+
+if (isSmallDevice()) document.body.classList.add("mobile-layout")
+if (prefersDarkMode()) document.body.classList.add("dark")
 ```
 
 ## Screen size
 
-| Function | True when the viewport is |
-|---|---|
-| `isSmallDevice()` | 760px wide or less |
-| `isMediumDevice()` | between 760px and 1024px |
-| `isLargeDevice()` | wider than 1024px |
+| Function | `true` when the window is | Typical device |
+|---|---|---|
+| `isSmallDevice()` | 760px wide or less | phone |
+| `isMediumDevice()` | 760px to 1024px | tablet, small laptop window |
+| `isLargeDevice()` | wider than 1024px | desktop |
 
-These read the viewport at the moment you call them. To react to changes, listen to `resize`, or
-use `matchMedia(query).addEventListener("change", …)` directly.
-
-## Preferences
-
-| Function | Media query |
-|---|---|
-| `prefersDarkMode()` | `(prefers-color-scheme: dark)` |
-| `prefersLightMode()` | `(prefers-color-scheme: light)` |
-| `prefersReducedMotion()` | `(prefers-reduced-motion: reduce)` |
-| `mediaQuery(query)` | any query you pass |
+They check the size **when you call them**. To react when the user resizes the window:
 
 ```ts
-if (prefersReducedMotion()) document.body.classList.add("no-animations")
-mediaQuery("(hover: none)") // a touch screen
+window.addEventListener("resize", () => {
+  document.body.classList.toggle("mobile-layout", isSmallDevice())
+})
 ```
 
-## Device
+> 💡 For pure styling, CSS media queries (`@media (max-width: 760px) { … }`) are simpler. Use
+> these functions when the **code** must change, e.g. to draw a different menu.
+
+## User preferences
+
+People set these in their operating system. Respecting them makes your app feel at home.
+
+| Function | `true` when the user… |
+|---|---|
+| `prefersDarkMode()` | uses a dark theme |
+| `prefersLightMode()` | uses a light theme |
+| `prefersReducedMotion()` | asked for fewer animations (motion can make some people dizzy) |
+| `mediaQuery(query)` | matches any [media query](https://developer.mozilla.org/docs/Web/CSS/Media_Queries) you write |
+
+```ts
+const animate = !prefersReducedMotion()
+const touchOnly = mediaQuery("(hover: none)")
+const printing = mediaQuery("print")
+```
+
+## Device and system
 
 | Function | Returns |
 |---|---|
-| `isMobile()` | A truthy value on Android, iOS, BlackBerry, Opera Mini and IE Mobile |
-| `getOs()` | `"Windows"`, `"MacOS"`, `"Linux"`, `"UNIX"` or `undefined`, read from the user agent |
+| `isMobile()` | Something truthy on Android, iPhone, iPad and other mobile browsers |
+| `getOs()` | `"Windows"`, `"MacOS"`, `"Linux"`, `"UNIX"`, or `undefined` |
 
-User agents can lie; prefer media queries for layout decisions and keep these for hints like
-keyboard shortcuts (`⌘` or `Ctrl`).
+```ts
+const shortcut = "MacOS" == getOs() ? "⌘ + S" : "Ctrl + S"
+uiComponent({ type: "small", text: `Save with ${shortcut}` })
+```
+
+These read the browser's *user agent* text, which can be changed or faked. Use them for small
+hints like the example above, not for important decisions.
 
 ---
 

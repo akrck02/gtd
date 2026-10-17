@@ -1,15 +1,22 @@
-# Icons
+# Icons ✨
 
-`icons.ts` loads collections of SVG icons from JSON files and draws them as elements.
+**Module:** `icons.ts` · **Depends on:** `dom.ts`
+
+Load a collection of SVG icons once, then draw any of them, at any size and colour, with one call.
+
+## In 30 seconds
 
 ```ts
 import { loadIcons, getIcon } from "./gtd/icons.js"
+
+await loadIcons("ui", "./icons.json")
+document.body.append(getIcon("ui", "home"))
 ```
 
 ## The collection file
 
-A JSON object whose keys are icon names and whose values are the **inside** of an `<svg>` drawn on a
-24 × 24 grid (the format of Material Symbols and most icon sets):
+A JSON file where each key is an icon name, and each value is what goes **inside** an `<svg>` tag,
+drawn on a 24 × 24 grid:
 
 ```json
 {
@@ -18,19 +25,65 @@ A JSON object whose keys are icon names and whose values are the **inside** of a
 }
 ```
 
-## Drawing an icon
+> 💡 **Where do I get icons?** [Material Symbols](https://fonts.google.com/icons) and most icon
+> sets use a 24 × 24 grid. Download an SVG, open it in a text editor, and copy what is **between**
+> `<svg …>` and `</svg>` — usually one or more `<path …/>`. Remember to escape the quotes (`\"`)
+> inside the JSON.
+
+## Drawing icons
 
 ```ts
-await loadIcons("material", "./icons/material.json")
-
-const home = getIcon("material", "home")                       // 24px, #222222
-const close = getIcon("material", "close", "16px", "currentColor")
-button.appendChild(close)
+getIcon(collection, name, size?, fill?)
 ```
 
-`getIcon(collection, name, size?, fill?)` returns a `div` holding the `svg`, or `undefined` when the
-collection or icon is unknown. Use `"currentColor"` as the fill so icons follow the text colour and
-dark mode.
+| Argument | Meaning | Default |
+|---|---|---|
+| `collection` | The id you gave to `loadIcons` | — |
+| `name` | The key in the JSON file | — |
+| `size` | Width and height | `"24px"` |
+| `fill` | Colour | `"#222222"` |
+
+It returns a `<div>` with the `<svg>` inside, or `undefined` if the collection or the icon doesn't
+exist.
+
+```ts
+getIcon("ui", "close", "16px", "crimson")
+getIcon("ui", "home", "2rem", "currentColor")
+```
+
+> 💡 Use **`"currentColor"`** as the colour: the icon then takes the text colour of its parent, so it
+> follows your CSS, hover states and dark mode for free.
+
+## An icon inside a button
+
+```ts
+const button = uiComponent({ type: "button", text: " Home", classes: ["with-icon"] })
+button.prepend(getIcon("ui", "home", "18px", "currentColor"))
+```
+
+```css
+.with-icon { display: inline-flex; align-items: center; gap: 4px; }
+```
+
+## Several collections
+
+Give each collection its own id:
+
+```ts
+await loadIcons("ui", "./icons/ui.json")
+await loadIcons("brands", "./icons/brands.json")
+
+getIcon("brands", "github")
+```
+
+## Common mistakes
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `getIcon` returns `undefined` | `loadIcons` not awaited, or a typo in the id or name | `await loadIcons(...)` first, check spelling |
+| Icon is invisible | Same colour as the background | Pass a `fill`, or `"currentColor"` |
+| Icon looks cut or tiny | The SVG was not drawn on a 24 × 24 grid | Use 24px icons, or edit `viewBox` in `icons.ts` |
+| JSON fails to load | Unescaped quotes in the paths | Write `\"` inside the strings |
 
 ---
 
