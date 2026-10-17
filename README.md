@@ -1,36 +1,33 @@
-# Getting things done library.
+# GTD — Getting Things Done
 
-This is a library to develop web applications easier.
-Every script is a module that can be loaded importing the script.
-They may be dependant of other modules.
+[![Test](https://github.com/akrck02/gtd/actions/workflows/test.yaml/badge.svg)](https://github.com/akrck02/gtd/actions/workflows/test.yaml)
 
-*see module dependencies on each module docs*
+A small TypeScript library for building web applications with the platform itself: real
+`HTMLElement`s, `fetch`, `localStorage`. Every file in `src/` is an independent ES module; import
+only what you need.
 
-Example for a script importing a module: 
+```ts
+import { uiComponent } from "./gtd/dom.js"
 
-``` Typescript
-import {uiComponent} from "./dom.js" 
-
-const title = uiComponent({
-    type = "h1",
-    text = "Hello world!"
-})
-
-document.body.appendChild(title)
+document.body.appendChild(uiComponent({ type: "h1", text: "Hello world!" }))
 ```
 
-Read the docs below to understand the usage and behaviour.
-## Learn how to 
-- [Create UI components.](./docs/dom.md)
-- [Make http requests.](./docs/http.md)
-- [Create views.](./docs/view.md)
-- [Set routes for your app.](./docs/router.md)
-- [Text internationalisation.](./docs/i18n.md)
-- [Save and load app configuration.](./docs/configuration.md)
-- [Load icons.](./docs/icons.md)
-- [Set up and handle signals.](./docs/signals.md)
+## Documentation
 
-## Utility modules
-- [Browser tools.](./docs/browser.md)
-- [Path tools.](./docs/paths.md)
-- [Cryptographic tools.](./docs/crypto.md)
+Read it at **<https://akrck02.github.io/gtd>**, or in [`docs/`](docs/README.md):
+
+- [Getting started](docs/getting-started.md) and [a tour of GTD](docs/tour.md)
+- Guides: [interface](docs/guides/dom.md), [routing](docs/guides/router.md),
+  [HTTP](docs/guides/http.md), [signals](docs/guides/signals.md),
+  [translations](docs/guides/i18n.md), [configuration](docs/guides/configuration.md),
+  [icons](docs/guides/icons.md)
+- Utilities: [browser](docs/reference/browser.md), [paths](docs/reference/paths.md),
+  [crypto](docs/reference/crypto.md)
+- [Contributing and testing](docs/contributing.md)
+
+## Testing
+
+```sh
+npm install
+npm test
+```

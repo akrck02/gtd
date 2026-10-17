@@ -242,7 +242,8 @@ function httpRequest(request: HttpRequest): Promise<Response> {
   if (HttpMethod.Get !== request.method) {
     if (request.parameters instanceof FormData) {
       options["body"] = request.parameters
-      options.headers["Content-type"] = `multipart/form-data;charset=${request.charset || "UTF-8"}`
+      // The browser writes the multipart boundary itself
+      delete options.headers["Content-type"]
     } else {
       options["body"] = JSON.stringify(request.parameters)
     }

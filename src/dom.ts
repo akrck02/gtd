@@ -93,13 +93,13 @@ export function setDomStyles(element: HTMLElement, styles: { [key: string]: stri
   return element;
 }
 
-/** Remove DOM styles */
+/** Remove DOM styles (CSS names, like background-color) */
 export function removeDomStyles(element: HTMLElement, styles: string[]): HTMLElement {
   
   if (undefined == element || undefined == styles) 
     return element
 
-  for (const style in styles) 
+  for (const style of styles) 
     element.style.removeProperty(style)    
 
   return element

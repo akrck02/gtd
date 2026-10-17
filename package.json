@@ -1,0 +1,14 @@
+{
+  "name": "gtd",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "happy-dom": "^15.11.7",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.8"
+  }
+}

@@ -69,6 +69,7 @@ export async function setCurrentLanguage(locale : string, reloadBundles = false)
 /**
  * Load a text bundle if needed 
  * @param id The bundle id 
+ * @param reload (Optional) Fetch the bundle again even if it is loaded
  * @param maxAttemps (Optional) The max number of attemps, one by default
  * @author akrck02
  */
@@ -82,7 +83,9 @@ export async function loadTextBundle(id : string, reload = false, maxAttemps = 1
   let language = undefined
   
   for (let attemps = 0; attemps < maxAttemps && undefined == language; attemps++) {
-    language = await fetch(`${I18N_PATH}/${currentLanguage.main}/${id}.json`).then(res => res.json())
+    language = await fetch(`${I18N_PATH}/${currentLanguage.main}/${id}.json`)
+      .then(res => res.ok ? res.json() : undefined)
+      .catch(() => undefined)
   }
 
   // If nothing was found, return
