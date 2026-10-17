@@ -3,49 +3,51 @@
 Something not working? Open the **browser console** first (`F12`, or right click → *Inspect* →
 *Console*). The error there almost always points to one of these.
 
+## Building
+
+**`./bin/esbuild: Permission denied`**
+
+Make it executable: `chmod +x bin/esbuild`.
+
+**`./bin/esbuild: cannot execute binary file`** (or *Exec format error*)
+
+The esbuild in the GTD repository is for Linux x86-64. On macOS, Windows or ARM, download yours:
+`curl -fsSL https://esbuild.github.io/dl/v0.25.8 | sh`. On Windows, run it in *Git Bash* or WSL.
+
+**`Could not resolve "./gtd/dom.js"`**
+
+The path is wrong. Imports are relative to the file that has them: from `src/main.ts`, GTD's files
+are in `./gtd/`. Check that `src/gtd/dom.ts` exists.
+
+**`Top-level await is currently not supported with the "iife" output format`**
+
+Add `--format=esm` to the esbuild command, and keep `type="module"` on the `<script>` tag.
+
+**My changes don't show up**
+
+Is esbuild running with `--watch`, or did you run it again? Then reload without cache:
+`Ctrl + Shift + R` (`Cmd + Shift + R` on a Mac).
+
 ## The page is blank
-
-**"Failed to load module script" or "CORS" errors, and the address starts with `file://`**
-
-You opened `index.html` by double-clicking it. Browsers block modules there. Serve the folder:
-
-```sh
-python3 -m http.server 8000
-```
-
-…and open <http://localhost:8000>.
 
 **`GET http://localhost:8000/out/main.js 404 (Not Found)`**
 
-The code was not compiled yet, or went somewhere else. Run `npx tsc` and check that `out/main.js`
-exists and that `outDir` in `tsconfig.json` matches the `src` of your `<script>`.
+The app was not built yet, or went somewhere else. Run esbuild and check that `out/main.js` exists
+and matches the `src` of your `<script>`.
 
-**`GET …/gtd/dom 404` (no extension)**
+**Errors about modules or CORS, and the address starts with `file://`**
 
-An import is missing `.js`. Write `import { … } from "./gtd/dom.js"`.
+You opened `index.html` by double-clicking it. Serve the folder instead:
+`python3 -m http.server 8000`, then open <http://localhost:8000>.
 
 **`Cannot use import statement outside a module`**
 
 The `<script>` tag needs `type="module"`.
 
-## TypeScript errors
+**`x is not defined` or `Cannot read properties of undefined`, but it compiled**
 
-**`Cannot find name 'document'` or `'window'`**
-
-Add the browser types to `tsconfig.json`: `"lib": ["ES2021", "DOM", "DOM.Iterable"]`.
-
-**`Property 'replaceAll' does not exist`**
-
-Your `target` is too old. Use `"target": "ES2021"` or newer.
-
-**`Top-level 'await' expressions are only allowed when the 'module' option is set to 'es2022'…`**
-
-Use `"module": "ES2022"` in `tsconfig.json`, as in [Getting started](getting-started.md).
-
-**My changes don't show up**
-
-Run `npx tsc` again (or keep `npx tsc --watch` running), then reload. Still old? Reload without
-cache: `Ctrl + Shift + R` (`Cmd + Shift + R` on a Mac).
+esbuild does not check types, so typos reach the browser. Check the name in the error, or check
+types first: see *Checking types* in [Getting started](getting-started.md).
 
 ## Routing
 
@@ -73,12 +75,12 @@ container before each page.
 **`getText` returns an empty string**
 
 - Did you `await loadTextBundle("name")` before calling `getText`?
-- Does `./i18n/<language>/<name>.json` exist? Check the *Network* tab for a 404.
+- Does `./resources/i18n/<language>/<name>.json` exist? Check the *Network* tab for a 404.
 - Is your language in `AVAILABLE_LANGUAGES` in `i18n.ts`? See [Translations](guides/i18n.md).
 
-**"The configuration id need to be changed" warning**
+**Settings of two apps mix up on `localhost`**
 
-Open `configuration.ts` and set `configurationId` to your app's name. See
+Both use the same `configurationId`. Set your app's name in `configuration.ts`. See
 [Configuration](guides/configuration.md).
 
 **`getIcon` returns `undefined`**

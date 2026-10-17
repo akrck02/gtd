@@ -21,6 +21,8 @@ navigate()
 
 Now `#/` shows **Home** and `#/about` shows **About us**.
 
+![How showRoute works: the address is matched against your routes, the matching view draws into the container](../images/router-flow.svg)
+
 ## Two words: view and route
 
 A **view** is a function that draws one page. It receives two things:
@@ -72,7 +74,7 @@ Values always arrive as **strings**. Convert them if you need numbers: `Number(u
 
 ## Home and "not found"
 
-- `"/"` (or `""`) is the home page.
+- `"/"` (or `""`) is the home page. You can also set it with `setHomeRoute(view)`.
 - When no route matches, the **not found** view is shown. Set your own:
 
 ```ts
@@ -95,6 +97,9 @@ Until you set them, GTD shows the words `Home page.` and `Page not found.`.
 1. Empties `container`.
 2. Finds the route that matches `path`.
 3. Calls its view with the values and the container.
+
+To **add** a page below what the container already has, instead of replacing it, pass `false`:
+`showRoute("/comments", container, false)`.
 
 GTD does **not** listen to the address bar by itself — you choose how. There are two common ways.
 
@@ -170,9 +175,11 @@ setRoute("/", async (_, container) => {
 
 setRoute("/products", async (_, container) => {
   container.append(menu(), uiComponent({ type: "h1", text: "Products" }))
-  products.forEach((name, index) =>
-    container.append(uiComponent({ type: "p" }),
-      uiComponent({ type: "a", text: name, attributes: { href: `#/products/${index}` } })))
+  products.forEach((name, index) => {
+    const item = uiComponent({ type: "p" })
+    item.append(uiComponent({ type: "a", text: name, attributes: { href: `#/products/${index}` } }))
+    container.append(item)
+  })
 })
 
 setRoute("/products/$", async ([index], container) => {

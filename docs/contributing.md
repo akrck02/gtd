@@ -3,50 +3,75 @@
 ## Layout
 
 ```
-src/        the library, one module per file
-test/       unit tests, one file per module (dom.test.ts tests dom.ts)
-docs/       this documentation, published to GitHub Pages
+src/          the library, one module per file
+test/         unit tests, one file per module (dom.test.ts tests dom.ts)
+test/lib/     the small test runner
+bin/          esbuild, and scripts to test and check types
+docs/         this documentation, published to GitHub Pages
 ```
 
-## Setting up
+## No Node.js
 
-```sh
-npm install
-npm test        # runs every unit test once
-npx vitest      # runs them again on each change
-npm run build   # type checks and compiles src/ into temp/
-```
+Like the apps made with it, GTD itself needs no Node.js or npm. Everything runs with the files in
+`bin/`, a shell and a browser.
 
-Tests use [Vitest](https://vitest.dev/) with [happy-dom](https://github.com/capricorn86/happy-dom),
-a fake browser, so they run in Node without opening one.
+| Command | What it does |
+|---|---|
+| `bin/test.sh` | Builds the tests with esbuild and runs them in headless Chrome or Chromium |
+| `bin/test.sh --build` | Only builds them; open `test/index.html` in any browser to see the results |
+| `bin/install-ts.sh` | Downloads the native TypeScript compiler (`bin/tsgo`) with curl, once |
+| `bin/tsgo -p .` | Checks the types of `src/` and `test/` |
+
+If your Chrome is not found, point to it: `CHROME=/path/to/chrome bin/test.sh`.
+
+`test/index.html` is also a visual report: green for passing tests, red for failing ones, with the
+reason.
+
+![The test report in the browser: every module with its tests in green](images/test-report.png)
+
+GitHub runs the type check and the tests on **every push and pull request**
+(`.github/workflows/test.yaml`).
 
 ## Writing a test
 
 ```ts
-import { describe, expect, it, vi } from "vitest"
-import { uiComponent } from "../src/dom"
+import { describe, expect, it, mock } from "./lib/test.js"
+import { setDomEvents } from "../src/dom.js"
 
-describe("uiComponent", () => {
-  it("creates a div by default", () => {
-    expect(uiComponent({}).tagName).toBe("DIV")
+describe("dom", () => {
+  it("adds listeners", () => {
+    const button = document.createElement("button")
+    const click = mock(() => {})
+    setDomEvents(button, { click })
+    button.click()
+    expect(click).toHaveBeenCalledTimes(1)
   })
 })
 ```
 
+Then import the new file in `test/index.ts`.
+
+| Helper | Use it to |
+|---|---|
+| `expect(x).toBe / toEqual / toContain / toMatch / toBeTruthy / toBeFalsy` | Check values |
+| `mock(fn?)` | Make a function that remembers its calls; check with `toHaveBeenCalledTimes` / `toHaveBeenCalledWith` |
+| `fakeFetch({ path: body })` | Answer `fetch` from memory during the test (404 for other paths) |
+| `replace(object, key, value)` | Swap a property, like `window.matchMedia`, during the test |
+| `quiet("error" \| "warn")` | Silence and count console messages during the test |
+| `afterThis(fn)` | Clean up after the test, even when it fails |
+
 Some habits that keep the suite reliable:
 
-- **Network:** never call a real server. Replace `fetch` with `vi.stubGlobal("fetch", vi.fn(…))` and
-  undo it with `vi.unstubAllGlobals()`.
-- **Module state:** `router.ts` and `i18n.ts` keep state between calls. Use `vi.resetModules()` and
-  import the module again in `beforeEach` to start each test clean.
-- **Browser answers:** fake `matchMedia` and `navigator.userAgent` with `vi.spyOn`, as in
-  `test/browser.test.ts`.
+- **Network:** never call a real server; use `fakeFetch`.
+- **Module state:** `router.ts` and `i18n.ts` keep state for the whole page. Their tests run in
+  order and build on each other; add new ones at the end.
+- **The page:** remove what you add to `document.body` with `afterThis`.
 
 ## Conventions
 
 - Every exported function has a JSDoc comment.
 - Compare with the constant first: `undefined == value`, `false == buffer.has(id)`.
-- A module imports its siblings with `.js` (`./dom.js`) so the output runs in browsers unchanged.
+- A module imports its siblings with `.js` (`./dom.js`), as TypeScript and esbuild expect.
 - A new module gets a test file and a page in `docs/`, linked from `docs/README.md`.
 
 ## Documentation

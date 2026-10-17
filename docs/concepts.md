@@ -1,6 +1,6 @@
 # How GTD thinks 🧠
 
-GTD is small on purpose. Five ideas explain how every module behaves. Once you know them, you can
+GTD is small on purpose. Six ideas explain how every module behaves. Once you know them, you can
 guess how most of the library works before reading about it.
 
 ## 1. Everything is the real thing
@@ -20,7 +20,13 @@ button.focus()               // plain DOM
 button.textContent = "Saved" // plain DOM
 ```
 
-## 2. One file, one job
+## 2. Nothing to install
+
+No Node.js, no npm, no `node_modules`. GTD is a folder of `.ts` files, and
+[esbuild](https://esbuild.github.io) — one program, one command — turns your app into one `.js`
+file. Your project has no dependencies that can break, go out of date or need updating.
+
+## 3. One file, one job
 
 Each module lives in its own file and does one thing: `dom.ts` builds elements, `router.ts` picks
 pages, `http.ts` talks to servers. Import only what you use:
@@ -32,10 +38,11 @@ import { httpGet } from "./gtd/http.js"
 
 You can even delete the modules you don't need from your copy.
 
-## 3. Functions, not classes
+## 4. Functions, not classes
 
 There are no classes to extend and no lifecycle to learn. You call functions and pass plain
-objects:
+objects (the few helpers grouped in a class, like `Shortcuts`, are used the same way, with no
+`new`):
 
 ```ts
 uiComponent({ type: "h1", text: "Hi" })
@@ -43,7 +50,7 @@ httpPost({ url: "/api/notes", parameters: { text: "Buy milk" } })
 setRoute("/notes", showNotes)
 ```
 
-## 4. You draw, GTD doesn't re-draw
+## 5. You draw, GTD doesn't re-draw
 
 GTD does **not** watch your data. When something changes, you update the element yourself, or draw
 the page again:
@@ -64,7 +71,7 @@ setDomEvents(button, {
 This is a bit more typing than in big frameworks, but there is no magic: what you see in your code
 is exactly what happens on screen.
 
-## 5. Quiet when things are missing
+## 6. Quiet when things are missing
 
 GTD prefers doing nothing over crashing your page:
 
@@ -84,6 +91,7 @@ can.
 |---|---|
 | **Element** | A piece of the page, like `<h1>` or `<button>`. In code, an `HTMLElement`. |
 | **Module** | A `.ts` file that exports functions. |
+| **esbuild** | The program that turns your `.ts` files into one `.js` file for the browser. |
 | **View** | A function that draws one page into a container. |
 | **Route** | An address, like `/user/7`, linked to a view. |
 | **Signal** | A named event that several parts of the app can listen to. |

@@ -2,8 +2,8 @@
 
 **Module:** `configuration.ts` · **Depends on:** nothing
 
-Store settings — the API address, the theme, the language — so they **survive reloads**. Values are
-kept in the browser's `localStorage`, on the user's device.
+Store settings — the API address, the theme, the language — so they **survive reloads**. They are
+kept in the browser, on the user's device, as one JSON object.
 
 ## In 30 seconds
 
@@ -19,10 +19,11 @@ getConfiguration("theme") // "dark", even after closing the browser
 Open `src/gtd/configuration.ts` and change the id to your app's name:
 
 ```ts
-const configurationId = "my-notes-app"
+const configurationId: string = "my-notes-app"
 ```
 
-Until you do, GTD prints a reminder in the console.
+All your settings are saved together under that name. Two apps on the same address (for example
+both on `localhost:8000`) with the same id would share — and overwrite — their settings.
 
 ## Reading and writing
 
@@ -30,16 +31,21 @@ Until you do, GTD prints a reminder in the console.
 |---|---|
 | `setConfiguration(key, value)` | Saves `value` under `key` |
 | `getConfiguration(key)` | Returns the value, or `undefined` if it was never saved |
+| `isConfigurationSet(key)` | `true` if `key` has a value |
+| `isConfigurationActive(key)` | `true` only if the value is exactly `true` — handy for on/off options |
 | `await loadConfiguration(path)` | Saves every key of a JSON file |
 
-Values are **strings**. To store numbers, booleans or objects, convert them:
+Values can be **anything JSON can hold**: text, numbers, booleans, lists and objects. They come
+back with the same type:
 
 ```ts
-setConfiguration("fontSize", String(18))
-Number(getConfiguration("fontSize")) // 18
+setConfiguration("fontSize", 18)
+setConfiguration("favourites", ["1", "4"])
+setConfiguration("animations", true)
 
-setConfiguration("favourites", JSON.stringify(["1", "4"]))
-JSON.parse(getConfiguration("favourites") ?? "[]") // ["1", "4"]
+getConfiguration("fontSize") + 2         // 20
+getConfiguration("favourites").length    // 2
+isConfigurationActive("animations")      // true
 ```
 
 ## Defaults from a file
@@ -50,35 +56,43 @@ Put the defaults in **`config.json`**, next to `index.html`:
 {
   "api": "https://example.org/api",
   "theme": "light",
-  "lang": "en"
+  "animations": true
 }
 ```
 
-and load it when the app starts — **only the first time**, so you don't overwrite what the user
-changed:
+and load it when the app starts:
 
 ```ts
-if (undefined == getConfiguration("api"))
+await loadConfiguration("./config.json")
+```
+
+Each key of the file is saved; keys that are only in the browser are kept. If a key is in both,
+**the file wins**. To keep what the user chose, load the file only the first time:
+
+```ts
+if (!isConfigurationSet("api"))
   await loadConfiguration("./config.json")
 ```
 
 ## Full example: a theme switch that remembers
 
+Bubble UI has a dark theme built in: it turns on with `data-theme="dark"` on `<html>`.
+
 ```ts
 import { uiComponent, setDomEvents } from "./gtd/dom.js"
 import { getConfiguration, setConfiguration } from "./gtd/configuration.js"
 import { prefersDarkMode } from "./gtd/browser.js"
+import { BubbleUI } from "./gtd/bubble.js"
 
 function applyTheme(theme: string) {
-  document.body.style.background = "dark" == theme ? "#222" : "#fafafa"
-  document.body.style.color = "dark" == theme ? "#fafafa" : "#222"
+  document.documentElement.dataset.theme = theme // Bubble UI: "light" or "dark"
 }
 
 // use the saved theme, or the system preference the first time
 let theme = getConfiguration("theme") ?? (prefersDarkMode() ? "dark" : "light")
 applyTheme(theme)
 
-const toggle = uiComponent({ type: "button", text: "Toggle theme" })
+const toggle = uiComponent({ type: "button", text: "Toggle theme", classes: [BubbleUI.Primary] })
 setDomEvents(toggle, {
   click: () => {
     theme = "dark" == theme ? "light" : "dark"
@@ -89,12 +103,18 @@ setDomEvents(toggle, {
 document.body.append(toggle)
 ```
 
+| Light | Dark |
+|---|---|
+| ![The theme example in light mode](../images/theme-light.png) | ![The same page after pressing the button, in dark mode](../images/theme-dark.png) |
+
 ## Good to know
 
-- `localStorage` is per site and per browser: settings don't travel between devices.
-- Users can clear it at any time, so always have a default.
-- Don't store passwords or other secrets there: any script on the page can read it.
-- To see what's stored: developer tools → *Application* (*Storage* in Firefox) → *Local Storage*.
+- Settings are saved in `localStorage`: per site and per browser, so they don't travel between
+  devices.
+- Users can clear them at any time, so always have a default.
+- Don't store passwords or other secrets there: any script on the page can read them.
+- To see what's stored: developer tools → *Application* (*Storage* in Firefox) → *Local Storage* →
+  your `configurationId`.
 
 ---
 

@@ -24,13 +24,16 @@ await emitSignal(userLoggedIn, { name: "Ada" })        // 3. announce
 // → Welcome, Ada!
 ```
 
+![The login emits userLoggedIn; the header, the menu and the cart react, without knowing each other](../images/signals-flow.svg)
+
 ## The three steps
 
 | Step | Function | What it does |
 |---|---|---|
 | Create | `setSignal()` | Returns a new, unique signal id (a string) |
 | Listen | `connectToSignal(id, handler)` | Calls `handler(data)` every time the signal is emitted |
-| Announce | `emitSignal(id, data)` | Calls every handler connected to `id`, with `data` |
+| Announce | `emitSignal(id, data)` | Calls every handler connected to `id`, with `data`, and waits for all of them |
+| Stop | `disconnectSignal(id)` | Removes **every** handler of `id`; the signal can be connected again |
 
 ## Organising signals in a real app
 
@@ -73,11 +76,24 @@ Adding a new reaction later means adding one `connectToSignal`, without touching
 | Several handlers on one signal | All run, in the order they were connected |
 | Emitting a signal that was never created | Nothing |
 | Connecting to a signal that was never created | An error in the console; the handler is ignored |
-| A handler that takes long (e.g. a request) | `emitSignal` doesn't wait for it to finish |
+| A handler that takes long (e.g. a request) | `await emitSignal(...)` waits until every handler finished |
+| `emitSignal(id)` without data | Handlers receive `undefined` |
 
-There is no "disconnect" yet. Connect things that live as long as the app (a header, a cart), not
-views that are drawn and thrown away on each page change — or they will keep reacting after the page
-is gone.
+Handlers start one after the other but run **at the same time**, so a slow one doesn't delay the
+others.
+
+### Signals and pages
+
+A view that connects to a signal every time it is drawn would pile up handlers. Connect long-lived
+parts of the app (a header, a cart) once, at start. For a signal that belongs to one page, clear it
+before drawing the page again:
+
+```ts
+setRoute("/chat", async (_, container) => {
+  disconnectSignal(messageArrived) // forget the previous visit's handlers
+  connectToSignal(messageArrived, async message => container.append(bubble(message)))
+})
+```
 
 ## Typing the data
 

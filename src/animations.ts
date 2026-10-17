@@ -29,8 +29,10 @@ export default class Animations {
 			if (false == Animations.enabled) return;
 
 					// if children detected, animate children
-					if(element.hasChildNodes()) {
+					// (and keep them: typing the parent too would flatten them into text)
+					if(0 < element.children.length) {
 						for(const child of element.children) await this.typing(child as HTMLElement)
+						return
 					}
 
 					// if the element is not a text element, do not animate

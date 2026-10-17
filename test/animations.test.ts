@@ -20,6 +20,17 @@ describe("animations", () => {
     expect(text.textContent).toBe("Hi")
   })
 
+  it("types children one after the other, keeping them", async () => {
+    Animations.enabled = true
+    afterThis(() => Animations.enabled = false)
+    const box = document.createElement("div")
+    box.innerHTML = "<h1>Hi</h1><p>there</p>"
+    document.body.append(box)
+    afterThis(() => box.remove())
+    await Animations.typing(box)
+    expect(box.innerHTML).toBe("<h1>Hi</h1><p>there</p>")
+  })
+
   it("adds the show class", async () => {
     const box = document.createElement("div")
     await Animations.show(box)

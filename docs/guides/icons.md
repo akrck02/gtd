@@ -43,7 +43,7 @@ getIcon(collection, name, size?, fill?)
 | `size` | Width and height | `"24px"` |
 | `fill` | Colour | `"#222222"` |
 
-It returns a `<div>` with the `<svg>` inside, or `undefined` if the collection or the icon doesn't
+It returns a `<div>` (a flex box that centres the icon) with the `<svg>` inside, or `undefined` if the collection or the icon doesn't
 exist.
 
 ```ts
