@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 76" width="440" height="76" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#C2571A"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -17 L5 -6 L17 -5 L8 3 L11 15 L0 9 L-11 15 L-8 3 L-17 -5 L-5 -6 Z" fill="#fff" fill-opacity=".25"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Artist</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">An icon, a button, and a click that does something</text>
+</svg>

@@ -59,8 +59,9 @@ my-app/
 
 ## Level 1 · The Builder
 
-| ![Builder badge](images/quest/badge-builder.svg) | **Mission:** a home page, and one page per note<br>**Modules:** `dom`, `router` · **Time:** 5 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| A home page, and one page per note | `dom`, `router` | 5 min |
 
 #### The idea
 
@@ -118,7 +119,7 @@ Add a page at `#/about` that says who made the app.
 
 </details>
 
-*✓ Level done — The Builder badge earned.*
+![Achievement unlocked: Builder](images/quest/achievement-builder.svg)
 
 Learn more: [Building the interface](guides/dom.md) · [Views and routing](guides/router.md)
 
@@ -126,8 +127,9 @@ Learn more: [Building the interface](guides/dom.md) · [Views and routing](guide
 
 ## Level 2 · The Keeper
 
-| ![Keeper badge](images/quest/badge-keeper.svg) | **Mission:** settings that survive closing the browser<br>**Module:** `configuration` · **Time:** 4 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| Settings that survive closing the browser | `configuration` | 4 min |
 
 #### The idea
 
@@ -186,7 +188,7 @@ console.log(`Welcome back! Visit number ${visits}`)</code></pre>
 
 </details>
 
-*✓ Level done — The Keeper badge earned.*
+![Achievement unlocked: Keeper](images/quest/achievement-keeper.svg)
 
 Learn more: [Configuration](guides/configuration.md)
 
@@ -194,8 +196,9 @@ Learn more: [Configuration](guides/configuration.md)
 
 ## Level 3 · The Messenger
 
-| ![Messenger badge](images/quest/badge-messenger.svg) | **Mission:** load your notes and show them as cards<br>**Modules:** `http`, `bubble` · **Time:** 6 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| Load your notes and show them as cards | `http`, `bubble` | 6 min |
 
 #### The idea
 
@@ -276,7 +279,7 @@ if (!response.ok)
 
 </details>
 
-*✓ Level done — The Messenger badge earned.*
+![Achievement unlocked: Messenger](images/quest/achievement-messenger.svg)
 
 Learn more: [Talking to a server](guides/http.md) · [Bubble UI](reference/html.md)
 
@@ -284,8 +287,9 @@ Learn more: [Talking to a server](guides/http.md) · [Bubble UI](reference/html.
 
 ## Level 4 · The Polyglot
 
-| ![Polyglot badge](images/quest/badge-polyglot.svg) | **Mission:** your app in English and Spanish<br>**Module:** `i18n` · **Time:** 5 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| Your app in English and Spanish | `i18n` | 5 min |
 
 #### The idea
 
@@ -350,7 +354,7 @@ localStorage.notes = '{"api":"./api","lang":"gl"}'</code></pre>
 
 </details>
 
-*✓ Level done — The Polyglot badge earned.*
+![Achievement unlocked: Polyglot](images/quest/achievement-polyglot.svg)
 
 Learn more: [Translations](guides/i18n.md)
 
@@ -358,8 +362,9 @@ Learn more: [Translations](guides/i18n.md)
 
 ## Level 5 · The Artist
 
-| ![Artist badge](images/quest/badge-artist.svg) | **Mission:** a button, with an icon, that switches language<br>**Modules:** `icons`, `dom` events · **Time:** 6 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| A button, with an icon, that switches language | `icons`, `dom` events | 6 min |
 
 #### The idea
 
@@ -436,7 +441,7 @@ container.append(card)</code></pre>
 
 </details>
 
-*✓ Level done — The Artist badge earned.*
+![Achievement unlocked: Artist](images/quest/achievement-artist.svg)
 
 Learn more: [Icons](guides/icons.md) · [Building the interface](guides/dom.md)
 
@@ -444,8 +449,9 @@ Learn more: [Icons](guides/icons.md) · [Building the interface](guides/dom.md)
 
 ## Level 6 · The Broadcaster
 
-| ![Broadcaster badge](images/quest/badge-broadcaster.svg) | **Mission:** tell the rest of the app that the language changed<br>**Module:** `signals` · **Time:** 4 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| Tell the rest of the app that the language changed | `signals` | 4 min |
 
 #### The idea
 
@@ -501,7 +507,7 @@ connectToSignal(languageChanged, async lang => {
 
 </details>
 
-*✓ Level done — The Broadcaster badge earned.*
+![Achievement unlocked: Broadcaster](images/quest/achievement-broadcaster.svg)
 
 Learn more: [Signals](guides/signals.md)
 
@@ -509,8 +515,9 @@ Learn more: [Signals](guides/signals.md)
 
 ## Level 7 · The Shape-shifter
 
-| ![Shape-shifter badge](images/quest/badge-shape-shifter.svg) | **Mission:** look good on a phone too<br>**Module:** `display` · **Time:** 3 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| Look good on a phone too | `display` | 3 min |
 
 #### The idea
 
@@ -541,7 +548,7 @@ a phone: bigger text, cards as wide as the screen.
 
 ![Level 7: the notes app on a phone, with wide cards](images/tour-7-mobile.png)
 
-*✓ Level done — The Shape-shifter badge earned.*
+![Achievement unlocked: Shape-shifter](images/quest/achievement-shape-shifter.svg)
 
 Learn more: [Display](reference/display.md) · [Browser](reference/browser.md)
 
@@ -549,8 +556,9 @@ Learn more: [Display](reference/display.md) · [Browser](reference/browser.md)
 
 ## Level 8 · The Speedrunner
 
-| ![Speedrunner badge](images/quest/badge-speedrunner.svg) | **Mission:** move around without the mouse<br>**Module:** `shortcuts` · **Time:** 3 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| Move around without the mouse | `shortcuts` | 3 min |
 
 #### The idea
 
@@ -594,7 +602,7 @@ Make `Esc` go home too.
 
 </details>
 
-*✓ Level done — The Speedrunner badge earned.*
+![Achievement unlocked: Speedrunner](images/quest/achievement-speedrunner.svg)
 
 Learn more: [Keyboard shortcuts](guides/shortcuts.md)
 
@@ -602,8 +610,9 @@ Learn more: [Keyboard shortcuts](guides/shortcuts.md)
 
 ## Final challenge · Notes Master
 
-| ![Notes Master badge](images/quest/badge-final.svg) | **Mission:** write new notes, and keep them after a reload<br>**Modules:** everything you learned · **Time:** 10 min |
-|:---:|:---|
+| Mission | Modules | Time |
+|---|---|---|
+| Write new notes, and keep them after a reload | everything you learned | 10 min |
 
 #### The challenge
 
@@ -655,13 +664,13 @@ container.append(form)</code></pre>
 
 </details>
 
-*✓ Done — Notes Master badge earned.*
+![Rare achievement unlocked: Notes Master](images/quest/achievement-final.svg)
 
 ---
 
 ## Well done
 
-![The nine badges: Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter, Speedrunner and Notes Master](images/quest/badges-all.svg)
+![All nine achievements: Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter, Speedrunner and Notes Master](images/quest/achievements-all.svg)
 
 You built a real app, and you can read every line of it. That is the GTD way.
 
