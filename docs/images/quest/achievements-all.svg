@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 442" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif"><g transform="translate(6 6)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#4A5C92"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-16" y="4" width="15" height="10" rx="2"/><rect x="1" y="4" width="15" height="10" rx="2"/><rect x="-8" y="-8" width="16" height="10" rx="2"/><rect x="-16" y="-20" width="15" height="10" rx="2" opacity=".55"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Builder</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Your first pages, and a router to move between them</text>
+</g><g transform="translate(456 6)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#745471"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="-7" cy="-5" r="8"/><path d="M0 1 L14 15 M8 9 L12 5 M11 12 L15 8"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Keeper</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Your app remembers things after a reload</text>
+</g><g transform="translate(6 92)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#007ACC"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-17" y="-12" width="34" height="24" rx="4"/><path d="M-15 -9 L0 3 L15 -9"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Messenger</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Data loaded from a file and shown as cards</text>
+</g><g transform="translate(456 92)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#1B7A5A"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M-17 -15 h18 a3 3 0 0 1 3 3 v10 a3 3 0 0 1 -3 3 h-10 l-6 5 v-5 h-2 a3 3 0 0 1 -3 -3 v-10 a3 3 0 0 1 3 -3 z"/><path d="M1 0 h13 a3 3 0 0 1 3 3 v9 a3 3 0 0 1 -3 3 h-1 v5 l-6 -5 h-6 a3 3 0 0 1 -3 -3"/><text x="-8" y="-3.5" font-size="10" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">A</text><text x="8.5" y="11" font-size="10" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">あ</text></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Polyglot</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Your app speaks two languages</text>
+</g><g transform="translate(6 178)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#C2571A"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -17 L5 -6 L17 -5 L8 3 L11 15 L0 9 L-11 15 L-8 3 L-17 -5 L-5 -6 Z" fill="#fff" fill-opacity=".25"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Artist</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">An icon, a button, and a click that does something</text>
+</g><g transform="translate(456 178)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#585E72"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle r="3.5" fill="#fff"/><path d="M-9 -9 a13 13 0 0 0 0 18 M9 -9 a13 13 0 0 1 0 18 M-15 -15 a21 21 0 0 0 0 30 M15 -15 a21 21 0 0 1 0 30"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Broadcaster</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Parts of your app talk without knowing each other</text>
+</g><g transform="translate(6 264)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#8A4FB8"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-18" y="-13" width="24" height="17" rx="2.5"/><path d="M-10 9 h8"/><rect x="5" y="-7" width="13" height="22" rx="3" fill="#fff" fill-opacity=".25"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Shape-shifter</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Your app fits a phone too</text>
+</g><g transform="translate(456 264)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#B3261E"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-15" y="-15" width="30" height="30" rx="6"/><rect x="-10" y="-11" width="20" height="18" rx="3" fill="#fff" fill-opacity=".2"/><text x="0" y="3.5" font-size="12" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">K</text></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Speedrunner</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Keyboard shortcuts to get around</text>
+</g><g transform="translate(6 350)">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#d4a62a" stroke-width="2"/>
+  <circle cx="38" cy="38" r="27" fill="#B8860B"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M-17 10 L-17 -10 L-8 -1 L0 -15 L8 -1 L17 -10 L17 10 Z" fill="#fff" fill-opacity=".25"/><path d="M-17 15 h34"/></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">RARE ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Notes Master</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">New notes, written by you, kept by the browser</text>
+</g></svg>

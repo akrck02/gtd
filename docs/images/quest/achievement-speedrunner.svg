@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 76" width="440" height="76" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="#1f2330"/>
+  <rect x="1" y="1" width="438" height="74" rx="38" fill="none" stroke="#3a4050" stroke-width="1"/>
+  <circle cx="38" cy="38" r="27" fill="#B3261E"/>
+  <g transform="translate(38 38) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-15" y="-15" width="30" height="30" rx="6"/><rect x="-10" y="-11" width="20" height="18" rx="3" fill="#fff" fill-opacity=".2"/><text x="0" y="3.5" font-size="12" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">K</text></g>
+  <text x="80" y="27" font-size="10" font-weight="700" letter-spacing="1.2" fill="#9aa3b8">ACHIEVEMENT UNLOCKED</text>
+  <text x="80" y="46" font-size="16" font-weight="700" fill="#ffffff">Speedrunner</text>
+  <text x="80" y="63" font-size="11.5" fill="#c3c9d6">Keyboard shortcuts to get around</text>
+</svg>

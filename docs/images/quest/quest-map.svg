@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
+  <rect width="760" height="330" rx="20" fill="#eef1f8"/>
+  <g fill="#dbe1ff" opacity=".7"><circle cx="120" cy="60" r="38"/><circle cx="640" cy="290" r="50"/><circle cx="420" cy="40" r="26"/></g>
+  <text x="28" y="40" font-size="20" font-weight="800" fill="#00174B">The GTD quest</text>
+  <text x="28" y="62" font-size="13" fill="#4A5C92">8 short levels · about 45 minutes · one notes app</text>
+  <path d="M30 290 C 50 270, 60 260, 70 250 C 115.0 250, 115.0 150, 160 150 C 207.5 150, 207.5 240, 255 240 C 300.0 240, 300.0 120, 345 120 C 387.5 120, 387.5 225, 430 225 C 472.5 225, 472.5 110, 515 110 C 552.5 110, 552.5 220, 590 220 C 625.0 220, 625.0 120, 660 120 C 682.5 120, 682.5 245, 705 245" fill="none" stroke="#c9d1ea" stroke-width="16" stroke-linecap="round"/>
+  <path d="M30 290 C 50 270, 60 260, 70 250 C 115.0 250, 115.0 150, 160 150 C 207.5 150, 207.5 240, 255 240 C 300.0 240, 300.0 120, 345 120 C 387.5 120, 387.5 225, 430 225 C 472.5 225, 472.5 110, 515 110 C 552.5 110, 552.5 220, 590 220 C 625.0 220, 625.0 120, 660 120 C 682.5 120, 682.5 245, 705 245" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
+  <g transform="translate(22 268)"><path d="M8 24 V0" stroke="#00174B" stroke-width="3"/><path d="M9 1 h18 l-5 6 l5 6 h-18 z" fill="#B3261E"/></g>
+  <text x="18" y="318" font-size="11" font-weight="700" fill="#00174B">START</text>
+  <circle cx="70" cy="253" r="24" fill="#2E3F72"/>
+  <circle cx="70" cy="250" r="24" fill="#4A5C92"/>
+  <g transform="translate(70 250) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-16" y="4" width="15" height="10" rx="2"/><rect x="1" y="4" width="15" height="10" rx="2"/><rect x="-8" y="-8" width="16" height="10" rx="2"/><rect x="-16" y="-20" width="15" height="10" rx="2" opacity=".55"/></g>
+  <text x="70" y="216" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">1 · Builder</text>
+  <circle cx="160" cy="153" r="24" fill="#553A53"/>
+  <circle cx="160" cy="150" r="24" fill="#745471"/>
+  <g transform="translate(160 150) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="-7" cy="-5" r="8"/><path d="M0 1 L14 15 M8 9 L12 5 M11 12 L15 8"/></g>
+  <text x="160" y="192" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">2 · Keeper</text>
+  <circle cx="255" cy="243" r="24" fill="#005A99"/>
+  <circle cx="255" cy="240" r="24" fill="#007ACC"/>
+  <g transform="translate(255 240) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-17" y="-12" width="34" height="24" rx="4"/><path d="M-15 -9 L0 3 L15 -9"/></g>
+  <text x="255" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">3 · Messenger</text>
+  <circle cx="345" cy="123" r="24" fill="#11573F"/>
+  <circle cx="345" cy="120" r="24" fill="#1B7A5A"/>
+  <g transform="translate(345 120) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M-17 -15 h18 a3 3 0 0 1 3 3 v10 a3 3 0 0 1 -3 3 h-10 l-6 5 v-5 h-2 a3 3 0 0 1 -3 -3 v-10 a3 3 0 0 1 3 -3 z"/><path d="M1 0 h13 a3 3 0 0 1 3 3 v9 a3 3 0 0 1 -3 3 h-1 v5 l-6 -5 h-6 a3 3 0 0 1 -3 -3"/><text x="-8" y="-3.5" font-size="10" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">A</text><text x="8.5" y="11" font-size="10" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">あ</text></g>
+  <text x="345" y="162" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">4 · Polyglot</text>
+  <circle cx="430" cy="228" r="24" fill="#943F10"/>
+  <circle cx="430" cy="225" r="24" fill="#C2571A"/>
+  <g transform="translate(430 225) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -17 L5 -6 L17 -5 L8 3 L11 15 L0 9 L-11 15 L-8 3 L-17 -5 L-5 -6 Z" fill="#fff" fill-opacity=".25"/></g>
+  <text x="430" y="191" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">5 · Artist</text>
+  <circle cx="515" cy="113" r="24" fill="#3E4354"/>
+  <circle cx="515" cy="110" r="24" fill="#585E72"/>
+  <g transform="translate(515 110) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle r="3.5" fill="#fff"/><path d="M-9 -9 a13 13 0 0 0 0 18 M9 -9 a13 13 0 0 1 0 18 M-15 -15 a21 21 0 0 0 0 30 M15 -15 a21 21 0 0 1 0 30"/></g>
+  <text x="515" y="152" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">6 · Broadcaster</text>
+  <circle cx="590" cy="223" r="24" fill="#663690"/>
+  <circle cx="590" cy="220" r="24" fill="#8A4FB8"/>
+  <g transform="translate(590 220) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-18" y="-13" width="24" height="17" rx="2.5"/><path d="M-10 9 h8"/><rect x="5" y="-7" width="13" height="22" rx="3" fill="#fff" fill-opacity=".25"/></g>
+  <text x="590" y="186" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">7 · Shape-shifter</text>
+  <circle cx="660" cy="123" r="24" fill="#8C1D17"/>
+  <circle cx="660" cy="120" r="24" fill="#B3261E"/>
+  <g transform="translate(660 120) scale(0.5)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><rect x="-15" y="-15" width="30" height="30" rx="6"/><rect x="-10" y="-11" width="20" height="18" rx="3" fill="#fff" fill-opacity=".2"/><text x="0" y="3.5" font-size="12" font-weight="700" fill="#fff" stroke="none" text-anchor="middle" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">K</text></g>
+  <text x="660" y="162" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">8 · Speedrunner</text>
+  <circle cx="705" cy="248" r="30" fill="#8A6408"/>
+  <circle cx="705" cy="245" r="30" fill="#B8860B"/>
+  <g transform="translate(705 245) scale(0.62)" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M-17 10 L-17 -10 L-8 -1 L0 -15 L8 -1 L17 -10 L17 10 Z" fill="#fff" fill-opacity=".25"/><path d="M-17 15 h34"/></g>
+  <text x="705" y="205" text-anchor="middle" font-size="12" font-weight="700" fill="#2b2b2b">Notes Master</text>
+</svg>

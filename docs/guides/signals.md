@@ -80,7 +80,9 @@ Adding a new reaction later means adding one `connectToSignal`, without touching
 | `emitSignal(id)` without data | Handlers receive `undefined` |
 
 Handlers start one after the other but run **at the same time**, so a slow one doesn't delay the
-others.
+others. But `await emitSignal(...)` waits for the **slowest** one: a handler that should not hold up
+the code that emits (an animation, a message that disappears later) should not `await` its slow
+part.
 
 ### Signals and pages
 
