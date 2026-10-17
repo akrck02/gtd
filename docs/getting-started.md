@@ -5,10 +5,10 @@
 | 🎯 **Goal** | Your first GTD app in the browser: two pages and a button |
 | ⏱️ **Time** | About 5 minutes |
 | 🧰 **You need** | A terminal, git and Python 3 — no Node.js |
-| 🗺️ **Then** | [The GTD Quest](tour.md): 8 levels, a boss and 9 badges |
+| 🗺️ **Then** | [The GTD quest](tour.md): a notes app, step by step |
 
-Think of this page as **level 0, the base camp** ⛺: you set up your tools here, and the adventure
-starts on the next page.
+Think of this page as **level 0**: you set up your tools here, and the quest starts on the next
+page.
 
 ---
 
@@ -180,7 +180,7 @@ Click **Say hello** → the address ends in `#/hello/world` and the page greets 
 
 Click **← Back** → you are home again. Try typing `#/hello/Ada` in the address bar too.
 
-🎉 **That's it — you have a GTD app with routing.** Base camp done: you are ready for the quest.
+🎉 **That's it — you have a GTD app with routing.** You are ready for the quest.
 
 Nothing on screen? Head to [Troubleshooting](troubleshooting.md).
 
@@ -238,7 +238,7 @@ cp ../gtd-download/bin/install-ts.sh bin/
 
 | | Path | What you get |
 |---|---|---|
-| 🗺️ | **[Start the GTD Quest](tour.md)** (recommended) | Build a notes app in 8 levels and a boss. Learn by doing, earn 9 badges |
+| 🗺️ | **[The GTD quest](tour.md)** (recommended) | Build a notes app in 8 short levels, learning by doing |
 | 🧠 | [How GTD thinks](concepts.md) | Six ideas, five minutes, every other page becomes easier |
 | 📚 | [The guides](README.md#guides--one-per-thing-you-want-to-do) | Look up one thing when you need it |
 

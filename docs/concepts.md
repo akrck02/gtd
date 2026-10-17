@@ -136,4 +136,4 @@ can.
 
 ---
 
-[← All the documentation](README.md) · Next: [The GTD Quest →](tour.md) 🗺️
+[← All the documentation](README.md) · Next: [The GTD quest →](tour.md)

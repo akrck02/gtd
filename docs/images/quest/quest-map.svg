@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 330" font-family="system-ui, -apple-system, Segoe UI, Roboto, sans-serif">
   <rect width="760" height="330" rx="20" fill="#eef1f8"/>
   <g fill="#dbe1ff" opacity=".7"><circle cx="120" cy="60" r="38"/><circle cx="640" cy="290" r="50"/><circle cx="420" cy="40" r="26"/></g>
-  <text x="28" y="40" font-size="20" font-weight="800" fill="#00174B">The GTD Quest</text>
-  <text x="28" y="62" font-size="13" fill="#4A5C92">8 levels and a boss · about 45 minutes · one notes app</text>
+  <text x="28" y="40" font-size="20" font-weight="800" fill="#00174B">The GTD quest</text>
+  <text x="28" y="62" font-size="13" fill="#4A5C92">8 short levels · about 45 minutes · one notes app</text>
   <path d="M30 290 C 50 270, 60 260, 70 250 C 115.0 250, 115.0 150, 160 150 C 207.5 150, 207.5 240, 255 240 C 300.0 240, 300.0 120, 345 120 C 387.5 120, 387.5 225, 430 225 C 472.5 225, 472.5 110, 515 110 C 552.5 110, 552.5 220, 590 220 C 625.0 220, 625.0 120, 660 120 C 682.5 120, 682.5 245, 705 245" fill="none" stroke="#c9d1ea" stroke-width="16" stroke-linecap="round"/>
   <path d="M30 290 C 50 270, 60 260, 70 250 C 115.0 250, 115.0 150, 160 150 C 207.5 150, 207.5 240, 255 240 C 300.0 240, 300.0 120, 345 120 C 387.5 120, 387.5 225, 430 225 C 472.5 225, 472.5 110, 515 110 C 552.5 110, 552.5 220, 590 220 C 625.0 220, 625.0 120, 660 120 C 682.5 120, 682.5 245, 705 245" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round"/>
   <g transform="translate(22 268)"><path d="M8 24 V0" stroke="#00174B" stroke-width="3"/><path d="M9 1 h18 l-5 6 l5 6 h-18 z" fill="#B3261E"/></g>

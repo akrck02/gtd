@@ -1,31 +1,22 @@
-# The GTD Quest 🗺️
+# The GTD quest
 
-**Build a real app, one level at a time.** Every level teaches you one piece of GTD, ends with
-something new on your screen, and gives you a badge. Nine badges, and you know all of GTD.
+Build a small app, one level at a time. Each level teaches one piece of GTD and ends with something
+new on your screen.
 
-![The quest map: a road from START through 8 levels — Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter and Speedrunner — to the final boss, Notes Master](images/quest/quest-map.svg)
+![The quest map: a road from START through 8 levels — Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter and Speedrunner — to a final challenge, Notes Master](images/quest/quest-map.svg)
 
-We will build **Notes**: a small app that lists your notes, opens them, speaks English and
-Spanish, remembers your choices… and, if you beat the boss, lets you write new notes.
-
----
-
-## How the quest works
-
-| | |
-|---|---|
-| 🎯 **Mission** | What you will build in the level |
-| 🧠 **The idea** | The concept, explained with something from everyday life |
-| 🛠️ **Build it** | The code to write — copy it, but read it too! |
-| ✅ **Checkpoint** | What you should see. If you see it, the level is done |
-| ⭐ **Bonus** | An optional mini challenge, with the solution hidden |
-| 🏆 **Badge** | Your reward, and how far you have come |
-
-Every level gives you **+100 XP**. The boss gives **+300 XP**. 1,100 XP in total — let's go.
+We will build **Notes**: an app that lists your notes, opens them, speaks English and Spanish and
+remembers your choices. At the end, a small challenge: writing new notes.
 
 ---
 
-## Before you start: the base camp ⛺
+Every level has the same shape: **the idea** (explained with something from everyday life), **the
+code**, a **checkpoint** to know it works, and an optional **bonus** if you want a bit more. Go at
+your own pace — each level leaves you with a working app.
+
+---
+
+## Before you start
 
 You need the project from [Getting started](getting-started.md) (5 minutes, if you haven't done it
 yet). Open **two terminals** in your project folder and leave these running the whole quest:
@@ -66,12 +57,12 @@ my-app/
 
 ---
 
-## Level 1 · The Builder 🧱
+## Level 1 · The Builder
 
-| ![Builder badge](images/quest/badge-builder.svg) | 🎯 **Mission:** a home page, and one page per note<br>📦 **Modules:** `dom`, `router`<br>⏱️ **Time:** 5 min · ✨ **XP:** +100 |
+| ![Builder badge](images/quest/badge-builder.svg) | **Mission:** a home page, and one page per note<br>**Modules:** `dom`, `router` · **Time:** 5 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
 Think of **LEGO**. `uiComponent` gives you a brick — a title, a button, a card — and you click
 bricks into each other with `append`.
@@ -81,7 +72,7 @@ you to the right room. That room is a **view**: a function that builds one page.
 
 ![How the router works: the address is matched against your routes, and the matching view draws into the container](images/router-flow.svg)
 
-#### 🛠️ Build it
+#### Build it
 
 Replace `src/main.ts` with:
 
@@ -107,14 +98,14 @@ window.addEventListener("hashchange", navigate)
 navigate()
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
 Open <http://localhost:8000>: you see **Notes**. Now type `#/note/3` at the end of the address:
 the page says **Note 3**.
 
 ![Level 1: a page with the title "Notes"](images/tour-1.png)
 
-#### ⭐ Bonus: an "About" page
+#### Bonus (optional): an "About" page
 
 Add a page at `#/about` that says who made the app.
 
@@ -127,26 +118,26 @@ Add a page at `#/about` that says who made the app.
 
 </details>
 
-**🏆 Badge unlocked: The Builder** · 🟦⬜⬜⬜⬜⬜⬜⬜⬜ 1/9 · 100 XP
+*✓ Level done — The Builder badge earned.*
 
-📖 Want more? [Building the interface](guides/dom.md) · [Views and routing](guides/router.md)
+Learn more: [Building the interface](guides/dom.md) · [Views and routing](guides/router.md)
 
 ---
 
-## Level 2 · The Keeper 🔑
+## Level 2 · The Keeper
 
-| ![Keeper badge](images/quest/badge-keeper.svg) | 🎯 **Mission:** settings that survive closing the browser<br>📦 **Module:** `configuration`<br>⏱️ **Time:** 4 min · ✨ **XP:** +100 |
+| ![Keeper badge](images/quest/badge-keeper.svg) | **Mission:** settings that survive closing the browser<br>**Module:** `configuration` · **Time:** 4 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
-Your app forgets everything when you reload — like a goldfish 🐟. The **configuration** is a
+Your app forgets everything when you reload — like a goldfish. The **configuration** is a
 **sticky note on the fridge**: you write on it, close the tab, come back tomorrow… and it is still
 there.
 
 The first time, we fill it from a file with defaults. After that, the browser keeps it.
 
-#### 🛠️ Build it
+#### Build it
 
 Create **`config.json`** next to `index.html`:
 
@@ -170,7 +161,7 @@ if (undefined == getConfiguration("api"))
   await loadConfiguration("./config.json")
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
 Open the browser console (`F12` → *Console*) and type `localStorage.notes`. You should see:
 
@@ -180,7 +171,7 @@ Open the browser console (`F12` → *Console*) and type `localStorage.notes`. Yo
 
 That is your sticky note. Reload the page: it is still there.
 
-#### ⭐ Bonus: a visit counter
+#### Bonus (optional): a visit counter
 
 Count how many times the app was opened, and log it to the console.
 
@@ -195,20 +186,20 @@ console.log(`Welcome back! Visit number ${visits}`)</code></pre>
 
 </details>
 
-**🏆 Badge unlocked: The Keeper** · 🟦🟦⬜⬜⬜⬜⬜⬜⬜ 2/9 · 200 XP
+*✓ Level done — The Keeper badge earned.*
 
-📖 Want more? [Configuration](guides/configuration.md)
+Learn more: [Configuration](guides/configuration.md)
 
 ---
 
-## Level 3 · The Messenger 📨
+## Level 3 · The Messenger
 
-| ![Messenger badge](images/quest/badge-messenger.svg) | 🎯 **Mission:** load your notes and show them as cards<br>📦 **Modules:** `http`, `bubble`<br>⏱️ **Time:** 6 min · ✨ **XP:** +100 |
+| ![Messenger badge](images/quest/badge-messenger.svg) | **Mission:** load your notes and show them as cards<br>**Modules:** `http`, `bubble` · **Time:** 6 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
-Asking a server for data is like **ordering food delivery** 🛵:
+Asking a server for data is like **ordering food delivery**:
 
 1. You place the order → `httpGet({ url })`
 2. You wait at home → `await`
@@ -217,7 +208,7 @@ Asking a server for data is like **ordering food delivery** 🛵:
 
 Our "restaurant" is a JSON file in the project, so you need no real server.
 
-#### 🛠️ Build it
+#### Build it
 
 Create **`api/notes.json`**:
 
@@ -264,13 +255,13 @@ setRoute("/note/$", async ([id], container) => {
 })
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
 Three cards on the home page. Click one: it opens.
 
 ![Level 3: the three notes shown as cards](images/tour-3.png)
 
-#### ⭐ Bonus: what if the restaurant is closed?
+#### Bonus (optional): what if the restaurant is closed?
 
 Rename `api/notes.json` for a moment: the app breaks. Make it show a friendly message instead.
 
@@ -285,23 +276,23 @@ if (!response.ok)
 
 </details>
 
-**🏆 Badge unlocked: The Messenger** · 🟦🟦🟦⬜⬜⬜⬜⬜⬜ 3/9 · 300 XP
+*✓ Level done — The Messenger badge earned.*
 
-📖 Want more? [Talking to a server](guides/http.md) · [Bubble UI](reference/html.md)
+Learn more: [Talking to a server](guides/http.md) · [Bubble UI](reference/html.md)
 
 ---
 
-## Level 4 · The Polyglot 🌍
+## Level 4 · The Polyglot
 
-| ![Polyglot badge](images/quest/badge-polyglot.svg) | 🎯 **Mission:** your app in English and Spanish<br>📦 **Module:** `i18n`<br>⏱️ **Time:** 5 min · ✨ **XP:** +100 |
+| ![Polyglot badge](images/quest/badge-polyglot.svg) | **Mission:** your app in English and Spanish<br>**Module:** `i18n` · **Time:** 5 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
-Think of **subtitles** 🎬. The film is the same; only the subtitle file changes. Your code says
+Think of **subtitles**. The film is the same; only the subtitle file changes. Your code says
 *"show the `title` text"*, and a JSON file per language says what that text is.
 
-#### 🛠️ Build it
+#### Build it
 
 Create **`resources/i18n/en/notes.json`**:
 
@@ -334,7 +325,7 @@ container.append(uiComponent({ type: "h1", text: getText("notes", "title") }))
 container.append(uiComponent({ type: "h1", text: note ? note.text : getText("notes", "missing") }))
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
 In the console, switch the sticky note to Spanish and reload:
 
@@ -342,9 +333,9 @@ In the console, switch the sticky note to Spanish and reload:
 localStorage.notes = '{"api":"./api","lang":"es"}'
 ```
 
-The title is now **Notas**. ¡Olé! 💃
+The title is now **Notas**.
 
-#### ⭐ Bonus: a third language
+#### Bonus (optional): a third language
 
 GTD also knows Galician (`gl`) and Catalan (`ca`). Add one of them.
 
@@ -359,25 +350,25 @@ localStorage.notes = '{"api":"./api","lang":"gl"}'</code></pre>
 
 </details>
 
-**🏆 Badge unlocked: The Polyglot** · 🟦🟦🟦🟦⬜⬜⬜⬜⬜ 4/9 · 400 XP
+*✓ Level done — The Polyglot badge earned.*
 
-📖 Want more? [Translations](guides/i18n.md)
+Learn more: [Translations](guides/i18n.md)
 
 ---
 
-## Level 5 · The Artist 🎨
+## Level 5 · The Artist
 
-| ![Artist badge](images/quest/badge-artist.svg) | 🎯 **Mission:** a button, with an icon, that switches language<br>📦 **Modules:** `icons`, `dom` events<br>⏱️ **Time:** 6 min · ✨ **XP:** +100 |
+| ![Artist badge](images/quest/badge-artist.svg) | **Mission:** a button, with an icon, that switches language<br>**Modules:** `icons`, `dom` events · **Time:** 6 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
-An **icon collection** is a **sticker album** 📒: you load the album once, then stick any sticker
+An **icon collection** is a **sticker album**: you load the album once, then stick any sticker
 anywhere, at any size and colour.
 
-A **click event** is a **doorbell** 🔔: you decide in advance what happens when someone rings it.
+A **click event** is a **doorbell**: you decide in advance what happens when someone rings it.
 
-#### 🛠️ Build it
+#### Build it
 
 Create **`resources/icons.json`** with one sticker:
 
@@ -419,15 +410,15 @@ setDomEvents(switchButton, {
 container.append(switchButton)
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
-Press the button: the whole page changes language. Reload: it remembers. 🧠
+Press the button: the whole page changes language. Reload: it remembers.
 
 | English | Español |
 |---|---|
 | ![The notes app in English, with an "Español" button](images/tour-5-en.png) | ![The same app in Spanish, titled "Notas", with an "English" button](images/tour-5-es.png) |
 
-#### ⭐ Bonus: a sticker on every card
+#### Bonus (optional): a sticker on every card
 
 Add a second icon to `icons.json` and show it at the start of each note card.
 
@@ -445,27 +436,27 @@ container.append(card)</code></pre>
 
 </details>
 
-**🏆 Badge unlocked: The Artist** · 🟦🟦🟦🟦🟦⬜⬜⬜⬜ 5/9 · 500 XP
+*✓ Level done — The Artist badge earned.*
 
-📖 Want more? [Icons](guides/icons.md) · [Building the interface](guides/dom.md)
+Learn more: [Icons](guides/icons.md) · [Building the interface](guides/dom.md)
 
 ---
 
-## Level 6 · The Broadcaster 📡
+## Level 6 · The Broadcaster
 
-| ![Broadcaster badge](images/quest/badge-broadcaster.svg) | 🎯 **Mission:** tell the rest of the app that the language changed<br>📦 **Module:** `signals`<br>⏱️ **Time:** 4 min · ✨ **XP:** +100 |
+| ![Broadcaster badge](images/quest/badge-broadcaster.svg) | **Mission:** tell the rest of the app that the language changed<br>**Module:** `signals` · **Time:** 4 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
-A **signal** is a **radio station** 📻. The button broadcasts *"language changed!"*. Anyone tuned
+A **signal** is a **radio station**. The button broadcasts *"language changed!"*. Anyone tuned
 in reacts. The station doesn't know who is listening — and doesn't need to.
 
 This keeps your code tidy: tomorrow you can add another listener without touching the button.
 
 ![A signal: the login emits it, and the header, the menu and the cart react, without knowing each other](images/signals-flow.svg)
 
-#### 🛠️ Build it
+#### Build it
 
 Create the station and a listener that writes in the browser tab's title:
 
@@ -487,12 +478,12 @@ Broadcast from the button, after `setCurrentLanguage`:
 await emitSignal(languageChanged, lang)
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
 Look at the browser tab while you press the button: **Notes (es, 1 changes)**,
 **Notes (en, 2 changes)**…
 
-#### ⭐ Bonus: a second listener
+#### Bonus (optional): a second listener
 
 Tune a second listener to the same station: show a small message for two seconds.
 
@@ -510,24 +501,24 @@ connectToSignal(languageChanged, async lang => {
 
 </details>
 
-**🏆 Badge unlocked: The Broadcaster** · 🟦🟦🟦🟦🟦🟦⬜⬜⬜ 6/9 · 600 XP
+*✓ Level done — The Broadcaster badge earned.*
 
-📖 Want more? [Signals](guides/signals.md)
+Learn more: [Signals](guides/signals.md)
 
 ---
 
-## Level 7 · The Shape-shifter 📱
+## Level 7 · The Shape-shifter
 
-| ![Shape-shifter badge](images/quest/badge-shape-shifter.svg) | 🎯 **Mission:** look good on a phone too<br>📦 **Module:** `display`<br>⏱️ **Time:** 3 min · ✨ **XP:** +100 |
+| ![Shape-shifter badge](images/quest/badge-shape-shifter.svg) | **Mission:** look good on a phone too<br>**Module:** `display` · **Time:** 3 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
-You wear different clothes when it rains ☔ — same you, different outfit. `checkDisplayType`
+You wear different clothes when it rains — same you, different outfit. `checkDisplayType`
 looks at the weather (the screen) and writes `mobile` or `desktop` on the page. Your CSS picks the
 outfit.
 
-#### 🛠️ Build it
+#### Build it
 
 ```ts
 import { checkDisplayType } from "./gtd/display.js"
@@ -543,30 +534,30 @@ And the rainy-day outfit, in `index.html`'s `<style>`:
 [data-display="mobile"] .note { max-width: none; }
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
-Open the developer tools, turn on the device toolbar (📱 icon, or `Ctrl` + `Shift` + `M`) and pick
+Open the developer tools, turn on the device toolbar (the phone icon, or `Ctrl` + `Shift` + `M`) and pick
 a phone: bigger text, cards as wide as the screen.
 
 ![Level 7: the notes app on a phone, with wide cards](images/tour-7-mobile.png)
 
-**🏆 Badge unlocked: The Shape-shifter** · 🟦🟦🟦🟦🟦🟦🟦⬜⬜ 7/9 · 700 XP
+*✓ Level done — The Shape-shifter badge earned.*
 
-📖 Want more? [Display](reference/display.md) · [Browser](reference/browser.md)
+Learn more: [Display](reference/display.md) · [Browser](reference/browser.md)
 
 ---
 
-## Level 8 · The Speedrunner ⚡
+## Level 8 · The Speedrunner
 
-| ![Speedrunner badge](images/quest/badge-speedrunner.svg) | 🎯 **Mission:** move around without the mouse<br>📦 **Module:** `shortcuts`<br>⏱️ **Time:** 3 min · ✨ **XP:** +100 |
+| ![Speedrunner badge](images/quest/badge-speedrunner.svg) | **Mission:** move around without the mouse<br>**Module:** `shortcuts` · **Time:** 3 min |
 |:---:|:---|
 
-#### 🧠 The idea
+#### The idea
 
 You already use shortcuts every day: `Ctrl` + `C`, `Ctrl` + `V`. Speedrunners in games beat
 levels faster with them. Let's give your app some.
 
-#### 🛠️ Build it
+#### Build it
 
 Press `Ctrl` + `H` anywhere to go **h**ome:
 
@@ -584,11 +575,11 @@ Shortcuts.set(keys, {
 })
 ```
 
-#### ✅ Checkpoint
+#### Checkpoint
 
-Open a note, press `Ctrl` + `H`: you are home. ⚡
+Open a note, press `Ctrl` + `H`: you are home.
 
-#### ⭐ Bonus: escape!
+#### Bonus (optional): escape!
 
 Make `Esc` go home too.
 
@@ -603,38 +594,38 @@ Make `Esc` go home too.
 
 </details>
 
-**🏆 Badge unlocked: The Speedrunner** · 🟦🟦🟦🟦🟦🟦🟦🟦⬜ 8/9 · 800 XP
+*✓ Level done — The Speedrunner badge earned.*
 
-📖 Want more? [Keyboard shortcuts](guides/shortcuts.md)
+Learn more: [Keyboard shortcuts](guides/shortcuts.md)
 
 ---
 
-## 👑 Final boss · The Notes Master
+## Final challenge · Notes Master
 
-| ![Notes Master badge](images/quest/badge-boss.svg) | 🎯 **Mission:** write new notes, and keep them after a reload<br>📦 **Modules:** everything you learned<br>⏱️ **Time:** 10 min · ✨ **XP:** +300 |
+| ![Notes Master badge](images/quest/badge-final.svg) | **Mission:** write new notes, and keep them after a reload<br>**Modules:** everything you learned · **Time:** 10 min |
 |:---:|:---|
 
-#### 🧠 The challenge
+#### The challenge
 
-This time there is no step-by-step. You have every tool you need:
+This time there is no step-by-step, but you already have every piece:
 
 | You need to… | You learned it in |
 |---|---|
-| Draw a text box and a button | 🧱 Level 1 |
-| Keep the notes after a reload | 🔑 Level 2 |
-| Start from `api/notes.json` the first time | 📨 Level 3 |
-| React to the button | 🎨 Level 5 |
+| Draw a text box and a button | Level 1 |
+| Keep the notes after a reload | Level 2 |
+| Start from `api/notes.json` the first time | Level 3 |
+| React to the button | Level 5 |
 | Give each note a unique id | `uuidv4()` from [`crypto.ts`](reference/crypto.md) |
 
 **The goal:** a text box and an **+ Add** button on the home page. Type *"Water the plants"*, press **+ Add**, and
 a new card appears. Reload: it is still there.
 
-> 💡 **Hint:** keep the whole list on the sticky note — `setConfiguration("notes", notes)` — and
+> **Hint:** keep the whole list on the sticky note — `setConfiguration("notes", notes)` — and
 > read it back at start with `getConfiguration("notes")`.
 
-Try it first! Then compare with the solution. 💪
+Try it on your own first, then compare with the solution.
 
-![The boss level: a text box and a plus button above the cards, with a new note "Water the plants"](images/tour-boss.png)
+![The final challenge: a text box and a plus button above the cards, with a new note "Water the plants"](images/tour-final.png)
 
 <details>
 <summary>🔓 Show the solution</summary>
@@ -664,29 +655,27 @@ container.append(form)</code></pre>
 
 </details>
 
-**👑 Badge unlocked: The Notes Master** · 🟦🟦🟦🟦🟦🟦🟦🟦🟦 9/9 · **1,100 XP**
+*✓ Done — Notes Master badge earned.*
 
 ---
 
-## 🎉 Quest complete!
+## Well done
 
-![All nine badges: Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter, Speedrunner and Notes Master](images/quest/badges-all.svg)
+![The nine badges: Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter, Speedrunner and Notes Master](images/quest/badges-all.svg)
 
-You built a real app, and you can read **every line** of it. That is the GTD way. 🙌
+You built a real app, and you can read every line of it. That is the GTD way.
 
-### 🧭 Side quests
+### Ideas to keep going
 
-Feeling good? Some ideas to keep playing:
-
-| Side quest | Difficulty | Hint |
+| Idea | Difficulty | Hint |
 |---|---|---|
-| 🗑️ Delete a note | ⭐ | A button on the note page, `notes.splice(…)`, `setConfiguration` |
-| 🌙 Dark mode switch | ⭐ | `document.documentElement.dataset.theme = "dark"` — see [Configuration](guides/configuration.md) |
-| ✍️ Type the title letter by letter | ⭐⭐ | [Animations](reference/animations.md) |
-| 🔍 Search your notes | ⭐⭐ | An input, `notes.filter(…)`, draw again on `input` events |
-| ☁️ Save notes on a real server | ⭐⭐⭐ | `httpPost` — see [Talking to a server](guides/http.md) |
+| Delete a note | ⭐ | A button on the note page, `notes.splice(…)`, `setConfiguration` |
+| Dark mode switch | ⭐ | `document.documentElement.dataset.theme = "dark"` — see [Configuration](guides/configuration.md) |
+| Type the title letter by letter | ⭐⭐ | [Animations](reference/animations.md) |
+| Search your notes | ⭐⭐ | An input, `notes.filter(…)`, draw again on `input` events |
+| Save notes on a real server | ⭐⭐⭐ | `httpPost` — see [Talking to a server](guides/http.md) |
 
-Stuck at any point? [Troubleshooting](troubleshooting.md) has your back.
+Stuck at any point? See [Troubleshooting](troubleshooting.md).
 
 ---
 
