@@ -1,7 +1,39 @@
 <h1 id="getting-started">Getting started 🚀</h1>
 
-<p>By the end of this page you will have a GTD app running in your browser, with two pages and a
-button. It takes about <strong>five minutes</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>🎯 <strong>Goal</strong></td>
+<td>Your first GTD app in the browser: two pages and a button</td>
+</tr>
+
+<tr>
+<td>⏱️ <strong>Time</strong></td>
+<td>About 5 minutes</td>
+</tr>
+
+<tr>
+<td>🧰 <strong>You need</strong></td>
+<td>A terminal, git and Python 3 — no Node.js</td>
+</tr>
+
+<tr>
+<td>🗺️ <strong>Then</strong></td>
+<td><a href="./tour">The GTD quest</a>: a notes app, step by step</td>
+</tr>
+</tbody>
+</table>
+<p>Think of this page as <strong>level 0</strong>: you set up your tools here, and the quest starts on the next
+page.</p>
+
+<hr>
 
 <h2 id="no-node-js-no-npm">No Node.js, no npm</h2>
 
@@ -37,7 +69,9 @@ button. It takes about <strong>five minutes</strong>.</p>
 (<code>file://…</code>) in many cases. Any static server works; Python&rsquo;s is just already there.</p>
 </blockquote>
 
-<h2 id="step-1-get-gtd">Step 1 — Get GTD</h2>
+<hr>
+
+<h2 id="step-1-get-gtd">Step 1 — Get GTD 📦</h2>
 <pre><code class="language-sh">git clone --depth <span class="m">1</span> https://github.com/akrck02/gtd gtd-download
 mkdir -p my-app/src my-app/bin
 cp -r gtd-download/src my-app/src/gtd
@@ -52,7 +86,12 @@ project</strong>. You own them — you can read them, and even change them.</p>
 a dark theme and layout classes, in one 9 KB file. It is optional, but it makes your app look good
 from the first minute.</p>
 
-<h2 id="step-2-get-esbuild">Step 2 — Get esbuild</h2>
+<hr>
+
+<h2 id="step-2-get-esbuild">Step 2 — Get esbuild 🔧</h2>
+
+<p>esbuild is a <strong>blender</strong> 🥤: you put in many <code>.ts</code> files — yours and GTD&rsquo;s — and get <strong>one</strong>
+<code>.js</code> file the browser can drink.</p>
 
 <p><strong>On Linux (x86-64)</strong> the GTD repository already ships it:</p>
 <pre><code class="language-sh">cp ../gtd-download/bin/esbuild bin/
@@ -80,7 +119,9 @@ mv esbuild bin/
         └── …
 </code></pre>
 
-<h2 id="step-3-write-the-page">Step 3 — Write the page</h2>
+<hr>
+
+<h2 id="step-3-write-the-page">Step 3 — Write the page 📄</h2>
 
 <p>Create <strong><code>index.html</code></strong> in <code>my-app/</code>:</p>
 <pre><code class="language-html"><span class="cp">&lt;!doctype html&gt;</span>
@@ -105,7 +146,9 @@ mv esbuild bin/
 classes stack what we put in it and centre it. The <code>&lt;script&gt;</code> loads our code — it points to
 <code>out/main.js</code>, the file esbuild will <strong>build</strong>, not to the <code>.ts</code> file.</p>
 
-<h2 id="step-4-write-the-app">Step 4 — Write the app</h2>
+<hr>
+
+<h2 id="step-4-write-the-app">Step 4 — Write the app ✍️</h2>
 
 <p>Create <strong><code>src/main.ts</code></strong>:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span><span class="p">,</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
@@ -145,7 +188,9 @@ classes stack what we put in it and centre it. The <code>&lt;script&gt;</code> l
 write imports in TypeScript for the browser, and esbuild understands it.</p>
 </blockquote>
 
-<h2 id="step-5-build-and-run">Step 5 — Build and run</h2>
+<hr>
+
+<h2 id="step-5-build-and-run">Step 5 — Build and run ▶️</h2>
 <pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js
 python3 -m http.server <span class="m">8000</span>
 </code></pre>
@@ -163,11 +208,13 @@ python3 -m http.server <span class="m">8000</span>
 
 <p>Click <strong>← Back</strong> → you are home again. Try typing <code>#/hello/Ada</code> in the address bar too.</p>
 
-<p>🎉 <strong>That&rsquo;s it — you have a GTD app with routing.</strong></p>
+<p>🎉 <strong>That&rsquo;s it — you have a GTD app with routing.</strong> You are ready for the quest.</p>
 
 <p>Nothing on screen? Head to <a href="./troubleshooting">Troubleshooting</a>.</p>
 
-<h2 id="making-changes">Making changes</h2>
+<hr>
+
+<h2 id="making-changes">Making changes 🔁</h2>
 
 <p>Leave esbuild <strong>watching</strong> in a second terminal; it rebuilds every time you save:</p>
 <pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js --watch
@@ -175,14 +222,14 @@ python3 -m http.server <span class="m">8000</span>
 
 <p>Then just reload the browser after each change.</p>
 
-<h2 id="getting-ready-to-publish">Getting ready to publish</h2>
+<h2 id="getting-ready-to-publish">Getting ready to publish 🌍</h2>
 
 <p>Add <code>--minify</code> to make the file small, and copy <code>index.html</code> and <code>out/</code> to any static host
 (GitHub Pages, Netlify, your own server…):</p>
 <pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --minify --outfile<span class="o">=</span>out/main.js
 </code></pre>
 
-<h2 id="checking-types-optional">Checking types (optional)</h2>
+<h2 id="checking-types-optional">Checking types (optional) 🔍</h2>
 
 <p>esbuild builds fast because it <strong>does not check types</strong>: a typo like <code>contaner</code> shows up in the
 browser, not in the terminal. Editors such as VS Code check types as you type. To check from the
@@ -190,10 +237,12 @@ terminal too, the GTD repository has a script that downloads the native TypeScri
 without Node:</p>
 <pre><code class="language-sh">cp ../gtd-download/bin/install-ts.sh bin/
 ./bin/install-ts.sh        <span class="c1"># downloads bin/tsgo once</span>
-./bin/tsgo --noEmit --target ES2022 --module ESNext --lib ES2022,DOM,DOM.Iterable src/main.ts
+./bin/tsgo --noEmit --strict <span class="nb">false</span> --target ES2022 --module ESNext --lib ES2022,DOM,DOM.Iterable src/main.ts
 </code></pre>
 
-<h2 id="what-just-happened">What just happened?</h2>
+<hr>
+
+<h2 id="what-just-happened">What just happened? 🤔</h2>
 
 <p><img src="./images/build-flow.svg" alt="How a GTD app is built: your TypeScript and GTD go through esbuild into one JavaScript file that index.html loads" /></p>
 
@@ -233,12 +282,39 @@ without Node:</p>
 </tbody>
 </table>
 
-<h2 id="next-steps">Next steps</h2>
+<hr>
 
-<ul>
-<li>🧠 <a href="./concepts">How GTD thinks</a> — six ideas that make every other page easier.</li>
-<li>🗺️ <a href="./tour">A tour of GTD</a> — build a small notes app, step by step.</li>
-</ul>
+<h2 id="next-choose-your-path">Next: choose your path 🧭</h2>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Path</th>
+<th>What you get</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>🗺️</td>
+<td><strong><a href="./tour">The GTD quest</a></strong> (recommended)</td>
+<td>Build a notes app in 8 short levels, learning by doing</td>
+</tr>
+
+<tr>
+<td>🧠</td>
+<td><a href="./concepts">How GTD thinks</a></td>
+<td>Six ideas, five minutes, every other page becomes easier</td>
+</tr>
+
+<tr>
+<td>📚</td>
+<td><a href="./readme">The guides</a></td>
+<td>Look up one thing when you need it</td>
+</tr>
+</tbody>
+</table>
 
 <hr>
 

@@ -126,7 +126,9 @@ the header shows their name, the menu shows more options, the cart loads. A <str
 </tbody>
 </table>
 <p>Handlers start one after the other but run <strong>at the same time</strong>, so a slow one doesn&rsquo;t delay the
-others.</p>
+others. But <code>await emitSignal(...)</code> waits for the <strong>slowest</strong> one: a handler that should not hold up
+the code that emits (an animation, a message that disappears later) should not <code>await</code> its slow
+part.</p>
 
 <h3 id="signals-and-pages">Signals and pages</h3>
 

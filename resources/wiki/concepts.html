@@ -1,11 +1,62 @@
 <h1 id="how-gtd-thinks">How GTD thinks 🧠</h1>
 
-<p>GTD is small on purpose. Six ideas explain how every module behaves. Once you know them, you can
-guess how most of the library works before reading about it.</p>
+<p>GTD is small on purpose. <strong>Six ideas</strong> explain how every module behaves. Once you know them, you
+can guess how most of the library works before reading about it.</p>
 
-<h2 id="1-everything-is-the-real-thing">1. Everything is the real thing</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Idea</th>
+<th>In one line</th>
+</tr>
+</thead>
 
-<p>GTD never hides the browser from you.</p>
+<tbody>
+<tr>
+<td>1</td>
+<td>Everything is the real thing</td>
+<td>A GTD button <em>is</em> a <code>&lt;button&gt;</code></td>
+</tr>
+
+<tr>
+<td>2</td>
+<td>Nothing to install</td>
+<td>One builder, no Node.js, no <code>node_modules</code></td>
+</tr>
+
+<tr>
+<td>3</td>
+<td>One file, one job</td>
+<td>Take the modules you need, leave the rest</td>
+</tr>
+
+<tr>
+<td>4</td>
+<td>Functions, not classes</td>
+<td>Call a function, pass an object, done</td>
+</tr>
+
+<tr>
+<td>5</td>
+<td>You draw, GTD doesn&rsquo;t re-draw</td>
+<td>No magic: you decide what changes on screen</td>
+</tr>
+
+<tr>
+<td>6</td>
+<td>Quiet when things are missing</td>
+<td>Missing pieces never crash your page</td>
+</tr>
+</tbody>
+</table>
+
+<hr>
+
+<h2 id="1-everything-is-the-real-thing">1. Everything is the real thing 🧱</h2>
+
+<p>GTD is a <strong>power drill</strong>, not a robot. It makes the job faster, but you are still the one holding
+the tool, and you can see exactly what it does. It never hides the browser from you.</p>
 
 <ul>
 <li><code>uiComponent</code> returns an <strong><code>HTMLElement</code></strong>, the same object <code>document.createElement</code> gives you.</li>
@@ -20,13 +71,21 @@ guess how most of the library works before reading about it.</p>
 </span><span class="nx">button</span><span class="p">.</span><span class="nx">textContent</span> <span class="o">=</span> <span class="s2">&#34;Saved&#34;</span> <span class="c1">// plain DOM
 </span></code></pre>
 
-<h2 id="2-nothing-to-install">2. Nothing to install</h2>
+<hr>
+
+<h2 id="2-nothing-to-install">2. Nothing to install 🎒</h2>
+
+<p>Travel light: GTD fits in your backpack.</p>
 
 <p>No Node.js, no npm, no <code>node_modules</code>. GTD is a folder of <code>.ts</code> files, and
 <a href="https://esbuild.github.io" target="_blank">esbuild</a> — one program, one command — turns your app into one <code>.js</code>
 file. Your project has no dependencies that can break, go out of date or need updating.</p>
 
-<h2 id="3-one-file-one-job">3. One file, one job</h2>
+<hr>
+
+<h2 id="3-one-file-one-job">3. One file, one job 🧰</h2>
+
+<p>Like a <strong>toolbox</strong>: you take the screwdriver, not the whole box.</p>
 
 <p>Each module lives in its own file and does one thing: <code>dom.ts</code> builds elements, <code>router.ts</code> picks
 pages, <code>http.ts</code> talks to servers. Import only what you use:</p>
@@ -36,7 +95,11 @@ pages, <code>http.ts</code> talks to servers. Import only what you use:</p>
 
 <p>You can even delete the modules you don&rsquo;t need from your copy.</p>
 
-<h2 id="4-functions-not-classes">4. Functions, not classes</h2>
+<hr>
+
+<h2 id="4-functions-not-classes">4. Functions, not classes 🍳</h2>
+
+<p>Like a <strong>recipe</strong>: <em>take this, do that</em>. No family tree of objects to learn first.</p>
 
 <p>There are no classes to extend and no lifecycle to learn. You call functions and pass plain
 objects (the few helpers grouped in a class, like <code>Shortcuts</code>, are used the same way, with no
@@ -46,7 +109,12 @@ objects (the few helpers grouped in a class, like <code>Shortcuts</code>, are us
 <span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/notes&#34;</span><span class="p">,</span> <span class="nx">showNotes</span><span class="p">)</span>
 </code></pre>
 
-<h2 id="5-you-draw-gtd-doesn-t-re-draw">5. You draw, GTD doesn&rsquo;t re-draw</h2>
+<hr>
+
+<h2 id="5-you-draw-gtd-doesn-t-re-draw">5. You draw, GTD doesn&rsquo;t re-draw 🎨</h2>
+
+<p>A <strong>whiteboard</strong>, not a smart screen: when something changes, you wipe it and draw it again. A bit
+more work, and never a surprise.</p>
 
 <p>GTD does <strong>not</strong> watch your data. When something changes, you update the element yourself, or draw
 the page again:</p>
@@ -65,7 +133,12 @@ the page again:</p>
 <p>This is a bit more typing than in big frameworks, but there is no magic: what you see in your code
 is exactly what happens on screen.</p>
 
-<h2 id="6-quiet-when-things-are-missing">6. Quiet when things are missing</h2>
+<hr>
+
+<h2 id="6-quiet-when-things-are-missing">6. Quiet when things are missing 🤫</h2>
+
+<p>Like a good <strong>waiter</strong>: if the dish you ordered is not available, you get told politely — the
+restaurant doesn&rsquo;t burn down.</p>
 
 <p>GTD prefers doing nothing over crashing your page:</p>
 
@@ -102,7 +175,9 @@ is exactly what happens on screen.</p>
 <p>When something does not show up, check the browser console: GTD writes a warning there when it
 can.</p>
 
-<h2 id="a-few-words-you-will-see">A few words you will see</h2>
+<hr>
+
+<h2 id="a-few-words-you-will-see">A few words you will see 📖</h2>
 
 <table>
 <thead>
@@ -157,4 +232,4 @@ can.</p>
 
 <hr>
 
-<p><a href="./readme">← All the documentation</a> · Next: <a href="./tour">A tour of GTD →</a></p>
+<p><a href="./readme">← All the documentation</a> · Next: <a href="./tour">The GTD quest →</a></p>

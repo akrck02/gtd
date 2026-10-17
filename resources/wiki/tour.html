@@ -1,82 +1,243 @@
-<h1 id="a-tour-of-gtd">A tour of GTD 🗺️</h1>
+<h1 id="the-gtd-quest">The GTD quest</h1>
 
-<p>In this tour we build <strong>Notes</strong>, a tiny app that lists notes, opens one, speaks English and Spanish,
-remembers your language and draws icons. Each step adds <strong>one module</strong> and links to its guide, so you
-can stop at any step and still have a working app.</p>
+<p>Build a small app, one level at a time. Each level teaches one piece of GTD and ends with something
+new on your screen.</p>
 
-<p>It needs no real server: the &ldquo;API&rdquo; is a JSON file in the project.</p>
+<p><img src="./images/quest/quest-map.svg" alt="The quest map: a road from START through 8 levels — Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter and Speedrunner — to a final challenge, Notes Master" /></p>
 
-<blockquote>
-<p>Start from the project you made in <a href="./getting-started">Getting started</a>. Keep these two
-running in two terminals, and reload the browser after each step:</p>
-</blockquote>
-<pre><code class="language-sh">./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js --watch
+<p>We will build <strong>Notes</strong>: an app that lists your notes, opens them, speaks English and Spanish and
+remembers your choices. At the end, a small challenge: writing new notes.</p>
+
+<hr>
+
+<p>Every level has the same shape: <strong>the idea</strong> (explained with something from everyday life), <strong>the
+code</strong>, a <strong>checkpoint</strong> to know it works, and an optional <strong>bonus</strong> if you want a bit more. Go at
+your own pace — each level leaves you with a working app.</p>
+
+<hr>
+
+<h2 id="before-you-start">Before you start</h2>
+
+<p>You need the project from <a href="./getting-started">Getting started</a> (5 minutes, if you haven&rsquo;t done it
+yet). Open <strong>two terminals</strong> in your project folder and leave these running the whole quest:</p>
+<pre><code class="language-sh"><span class="c1"># terminal 1 — rebuilds your app every time you save</span>
+./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js --watch
+</code></pre>
+<pre><code class="language-sh"><span class="c1"># terminal 2 — serves it at http://localhost:8000</span>
 python3 -m http.server <span class="m">8000</span>
 </code></pre>
 
-<h2 id="the-files-we-will-end-with">The files we will end with</h2>
-<pre><code>my-app/
-├── index.html
-├── config.json          ← step 2
-├── api/notes.json       ← step 3
-├── resources/
-│   ├── i18n/en/notes.json   ← step 4
-│   ├── i18n/es/notes.json   ← step 4
-│   └── icons.json           ← step 5
-└── src/
-    ├── gtd/
-    └── main.ts          ← every step
+<p>Now you only need to <strong>save and reload the browser</strong> after each change.</p>
+
+<p>Add this to the <code>&lt;style&gt;</code> in your <code>index.html</code>; it makes the notes look like cards:</p>
+<pre><code class="language-css"><span class="p">.</span><span class="nc">note</span> <span class="p">{</span> <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span> <span class="k">max-width</span><span class="p">:</span> <span class="mi">420</span><span class="kt">px</span><span class="p">;</span> <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mf">1.25</span><span class="kt">rem</span><span class="p">;</span> <span class="k">color</span><span class="p">:</span> <span class="kc">inherit</span><span class="p">;</span> <span class="p">}</span>
 </code></pre>
 
-<h2 id="step-1-pages-dom-router">Step 1 — Pages (<code>dom</code> + <code>router</code>)</h2>
+<p>This is where everything will live by the end:</p>
+<pre><code>my-app/
+├── index.html
+├── config.json                 ← level 2
+├── api/notes.json              ← level 3
+├── resources/
+│   ├── i18n/en/notes.json      ← level 4
+│   ├── i18n/es/notes.json      ← level 4
+│   └── icons.json              ← level 5
+└── src/
+    ├── gtd/
+    └── main.ts                 ← every level
+</code></pre>
 
-<p>Replace <code>src/main.ts</code> with a home page and a page for one note:</p>
+<hr>
+
+<h2 id="level-1-the-builder">Level 1 · The Builder</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>A home page, and one page per note</td>
+<td><code>dom</code>, <code>router</code></td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea">The idea</h4>
+
+<p>Think of <strong>LEGO</strong>. <code>uiComponent</code> gives you a brick — a title, a button, a card — and you click
+bricks into each other with <code>append</code>.</p>
+
+<p>The <strong>router</strong> is the receptionist of a building. You say <em>&ldquo;I&rsquo;m going to <code>/note/2</code>&rdquo;</em>, and they send
+you to the right room. That room is a <strong>view</strong>: a function that builds one page.</p>
+
+<p><img src="./images/router-flow.svg" alt="How the router works: the address is matched against your routes, and the matching view draws into the container" /></p>
+
+<h4 id="build-it">Build it</h4>
+
+<p>Replace <code>src/main.ts</code> with:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">uiComponent</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
 <span class="kr">import</span> <span class="p">{</span> <span class="nx">setRoute</span><span class="p">,</span> <span class="nx">showRoute</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/router.js&#34;</span>
 
 <span class="kr">const</span> <span class="nx">app</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;app&#34;</span><span class="p">)</span>
 
-<span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="c1">// the home page
+</span><span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Notes&#34;</span> <span class="p">}))</span>
 <span class="p">})</span>
 
-<span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/note/$&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">([</span><span class="nx">id</span><span class="p">],</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="c1">// one page per note: &#34;$&#34; catches the note number
+</span><span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/note/$&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">([</span><span class="nx">id</span><span class="p">],</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="sb">`Note </span><span class="si">${</span><span class="nx">id</span><span class="si">}</span><span class="sb">`</span> <span class="p">}))</span>
 <span class="p">})</span>
 
-<span class="kr">const</span> <span class="nx">navigate</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">showRoute</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">||</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="nx">app</span><span class="p">)</span>
+<span class="c1">// draw the right page now, and every time the address changes
+</span><span class="kr">const</span> <span class="nx">navigate</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">showRoute</span><span class="p">(</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">||</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="nx">app</span><span class="p">)</span>
 <span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;hashchange&#34;</span><span class="p">,</span> <span class="nx">navigate</span><span class="p">)</span>
 <span class="nx">navigate</span><span class="p">()</span>
 </code></pre>
 
-<p>✅ <strong>Check:</strong> <a href="http://localhost:8000" target="_blank">http://localhost:8000</a> shows <strong>Notes</strong>; <code>#/note/3</code> shows <strong>Note 3</strong>.</p>
+<h4 id="checkpoint">Checkpoint</h4>
 
-<p><img src="./images/tour-1.png" alt="Step 1: a page with the title &ldquo;Notes&rdquo;" /></p>
+<p>Open <a href="http://localhost:8000" target="_blank">http://localhost:8000</a>: you see <strong>Notes</strong>. Now type <code>#/note/3</code> at the end of the address:
+the page says <strong>Note 3</strong>.</p>
 
-<p>📖 <a href="./guides/dom">Building the interface</a> · <a href="./guides/router">Views and routing</a></p>
+<p><img src="./images/tour-1.png" alt="Level 1: a page with the title &ldquo;Notes&rdquo;" /></p>
 
-<h2 id="step-2-settings-configuration">Step 2 — Settings (<code>configuration</code>)</h2>
+<h4 id="bonus-optional-an-about-page">Bonus (optional): an &ldquo;About&rdquo; page</h4>
+
+<p>Add a page at <code>#/about</code> that says who made the app.</p>
+
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>setRoute("/about", async (_, container) => {
+  container.append(uiComponent({ type: "h1", text: "Made by me, with GTD" }))
+})</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-builder.svg" alt="Achievement unlocked: Builder" /></p>
+
+<p>Learn more: <a href="./guides/dom">Building the interface</a> · <a href="./guides/router">Views and routing</a></p>
+
+<hr>
+
+<h2 id="level-2-the-keeper">Level 2 · The Keeper</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Settings that survive closing the browser</td>
+<td><code>configuration</code></td>
+<td>4 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea-1">The idea</h4>
+
+<p>Your app forgets everything when you reload — like a goldfish. The <strong>configuration</strong> is a
+<strong>sticky note on the fridge</strong>: you write on it, close the tab, come back tomorrow… and it is still
+there.</p>
+
+<p>The first time, we fill it from a file with defaults. After that, the browser keeps it.</p>
+
+<h4 id="build-it-1">Build it</h4>
 
 <p>Create <strong><code>config.json</code></strong> next to <code>index.html</code>:</p>
 <pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;api&#34;</span><span class="p">:</span> <span class="s2">&#34;./api&#34;</span><span class="p">,</span> <span class="nt">&#34;lang&#34;</span><span class="p">:</span> <span class="s2">&#34;en&#34;</span> <span class="p">}</span>
 </code></pre>
 
+<p>Open <code>src/gtd/configuration.ts</code> and give your sticky note a name:</p>
+<pre><code class="language-ts"><span class="kr">const</span> <span class="nx">configurationId</span>: <span class="kt">string</span> <span class="o">=</span> <span class="s2">&#34;notes&#34;</span>
+</code></pre>
+
 <p>At the top of <code>src/main.ts</code>, after the imports:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">loadConfiguration</span><span class="p">,</span> <span class="nx">getConfiguration</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/configuration.js&#34;</span>
 
-<span class="c1">// Load the defaults only the first time, so user changes are kept
+<span class="c1">// fill the sticky note only the first time, so your changes are kept
 </span><span class="k">if</span> <span class="p">(</span><span class="kc">undefined</span> <span class="o">==</span> <span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;api&#34;</span><span class="p">))</span>
   <span class="k">await</span> <span class="nx">loadConfiguration</span><span class="p">(</span><span class="s2">&#34;./config.json&#34;</span><span class="p">)</span>
 </code></pre>
 
-<p>Also open <code>src/gtd/configuration.ts</code> and change <code>configurationId</code> to <code>&quot;notes&quot;</code>: it is the name
-under which your settings are saved in the browser.</p>
+<h4 id="checkpoint-1">Checkpoint</h4>
 
-<p>✅ <strong>Check:</strong> in the browser console, <code>localStorage.notes</code> prints <code>{&quot;api&quot;:&quot;./api&quot;,&quot;lang&quot;:&quot;en&quot;}</code>.</p>
+<p>Open the browser console (<code>F12</code> → <em>Console</em>) and type <code>localStorage.notes</code>. You should see:</p>
+<pre><code>&#39;{&#34;api&#34;:&#34;./api&#34;,&#34;lang&#34;:&#34;en&#34;}&#39;
+</code></pre>
 
-<p>📖 <a href="./guides/configuration">Configuration</a></p>
+<p>That is your sticky note. Reload the page: it is still there.</p>
 
-<h2 id="step-3-data-http">Step 3 — Data (<code>http</code>)</h2>
+<h4 id="bonus-optional-a-visit-counter">Bonus (optional): a visit counter</h4>
+
+<p>Count how many times the app was opened, and log it to the console.</p>
+
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>import { setConfiguration } from "./gtd/configuration.js"
+
+const visits = (getConfiguration("visits") ?? 0) + 1
+setConfiguration("visits", visits)
+console.log(`Welcome back! Visit number ${visits}`)</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-keeper.svg" alt="Achievement unlocked: Keeper" /></p>
+
+<p>Learn more: <a href="./guides/configuration">Configuration</a></p>
+
+<hr>
+
+<h2 id="level-3-the-messenger">Level 3 · The Messenger</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Load your notes and show them as cards</td>
+<td><code>http</code>, <code>bubble</code></td>
+<td>6 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea-2">The idea</h4>
+
+<p>Asking a server for data is like <strong>ordering food delivery</strong>:</p>
+
+<ol>
+<li>You place the order → <code>httpGet({ url })</code></li>
+<li>You wait at home → <code>await</code></li>
+<li>The courier hands you a closed box → a <code>Response</code></li>
+<li>You open it → <code>await response.json()</code></li>
+</ol>
+
+<p>Our &ldquo;restaurant&rdquo; is a JSON file in the project, so you need no real server.</p>
+
+<h4 id="build-it-2">Build it</h4>
 
 <p>Create <strong><code>api/notes.json</code></strong>:</p>
 <pre><code class="language-json"><span class="p">[</span>
@@ -86,8 +247,7 @@ under which your settings are saved in the browser.</p>
 <span class="p">]</span>
 </code></pre>
 
-<p>Load it once, and draw each note as a <strong>card</strong> on the home page. A card is a link with Bubble&rsquo;s
-<code>surface-1</code> class, which gives it a soft background and rounded corners:</p>
+<p>Order the notes once, when the app starts:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">httpGet</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/http.js&#34;</span>
 <span class="kr">import</span> <span class="p">{</span> <span class="nx">BubbleUI</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/bubble.js&#34;</span>
 
@@ -96,6 +256,9 @@ under which your settings are saved in the browser.</p>
 <span class="kr">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">httpGet</span><span class="p">({</span> <span class="nx">url</span><span class="o">:</span> <span class="sb">`</span><span class="si">${</span><span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;api&#34;</span><span class="p">)</span><span class="si">}</span><span class="sb">/notes.json`</span><span class="p">,</span> <span class="nx">parameters</span><span class="o">:</span> <span class="p">{}</span> <span class="p">})</span>
 <span class="kr">const</span> <span class="nx">notes</span>: <span class="kt">Note</span><span class="p">[]</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">response</span><span class="p">.</span><span class="nx">json</span><span class="p">()</span>
 </code></pre>
+
+<p>And show each one as a <strong>card</strong>. Bubble&rsquo;s <code>surface-1</code> class gives it a soft background and round
+corners:</p>
 <pre><code class="language-ts"><span class="nx">setRoute</span><span class="p">(</span><span class="s2">&#34;/&#34;</span><span class="p">,</span> <span class="kr">async</span> <span class="p">(</span><span class="nx">_</span><span class="p">,</span> <span class="nx">container</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span><span class="o">:</span> <span class="s2">&#34;Notes&#34;</span> <span class="p">}))</span>
 
@@ -115,67 +278,166 @@ under which your settings are saved in the browser.</p>
 <span class="p">})</span>
 </code></pre>
 
-<p>Give the cards some room in <code>index.html</code>&rsquo;s <code>&lt;style&gt;</code>:</p>
-<pre><code class="language-css"><span class="p">.</span><span class="nc">note</span> <span class="p">{</span> <span class="k">width</span><span class="p">:</span> <span class="mi">100</span><span class="kt">%</span><span class="p">;</span> <span class="k">max-width</span><span class="p">:</span> <span class="mi">420</span><span class="kt">px</span><span class="p">;</span> <span class="k">padding</span><span class="p">:</span> <span class="mi">1</span><span class="kt">rem</span> <span class="mf">1.25</span><span class="kt">rem</span><span class="p">;</span> <span class="k">color</span><span class="p">:</span> <span class="kc">inherit</span><span class="p">;</span> <span class="p">}</span>
-</code></pre>
+<h4 id="checkpoint-2">Checkpoint</h4>
 
-<p>✅ <strong>Check:</strong> the home page shows three cards, and each opens its note.</p>
+<p>Three cards on the home page. Click one: it opens.</p>
 
-<p><img src="./images/tour-3.png" alt="Step 3: the three notes listed as links" /></p>
+<p><img src="./images/tour-3.png" alt="Level 3: the three notes shown as cards" /></p>
 
-<p>📖 <a href="./guides/http">Talking to a server</a></p>
+<h4 id="bonus-optional-what-if-the-restaurant-is-closed">Bonus (optional): what if the restaurant is closed?</h4>
 
-<h2 id="step-4-two-languages-i18n">Step 4 — Two languages (<code>i18n</code>)</h2>
+<p>Rename <code>api/notes.json</code> for a moment: the app breaks. Make it show a friendly message instead.</p>
 
-<p>Create <strong><code>resources/i18n/en/notes.json</code></strong> and <strong><code>resources/i18n/es/notes.json</code></strong>:</p>
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>const response = await httpGet({ url: `${getConfiguration("api")}/notes.json`, parameters: {} })
+const notes: Note[] = response.ok ? await response.json() : []
+
+if (!response.ok)
+  document.body.prepend(uiComponent({ type: "p", text: "😴 Notes are sleeping, try again later." }))</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-messenger.svg" alt="Achievement unlocked: Messenger" /></p>
+
+<p>Learn more: <a href="./guides/http">Talking to a server</a> · <a href="./reference/html">Bubble UI</a></p>
+
+<hr>
+
+<h2 id="level-4-the-polyglot">Level 4 · The Polyglot</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Your app in English and Spanish</td>
+<td><code>i18n</code></td>
+<td>5 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea-3">The idea</h4>
+
+<p>Think of <strong>subtitles</strong>. The film is the same; only the subtitle file changes. Your code says
+<em>&ldquo;show the <code>title</code> text&rdquo;</em>, and a JSON file per language says what that text is.</p>
+
+<h4 id="build-it-3">Build it</h4>
+
+<p>Create <strong><code>resources/i18n/en/notes.json</code></strong>:</p>
 <pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;Notes&#34;</span><span class="p">,</span> <span class="nt">&#34;missing&#34;</span><span class="p">:</span> <span class="s2">&#34;No such note&#34;</span><span class="p">,</span> <span class="nt">&#34;switch&#34;</span><span class="p">:</span> <span class="s2">&#34;Español&#34;</span> <span class="p">}</span>
 </code></pre>
+
+<p>…and <strong><code>resources/i18n/es/notes.json</code></strong>:</p>
 <pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;title&#34;</span><span class="p">:</span> <span class="s2">&#34;Notas&#34;</span><span class="p">,</span> <span class="nt">&#34;missing&#34;</span><span class="p">:</span> <span class="s2">&#34;No existe esa nota&#34;</span><span class="p">,</span> <span class="nt">&#34;switch&#34;</span><span class="p">:</span> <span class="s2">&#34;English&#34;</span> <span class="p">}</span>
 </code></pre>
 
-<p>Load the texts in the language from the configuration, and use <code>getText</code> instead of the English
-words:</p>
+<p>Load the subtitles in the language of your sticky note:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setCurrentLanguage</span><span class="p">,</span> <span class="nx">loadTextBundle</span><span class="p">,</span> <span class="nx">getText</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/i18n.js&#34;</span>
 
 <span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">))</span>
 <span class="k">await</span> <span class="nx">loadTextBundle</span><span class="p">(</span><span class="s2">&#34;notes&#34;</span><span class="p">)</span>
 </code></pre>
+
+<p>And replace the English words in your views with <code>getText</code>:</p>
 <pre><code class="language-ts"><span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">getText</span><span class="p">(</span><span class="s2">&#34;notes&#34;</span><span class="p">,</span> <span class="s2">&#34;title&#34;</span><span class="p">)</span> <span class="p">}))</span>
 </code></pre>
+<pre><code class="language-ts"><span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">uiComponent</span><span class="p">({</span> <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;h1&#34;</span><span class="p">,</span> <span class="nx">text</span>: <span class="kt">note</span> <span class="o">?</span> <span class="nx">note.text</span> : <span class="kt">getText</span><span class="p">(</span><span class="s2">&#34;notes&#34;</span><span class="p">,</span> <span class="s2">&#34;missing&#34;</span><span class="p">)</span> <span class="p">}))</span>
+</code></pre>
 
-<p>English, Spanish, Galician and Catalan are ready to use; other languages are added in <code>i18n.ts</code>.</p>
+<h4 id="checkpoint-3">Checkpoint</h4>
 
-<p>✅ <strong>Check:</strong> in the console run <code>localStorage.notes = '{&quot;api&quot;:&quot;./api&quot;,&quot;lang&quot;:&quot;es&quot;}'</code> and reload:
-the title is now <strong>Notas</strong>.</p>
+<p>In the console, switch the sticky note to Spanish and reload:</p>
+<pre><code class="language-js"><span class="nx">localStorage</span><span class="p">.</span><span class="nx">notes</span> <span class="o">=</span> <span class="s1">&#39;{&#34;api&#34;:&#34;./api&#34;,&#34;lang&#34;:&#34;es&#34;}&#39;</span>
+</code></pre>
 
-<p>📖 <a href="./guides/i18n">Translations</a></p>
+<p>The title is now <strong>Notas</strong>.</p>
 
-<h2 id="step-5-a-button-with-an-icon-icons-events">Step 5 — A button with an icon (<code>icons</code>, events)</h2>
+<h4 id="bonus-optional-a-third-language">Bonus (optional): a third language</h4>
 
-<p>Create <strong><code>resources/icons.json</code></strong> with one icon:</p>
+<p>GTD also knows Galician (<code>gl</code>) and Catalan (<code>ca</code>). Add one of them.</p>
+
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>// resources/i18n/gl/notes.json
+{ "title": "Notas", "missing": "Non existe esa nota", "switch": "English" }
+
+// then, in the console:
+localStorage.notes = '{"api":"./api","lang":"gl"}'</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-polyglot.svg" alt="Achievement unlocked: Polyglot" /></p>
+
+<p>Learn more: <a href="./guides/i18n">Translations</a></p>
+
+<hr>
+
+<h2 id="level-5-the-artist">Level 5 · The Artist</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>A button, with an icon, that switches language</td>
+<td><code>icons</code>, <code>dom</code> events</td>
+<td>6 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea-4">The idea</h4>
+
+<p>An <strong>icon collection</strong> is a <strong>sticker album</strong>: you load the album once, then stick any sticker
+anywhere, at any size and colour.</p>
+
+<p>A <strong>click event</strong> is a <strong>doorbell</strong>: you decide in advance what happens when someone rings it.</p>
+
+<h4 id="build-it-4">Build it</h4>
+
+<p>Create <strong><code>resources/icons.json</code></strong> with one sticker:</p>
 <pre><code class="language-json"><span class="p">{</span> <span class="nt">&#34;translate&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;path d=\&#34;M12.9 15.1 10.4 12.6v-.1A17 17 0 0 0 14 6h3V4h-7V2H8v2H1v2h11.2A16 16 0 0 1 9 11.4 16 16 0 0 1 6.7 8h-2a18 18 0 0 0 3 4.6L2.6 17.6 4 19l5-5 3.1 3.1zM18.5 10h-2L12 22h2l1.1-3h4.8l1.1 3h2zm-2.6 7 1.6-4.3 1.6 4.3z\&#34;/&gt;&#34;</span> <span class="p">}</span>
 </code></pre>
 
-<p>Add a button on the home page that switches language and draws the page again:</p>
+<p>Load the album when the app starts:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setConfiguration</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/configuration.js&#34;</span>
 <span class="kr">import</span> <span class="p">{</span> <span class="nx">setDomEvents</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/dom.js&#34;</span>
 <span class="kr">import</span> <span class="p">{</span> <span class="nx">loadIcons</span><span class="p">,</span> <span class="nx">getIcon</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/icons.js&#34;</span>
 
 <span class="k">await</span> <span class="nx">loadIcons</span><span class="p">(</span><span class="s2">&#34;app&#34;</span><span class="p">,</span> <span class="s2">&#34;./resources/icons.json&#34;</span><span class="p">)</span>
 </code></pre>
+
+<p>And add the button at the end of the home page:</p>
 <pre><code class="language-ts"><span class="kr">const</span> <span class="nx">switchButton</span> <span class="o">=</span> <span class="nx">uiComponent</span><span class="p">({</span>
   <span class="kr">type</span><span class="o">:</span> <span class="s2">&#34;button&#34;</span><span class="p">,</span>
   <span class="nx">text</span>: <span class="kt">getText</span><span class="p">(</span><span class="s2">&#34;notes&#34;</span><span class="p">,</span> <span class="s2">&#34;switch&#34;</span><span class="p">),</span>
-  <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">Primary</span><span class="p">,</span> <span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">BoxYCenter</span><span class="p">],</span> <span class="c1">// blue, and icon and text side by side
+  <span class="nx">classes</span><span class="o">:</span> <span class="p">[</span><span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">Primary</span><span class="p">,</span> <span class="nx">BubbleUI</span><span class="p">.</span><span class="nx">BoxYCenter</span><span class="p">],</span> <span class="c1">// blue, icon and text side by side
 </span>  <span class="nx">styles</span><span class="o">:</span> <span class="p">{</span> <span class="nx">gap</span><span class="o">:</span> <span class="s2">&#34;6px&#34;</span> <span class="p">},</span>
 <span class="p">})</span>
 <span class="nx">switchButton</span><span class="p">.</span><span class="nx">prepend</span><span class="p">(</span><span class="nx">getIcon</span><span class="p">(</span><span class="s2">&#34;app&#34;</span><span class="p">,</span> <span class="s2">&#34;translate&#34;</span><span class="p">,</span> <span class="s2">&#34;16px&#34;</span><span class="p">,</span> <span class="s2">&#34;currentColor&#34;</span><span class="p">))</span>
 
-<span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">switchButton</span><span class="p">,</span> <span class="p">{</span>
+<span class="c1">// the doorbell: what happens on click
+</span><span class="nx">setDomEvents</span><span class="p">(</span><span class="nx">switchButton</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">click</span>: <span class="kt">async</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="p">{</span>
     <span class="kr">const</span> <span class="nx">lang</span> <span class="o">=</span> <span class="s2">&#34;es&#34;</span> <span class="o">==</span> <span class="nx">getConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&#34;en&#34;</span> <span class="o">:</span> <span class="s2">&#34;es&#34;</span>
-    <span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">,</span> <span class="nx">lang</span><span class="p">)</span>
-    <span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="c1">// true: reload the loaded bundles
+    <span class="nx">setConfiguration</span><span class="p">(</span><span class="s2">&#34;lang&#34;</span><span class="p">,</span> <span class="nx">lang</span><span class="p">)</span>       <span class="c1">// write it on the sticky note
+</span>    <span class="k">await</span> <span class="nx">setCurrentLanguage</span><span class="p">(</span><span class="nx">lang</span><span class="p">,</span> <span class="kc">true</span><span class="p">)</span> <span class="c1">// swap the subtitles
 </span>    <span class="nx">navigate</span><span class="p">()</span>                           <span class="c1">// draw the page again
 </span>  <span class="p">},</span>
 <span class="p">})</span>
@@ -183,8 +445,9 @@ the title is now <strong>Notas</strong>.</p>
 <span class="nx">container</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="nx">switchButton</span><span class="p">)</span>
 </code></pre>
 
-<p>✅ <strong>Check:</strong> the button flips the whole page between English and Spanish, and the choice survives
-a reload.</p>
+<h4 id="checkpoint-4">Checkpoint</h4>
+
+<p>Press the button: the whole page changes language. Reload: it remembers.</p>
 
 <table>
 <thead>
@@ -201,15 +464,63 @@ a reload.</p>
 </tr>
 </tbody>
 </table>
-<p>📖 <a href="./guides/icons">Icons</a> · <a href="./guides/configuration">Configuration</a></p>
 
-<h2 id="step-6-telling-others-signals">Step 6 — Telling others (<code>signals</code>)</h2>
+<h4 id="bonus-optional-a-sticker-on-every-card">Bonus (optional): a sticker on every card</h4>
 
-<p><img src="./images/signals-flow.svg" alt="A signal: the button emits it, and every connected handler reacts" /></p>
+<p>Add a second icon to <code>icons.json</code> and show it at the start of each note card.</p>
 
-<p>Say we want a counter in the page title of how many times the language changed, without the
-button knowing about the title. Create a signal, connect the title to it, and emit it from the
-button:</p>
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>// in resources/icons.json, next to "translate":
+"note": "&lt;path d=\"M5 3h14a2 2 0 0 1 2 2v9l-7 7H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm8 16 6-6h-6z\"/&gt;"
+
+// in the loop that draws the cards:
+const card = uiComponent({ type: "a", text: note.text, classes: ["note", BubbleUI.Surface1, BubbleUI.BoxYCenter],
+  styles: { gap: "10px" }, attributes: { href: `#/note/${note.id}` } })
+card.prepend(getIcon("app", "note", "20px", "currentColor"))
+container.append(card)</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-artist.svg" alt="Achievement unlocked: Artist" /></p>
+
+<p>Learn more: <a href="./guides/icons">Icons</a> · <a href="./guides/dom">Building the interface</a></p>
+
+<hr>
+
+<h2 id="level-6-the-broadcaster">Level 6 · The Broadcaster</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Tell the rest of the app that the language changed</td>
+<td><code>signals</code></td>
+<td>4 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea-5">The idea</h4>
+
+<p>A <strong>signal</strong> is a <strong>radio station</strong>. The button broadcasts <em>&ldquo;language changed!&rdquo;</em>. Anyone tuned
+in reacts. The station doesn&rsquo;t know who is listening — and doesn&rsquo;t need to.</p>
+
+<p>This keeps your code tidy: tomorrow you can add another listener without touching the button.</p>
+
+<p><img src="./images/signals-flow.svg" alt="A signal: the login emits it, and the header, the menu and the cart react, without knowing each other" /></p>
+
+<h4 id="build-it-5">Build it</h4>
+
+<p>Create the station and a listener that writes in the browser tab&rsquo;s title:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">setSignal</span><span class="p">,</span> <span class="nx">connectToSignal</span><span class="p">,</span> <span class="nx">emitSignal</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/signals.js&#34;</span>
 
 <span class="kr">const</span> <span class="nx">languageChanged</span> <span class="o">=</span> <span class="nx">setSignal</span><span class="p">()</span>
@@ -220,57 +531,310 @@ button:</p>
   <span class="nb">document</span><span class="p">.</span><span class="nx">title</span> <span class="o">=</span> <span class="sb">`Notes (</span><span class="si">${</span><span class="nx">lang</span><span class="si">}</span><span class="sb">, </span><span class="si">${</span><span class="nx">changes</span><span class="si">}</span><span class="sb"> changes)`</span>
 <span class="p">})</span>
 </code></pre>
-<pre><code class="language-ts"><span class="c1">// inside the click handler, after setCurrentLanguage
-</span><span class="k">await</span> <span class="nx">emitSignal</span><span class="p">(</span><span class="nx">languageChanged</span><span class="p">,</span> <span class="nx">lang</span><span class="p">)</span>
+
+<p>Broadcast from the button, after <code>setCurrentLanguage</code>:</p>
+<pre><code class="language-ts"><span class="k">await</span> <span class="nx">emitSignal</span><span class="p">(</span><span class="nx">languageChanged</span><span class="p">,</span> <span class="nx">lang</span><span class="p">)</span>
 </code></pre>
 
-<p>✅ <strong>Check:</strong> the browser tab title updates each time you press the button.</p>
+<h4 id="checkpoint-5">Checkpoint</h4>
 
-<p>📖 <a href="./guides/signals">Signals</a></p>
+<p>Look at the browser tab while you press the button: <strong>Notes (es, 1 changes)</strong>,
+<strong>Notes (en, 2 changes)</strong>…</p>
 
-<h2 id="step-7-phones-display">Step 7 — Phones (<code>display</code>)</h2>
+<h4 id="bonus-optional-a-second-listener">Bonus (optional): a second listener</h4>
+
+<p>Tune a second listener to the same station: show a small message for two seconds.</p>
+
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>import { sleep } from "./gtd/time.js"
+
+connectToSignal(languageChanged, async lang => {
+  const toast = uiComponent({ text: `🌍 ${lang}`, classes: [BubbleUI.PrimaryContainer],
+    styles: { position: "fixed", bottom: "1rem", right: "1rem", padding: ".75rem 1rem" } })
+  document.body.append(toast)
+  sleep(2000).then(() => toast.remove()) // no await: don't make the button wait two seconds
+})</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-broadcaster.svg" alt="Achievement unlocked: Broadcaster" /></p>
+
+<p>Learn more: <a href="./guides/signals">Signals</a></p>
+
+<hr>
+
+<h2 id="level-7-the-shape-shifter">Level 7 · The Shape-shifter</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Look good on a phone too</td>
+<td><code>display</code></td>
+<td>3 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea-6">The idea</h4>
+
+<p>You wear different clothes when it rains — same you, different outfit. <code>checkDisplayType</code>
+looks at the weather (the screen) and writes <code>mobile</code> or <code>desktop</code> on the page. Your CSS picks the
+outfit.</p>
+
+<h4 id="build-it-6">Build it</h4>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="p">{</span> <span class="nx">checkDisplayType</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/display.js&#34;</span>
 
-<span class="nx">checkDisplayType</span><span class="p">()</span>                            <span class="c1">// &lt;html data-display=&#34;mobile&#34;&gt; or &#34;desktop&#34;
+<span class="nx">checkDisplayType</span><span class="p">()</span>                             <span class="c1">// &lt;html data-display=&#34;mobile&#34;&gt; or &#34;desktop&#34;
 </span><span class="nb">window</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&#34;resize&#34;</span><span class="p">,</span> <span class="nx">checkDisplayType</span><span class="p">)</span>
 </code></pre>
 
-<p>Now plain CSS can adapt the app:</p>
+<p>And the rainy-day outfit, in <code>index.html</code>&rsquo;s <code>&lt;style&gt;</code>:</p>
 <pre><code class="language-css"><span class="o">[</span><span class="nt">data-display</span><span class="o">=</span><span class="s2">&#34;mobile&#34;</span><span class="o">]</span> <span class="nt">body</span> <span class="p">{</span> <span class="k">font-size</span><span class="p">:</span> <span class="mi">18</span><span class="kt">px</span><span class="p">;</span> <span class="p">}</span>
+<span class="o">[</span><span class="nt">data-display</span><span class="o">=</span><span class="s2">&#34;mobile&#34;</span><span class="o">]</span> <span class="p">.</span><span class="nc">note</span> <span class="p">{</span> <span class="k">max-width</span><span class="p">:</span> <span class="kc">none</span><span class="p">;</span> <span class="p">}</span>
 </code></pre>
 
-<p>✅ <strong>Check:</strong> open the developer tools&rsquo; device mode: the text gets bigger on a phone.</p>
+<h4 id="checkpoint-6">Checkpoint</h4>
 
-<p>📖 <a href="./reference/display">Display</a> · <a href="./reference/browser">Browser</a></p>
+<p>Open the developer tools, turn on the device toolbar (the phone icon, or <code>Ctrl</code> + <code>Shift</code> + <code>M</code>) and pick
+a phone: bigger text, cards as wide as the screen.</p>
 
-<h2 id="step-8-a-keyboard-shortcut-shortcuts">Step 8 — A keyboard shortcut (<code>shortcuts</code>)</h2>
+<p><img src="./images/tour-7-mobile.png" alt="Level 7: the notes app on a phone, with wide cards" /></p>
 
-<p>Press <code>Ctrl</code> + <code>H</code> anywhere to go home:</p>
+<p><img src="./images/quest/achievement-shape-shifter.svg" alt="Achievement unlocked: Shape-shifter" /></p>
+
+<p>Learn more: <a href="./reference/display">Display</a> · <a href="./reference/browser">Browser</a></p>
+
+<hr>
+
+<h2 id="level-8-the-speedrunner">Level 8 · The Speedrunner</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Move around without the mouse</td>
+<td><code>shortcuts</code></td>
+<td>3 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-idea-7">The idea</h4>
+
+<p>You already use shortcuts every day: <code>Ctrl</code> + <code>C</code>, <code>Ctrl</code> + <code>V</code>. Speedrunners in games beat
+levels faster with them. Let&rsquo;s give your app some.</p>
+
+<h4 id="build-it-7">Build it</h4>
+
+<p>Press <code>Ctrl</code> + <code>H</code> anywhere to go <strong>h</strong>ome:</p>
 <pre><code class="language-ts"><span class="kr">import</span> <span class="nx">Shortcuts</span><span class="p">,</span> <span class="p">{</span> <span class="nx">KeyInteraction</span> <span class="p">}</span> <span class="kr">from</span> <span class="s2">&#34;./gtd/shortcuts.js&#34;</span>
 
 <span class="kr">const</span> <span class="nx">keys</span> <span class="o">=</span> <span class="nx">Shortcuts</span><span class="p">.</span><span class="nx">register</span><span class="p">(</span><span class="nb">document</span><span class="p">)</span>
+
 <span class="nx">Shortcuts</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="nx">keys</span><span class="p">,</span> <span class="p">{</span>
   <span class="nx">interaction</span>: <span class="kt">KeyInteraction.keyDown</span><span class="p">,</span>
   <span class="nx">key</span><span class="o">:</span> <span class="s2">&#34;h&#34;</span><span class="p">,</span>
   <span class="nx">ctrlKey</span>: <span class="kt">true</span><span class="p">,</span>
-  <span class="nx">preventDefault</span>: <span class="kt">true</span><span class="p">,</span>
-  <span class="nx">callback</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span>
+  <span class="nx">preventDefault</span>: <span class="kt">true</span><span class="p">,</span>              <span class="c1">// don&#39;t open the browser&#39;s history
+</span>  <span class="nx">callback</span><span class="o">:</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">location</span><span class="p">.</span><span class="nx">hash</span> <span class="o">=</span> <span class="s2">&#34;/&#34;</span><span class="p">,</span>
 <span class="p">})</span>
 </code></pre>
 
-<p>✅ <strong>Check:</strong> open a note and press <code>Ctrl</code> + <code>H</code>.</p>
+<h4 id="checkpoint-7">Checkpoint</h4>
 
-<p>📖 <a href="./guides/shortcuts">Keyboard shortcuts</a></p>
+<p>Open a note, press <code>Ctrl</code> + <code>H</code>: you are home.</p>
 
-<h2 id="you-did-it">You did it 🎉</h2>
+<h4 id="bonus-optional-escape">Bonus (optional): escape!</h4>
 
-<p>You used every GTD module, and you can read every line of your app. Some ideas to keep going:</p>
+<p>Make <code>Esc</code> go home too.</p>
 
-<ul>
-<li>Add a form that creates notes and saves them with <code>setConfiguration(&quot;notes&quot;, JSON.stringify(notes))</code>.</li>
-<li>Replace <code>api/notes.json</code> with a real API and use <code>httpPost</code> — see <a href="./guides/http">Talking to a server</a>.</li>
-<li>Style it: everything is plain HTML, so plain CSS works.</li>
-</ul>
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>Shortcuts.set(keys, {
+  interaction: KeyInteraction.keyDown,
+  key: "Escape",
+  callback: () => location.hash = "/",
+})</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-speedrunner.svg" alt="Achievement unlocked: Speedrunner" /></p>
+
+<p>Learn more: <a href="./guides/shortcuts">Keyboard shortcuts</a></p>
+
+<hr>
+
+<h2 id="final-challenge-notes-master">Final challenge · Notes Master</h2>
+
+<table>
+<thead>
+<tr>
+<th>Mission</th>
+<th>Modules</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Write new notes, and keep them after a reload</td>
+<td>everything you learned</td>
+<td>10 min</td>
+</tr>
+</tbody>
+</table>
+
+<h4 id="the-challenge">The challenge</h4>
+
+<p>This time there is no step-by-step, but you already have every piece:</p>
+
+<table>
+<thead>
+<tr>
+<th>You need to…</th>
+<th>You learned it in</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Draw a text box and a button</td>
+<td>Level 1</td>
+</tr>
+
+<tr>
+<td>Keep the notes after a reload</td>
+<td>Level 2</td>
+</tr>
+
+<tr>
+<td>Start from <code>api/notes.json</code> the first time</td>
+<td>Level 3</td>
+</tr>
+
+<tr>
+<td>React to the button</td>
+<td>Level 5</td>
+</tr>
+
+<tr>
+<td>Give each note a unique id</td>
+<td><code>uuidv4()</code> from <a href="./reference/crypto"><code>crypto.ts</code></a></td>
+</tr>
+</tbody>
+</table>
+<p><strong>The goal:</strong> a text box and an <strong>+ Add</strong> button on the home page. Type <em>&ldquo;Water the plants&rdquo;</em>, press <strong>+ Add</strong>, and
+a new card appears. Reload: it is still there.</p>
+
+<blockquote>
+<p><strong>Hint:</strong> keep the whole list on the sticky note — <code>setConfiguration(&quot;notes&quot;, notes)</code> — and
+read it back at start with <code>getConfiguration(&quot;notes&quot;)</code>.</p>
+</blockquote>
+
+<p>Try it on your own first, then compare with the solution.</p>
+
+<p><img src="./images/tour-final.png" alt="The final challenge: a text box and a plus button above the cards, with a new note &ldquo;Water the plants&rdquo;" /></p>
+
+<details>
+<summary>🔓 Show the solution</summary>
+
+<pre><code>import { uuidv4 } from "./gtd/crypto.js"
+import { Html } from "./gtd/html.js"
+
+// start from the saved notes, or from the file the first time
+const notes: Note[] = getConfiguration("notes") ?? await response.json()
+
+// on the home page, before the cards
+const form = uiComponent({ classes: [BubbleUI.BoxRow, BubbleUI.BoxYCenter], styles: { width: "100%", maxWidth: "420px" } })
+const input = uiComponent({ type: Html.Input, attributes: { placeholder: "A new note…" }, styles: { flex: "1" } }) as HTMLInputElement
+const add = uiComponent({ type: Html.Button, text: "+ Add", classes: [BubbleUI.Primary] })
+
+setDomEvents(add, {
+  click: () => {
+    if ("" == input.value.trim()) return
+    notes.unshift({ id: uuidv4(), text: input.value.trim() })
+    setConfiguration("notes", notes)   // the sticky note keeps them
+    navigate()                         // draw the list again
+  },
+})
+
+form.append(input, add)
+container.append(form)</code></pre>
+
+</details>
+
+<p><img src="./images/quest/achievement-final.svg" alt="Rare achievement unlocked: Notes Master" /></p>
+
+<hr>
+
+<h2 id="well-done">Well done</h2>
+
+<p><img src="./images/quest/achievements-all.svg" alt="All nine achievements: Builder, Keeper, Messenger, Polyglot, Artist, Broadcaster, Shape-shifter, Speedrunner and Notes Master" /></p>
+
+<p>You built a real app, and you can read every line of it. That is the GTD way.</p>
+
+<h3 id="ideas-to-keep-going">Ideas to keep going</h3>
+
+<table>
+<thead>
+<tr>
+<th>Idea</th>
+<th>Difficulty</th>
+<th>Hint</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Delete a note</td>
+<td>⭐</td>
+<td>A button on the note page, <code>notes.splice(…)</code>, <code>setConfiguration</code></td>
+</tr>
+
+<tr>
+<td>Dark mode switch</td>
+<td>⭐</td>
+<td><code>document.documentElement.dataset.theme = &quot;dark&quot;</code> — see <a href="./guides/configuration">Configuration</a></td>
+</tr>
+
+<tr>
+<td>Type the title letter by letter</td>
+<td>⭐⭐</td>
+<td><a href="./reference/animations">Animations</a></td>
+</tr>
+
+<tr>
+<td>Search your notes</td>
+<td>⭐⭐</td>
+<td>An input, <code>notes.filter(…)</code>, draw again on <code>input</code> events</td>
+</tr>
+
+<tr>
+<td>Save notes on a real server</td>
+<td>⭐⭐⭐</td>
+<td><code>httpPost</code> — see <a href="./guides/http">Talking to a server</a></td>
+</tr>
+</tbody>
+</table>
+<p>Stuck at any point? See <a href="./troubleshooting">Troubleshooting</a>.</p>
 
 <hr>
 
