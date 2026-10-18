@@ -15,6 +15,7 @@ jobs:
           title: "GTD"
           description: "Easy idiomatic web library."
           logo: "./resources/logo.svg"
+          accent: "#007ACC"
           path: "./docs"
           isObsidianProject: false
           showFooter: true
