@@ -47,7 +47,7 @@ and matches the <code>src</code> of your <code>&lt;script&gt;</code>.</p>
 <p><strong><code>x is not defined</code> or <code>Cannot read properties of undefined</code>, but it compiled</strong></p>
 
 <p>esbuild does not check types, so typos reach the browser. Check the name in the error, or check
-types first: see <em>Checking types</em> in <a href="./2-getting-started">Getting started</a>.</p>
+types first: see <em>Checking types</em> in <a href="./getting-started">Getting started</a>.</p>
 
 <h2 id="routing">Routing</h2>
 
@@ -77,13 +77,13 @@ container before each page.</p>
 <ul>
 <li>Did you <code>await loadTextBundle(&quot;name&quot;)</code> before calling <code>getText</code>?</li>
 <li>Does <code>./resources/i18n/&lt;language&gt;/&lt;name&gt;.json</code> exist? Check the <em>Network</em> tab for a 404.</li>
-<li>Is your language in <code>AVAILABLE_LANGUAGES</code> in <code>i18n.ts</code>? See <a href="./5-guides/5-translations">Translations</a>.</li>
+<li>Is your language in <code>AVAILABLE_LANGUAGES</code> in <code>i18n.ts</code>? See <a href="./guides/translations">Translations</a>.</li>
 </ul>
 
 <p><strong>Settings of two apps mix up on <code>localhost</code></strong></p>
 
 <p>Both use the same <code>configurationId</code>. Set your app&rsquo;s name in <code>configuration.ts</code>. See
-<a href="./5-guides/6-configuration">Configuration</a>.</p>
+<a href="./guides/configuration">Configuration</a>.</p>
 
 <p><strong><code>getIcon</code> returns <code>undefined</code></strong></p>
 
@@ -101,7 +101,7 @@ from the same address avoids it.</p>
 <p><strong>My request fails but there&rsquo;s no error</strong></p>
 
 <p><code>fetch</code> — and so GTD — only throws on network failures. A <code>404</code> or <code>500</code> is a normal response:
-check <code>response.ok</code> or use <code>handleResponseStatus</code>. See <a href="./5-guides/3-talking-to-a-server">Talking to a server</a>.</p>
+check <code>response.ok</code> or use <code>handleResponseStatus</code>. See <a href="./guides/talking-to-a-server">Talking to a server</a>.</p>
 
 <h2 id="still-stuck">Still stuck?</h2>
 
@@ -110,4 +110,4 @@ the console error. Small examples are the fastest to fix.</p>
 
 <hr>
 
-<p><a href="./1-overview">← All the documentation</a></p>
+<p><a href="./overview">← All the documentation</a></p>

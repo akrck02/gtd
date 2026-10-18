@@ -18,7 +18,7 @@ your own pace — each level leaves you with a working app.</p>
 
 <h2 id="before-you-start">Before you start</h2>
 
-<p>You need the project from <a href="./2-getting-started">Getting started</a> (5 minutes, if you haven&rsquo;t done it
+<p>You need the project from <a href="./getting-started">Getting started</a> (5 minutes, if you haven&rsquo;t done it
 yet). Open <strong>two terminals</strong> in your project folder and leave these running the whole quest:</p>
 <pre><code class="language-sh"><span class="c1"># terminal 1 — rebuilds your app every time you save</span>
 ./bin/esbuild src/main.ts --bundle --format<span class="o">=</span>esm --outfile<span class="o">=</span>out/main.js --watch
@@ -125,7 +125,7 @@ the page says <strong>Note 3</strong>.</p>
 
 <p><img src="./images/quest/achievement-builder.svg" alt="Achievement unlocked: Builder" /></p>
 
-<p>Learn more: <a href="./5-guides/1-building-the-interface">Building the interface</a> · <a href="./5-guides/2-views-and-routing">Views and routing</a></p>
+<p>Learn more: <a href="./guides/building-the-interface">Building the interface</a> · <a href="./guides/views-and-routing">Views and routing</a></p>
 
 <hr>
 
@@ -200,7 +200,7 @@ console.log(`Welcome back! Visit number ${visits}`)</code></pre>
 
 <p><img src="./images/quest/achievement-keeper.svg" alt="Achievement unlocked: Keeper" /></p>
 
-<p>Learn more: <a href="./5-guides/6-configuration">Configuration</a></p>
+<p>Learn more: <a href="./guides/configuration">Configuration</a></p>
 
 <hr>
 
@@ -301,7 +301,7 @@ if (!response.ok)
 
 <p><img src="./images/quest/achievement-messenger.svg" alt="Achievement unlocked: Messenger" /></p>
 
-<p>Learn more: <a href="./5-guides/3-talking-to-a-server">Talking to a server</a> · <a href="./6-reference/5-tags-and-styles">Bubble UI</a></p>
+<p>Learn more: <a href="./guides/talking-to-a-server">Talking to a server</a> · <a href="./reference/tags-and-styles">Bubble UI</a></p>
 
 <hr>
 
@@ -378,7 +378,7 @@ localStorage.notes = '{"api":"./api","lang":"gl"}'</code></pre>
 
 <p><img src="./images/quest/achievement-polyglot.svg" alt="Achievement unlocked: Polyglot" /></p>
 
-<p>Learn more: <a href="./5-guides/5-translations">Translations</a></p>
+<p>Learn more: <a href="./guides/translations">Translations</a></p>
 
 <hr>
 
@@ -485,7 +485,7 @@ container.append(card)</code></pre>
 
 <p><img src="./images/quest/achievement-artist.svg" alt="Achievement unlocked: Artist" /></p>
 
-<p>Learn more: <a href="./5-guides/7-icons">Icons</a> · <a href="./5-guides/1-building-the-interface">Building the interface</a></p>
+<p>Learn more: <a href="./guides/icons">Icons</a> · <a href="./guides/building-the-interface">Building the interface</a></p>
 
 <hr>
 
@@ -561,7 +561,7 @@ connectToSignal(languageChanged, async lang => {
 
 <p><img src="./images/quest/achievement-broadcaster.svg" alt="Achievement unlocked: Broadcaster" /></p>
 
-<p>Learn more: <a href="./5-guides/4-signals">Signals</a></p>
+<p>Learn more: <a href="./guides/signals">Signals</a></p>
 
 <hr>
 
@@ -612,7 +612,7 @@ a phone: bigger text, cards as wide as the screen.</p>
 
 <p><img src="./images/quest/achievement-shape-shifter.svg" alt="Achievement unlocked: Shape-shifter" /></p>
 
-<p>Learn more: <a href="./6-reference/2-display">Display</a> · <a href="./6-reference/1-browser">Browser</a></p>
+<p>Learn more: <a href="./reference/display">Display</a> · <a href="./reference/browser">Browser</a></p>
 
 <hr>
 
@@ -678,7 +678,7 @@ levels faster with them. Let&rsquo;s give your app some.</p>
 
 <p><img src="./images/quest/achievement-speedrunner.svg" alt="Achievement unlocked: Speedrunner" /></p>
 
-<p>Learn more: <a href="./5-guides/8-keyboard-shortcuts">Keyboard shortcuts</a></p>
+<p>Learn more: <a href="./guides/keyboard-shortcuts">Keyboard shortcuts</a></p>
 
 <hr>
 
@@ -737,7 +737,7 @@ levels faster with them. Let&rsquo;s give your app some.</p>
 
 <tr>
 <td>Give each note a unique id</td>
-<td><code>uuidv4()</code> from <a href="./6-reference/7-crypto"><code>crypto.ts</code></a></td>
+<td><code>uuidv4()</code> from <a href="./reference/crypto"><code>crypto.ts</code></a></td>
 </tr>
 </tbody>
 </table>
@@ -812,13 +812,13 @@ container.append(form)</code></pre>
 <tr>
 <td>Dark mode switch</td>
 <td>⭐</td>
-<td><code>document.documentElement.dataset.theme = &quot;dark&quot;</code> — see <a href="./5-guides/6-configuration">Configuration</a></td>
+<td><code>document.documentElement.dataset.theme = &quot;dark&quot;</code> — see <a href="./guides/configuration">Configuration</a></td>
 </tr>
 
 <tr>
 <td>Type the title letter by letter</td>
 <td>⭐⭐</td>
-<td><a href="./6-reference/3-animations">Animations</a></td>
+<td><a href="./reference/animations">Animations</a></td>
 </tr>
 
 <tr>
@@ -830,12 +830,12 @@ container.append(form)</code></pre>
 <tr>
 <td>Save notes on a real server</td>
 <td>⭐⭐⭐</td>
-<td><code>httpPost</code> — see <a href="./5-guides/3-talking-to-a-server">Talking to a server</a></td>
+<td><code>httpPost</code> — see <a href="./guides/talking-to-a-server">Talking to a server</a></td>
 </tr>
 </tbody>
 </table>
-<p>Stuck at any point? See <a href="./7-troubleshooting">Troubleshooting</a>.</p>
+<p>Stuck at any point? See <a href="./troubleshooting">Troubleshooting</a>.</p>
 
 <hr>
 
-<p><a href="./1-overview">← All the documentation</a></p>
+<p><a href="./overview">← All the documentation</a></p>
